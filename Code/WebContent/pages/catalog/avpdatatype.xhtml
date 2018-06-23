@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="/pages/layout_empty.xhtml">
+	<ui:define name="subcontent">
+		<h:form id="form-avp-data-type" class="container-fluid nopadding">
+			<div class="row formFieldMg">
+
+				<div class="col-xs-12 col-sm-7 nopadding-right">
+					<article class="col-xs-12">
+					<div class="jarviswidget jarviswidget-color-yellow" id="wid-id-0"
+						style="margin-right: -10px;" data-widget-editbutton="false"
+						data-widget-colorbutton="false" data-widget-deletebutton="false">
+						<header> <span class="widget-icon"> <i
+							class="fa fa-table"></i>
+						</span>
+						<h2>#{msg['avpDataType.lstAVPDataType']}</h2>
+						</header>
+						<p:dataTable var="item"
+							value="#{avpDataTypeBean.loadAvpDataTypes()}" id="dtAVPDataType"
+							rowKey="#{item.avpDataTypeId}" widgetVar="wvAVPDataType"
+							emptyMessage="#{msg['common.noData']}" paginator="true" rows="20"
+							paginatorPosition="bottom" rowIndexVar="rowIndex"
+							resizableColumns="true"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="10,20,50,100"
+							rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+
+							<p:ajax event="filter" ignoreAutoUpdate="true" />
+
+							<p:column headerText="#" style="width:5%">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+
+							<p:column headerText="#{msg['avpDataType.avpDataTypeName']}"
+								sortBy="#{item.avpDataTypeName}" styleClass="text-truncate"
+								filterBy="#{item.avpDataTypeName}" filterMatchMode="contains">
+								<h:outputText value="#{item.avpDataTypeName}"
+									styleClass="preformatted" />
+							</p:column>
+
+							<p:column headerText="#{msg['common.action']}"
+								style="text-align:center; width: 20%">
+								<p:commandLink
+									actionListener="#{avpDataTypeBean.editAVPDataType(item)}"
+									resetValues="true" update="form-avp-data-type" process="@this"
+									styleClass="btn btn-sm btn-action-edit colorStrongGreen"
+									oncomplete="backtotop();">
+									<i class="fa fa-pencil icon-only mr-0"></i>
+								</p:commandLink>
+								<p:commandLink update="form-avp-data-type" resetValues="true"
+									process="@this"
+									actionListener="#{avpDataTypeBean.deleteAVPDataType(item)}"
+									styleClass="btn btn-sm btn-action-del colorRed">
+									<i class="fa fa-times icon-only mr-0"></i>
+									<p:confirm header="#{msg['common.delete']}"
+										message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+								</p:commandLink>
+
+							</p:column>
+						</p:dataTable>
+					</div>
+					</article>
+				</div>
+
+				<div class="col-xs-12 col-sm-5 nopadding-left">
+					<article class="col-xs-12">
+					<div class="jarviswidget jarviswidget-color-yellow" id="wid-id-0"
+						style="margin-right: -10px;" data-widget-editbutton="false"
+						data-widget-colorbutton="false" data-widget-deletebutton="false">
+						<header> <span class="widget-icon"> <i
+							class="fa fa-table"></i>
+						</span>
+						<h2>#{msg['avpDataType.addAVPDataType']}</h2>
+						</header>
+						<p:panel id="pnEdit" style="padding-top: 0px;">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['common.ID']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:inputText
+										value="#{avpDataTypeBean.avpDataType.avpDataTypeId}"
+										readonly="true" styleClass="form-control">
+									</p:inputText>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['avpDataType.avpDataTypeName']}"
+										for="txtAVPDataTypeName" />
+								</div>
+								<div class="col-xs-12">
+									<p:inputText
+										value="#{avpDataTypeBean.avpDataType.avpDataTypeName}"
+										maxlength="100" styleClass="form-control" required="true"
+										id="txtAVPDataTypeName">
+									</p:inputText>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12" style="text-align: right;">
+									<p:commandButton id="btnCancel" value="#{msg['common.cancel']}"
+										actionListener="#{avpDataTypeBean.btnCancel}"
+										disabled="#{!avpDataTypeBean.isEdit}" icon="fa fa-refresh"
+										update="form-avp-data-type" styleClass="pull-right"
+										immediate="true" resetValues="true">
+									</p:commandButton>
+									<p:commandButton disabled="#{!avpDataTypeBean.isEdit}"
+										value="#{msg['common.apply']}" styleClass="pull-right"
+										style="margin-right: 13px;" resetValues="true" icon="fa fa-save"
+										actionListener="#{avpDataTypeBean.applyAVPDataType()}"
+										update="form-avp-data-type">
+										<p:confirm header="#{msg['common.apply']}"
+											message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+									</p:commandButton>
+									<p:commandButton disabled="#{avpDataTypeBean.isEdit}"
+										resetValues="true" value="#{msg['common.addNew']}"
+										styleClass="pull-right" immediate="true"
+										style="margin-right: 13px;" icon="fa fa-plus"
+										update="form-avp-data-type dtAVPDataType"
+										actionListener="#{avpDataTypeBean.addNewAVPDataType()}" />
+								</div>
+							</div>
+
+						</p:panel>
+					</div>
+					</article>
+
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

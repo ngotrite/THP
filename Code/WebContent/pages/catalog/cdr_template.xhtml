@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="/pages/tree_common.xhtml">
+	<ui:define name="subcontent">
+		<p:panel id="myPanel">
+			<h:form id="form-template-category" class="container-fluid"
+				rendered="#{cdrTemplateBean.formType == 'category'}">
+				<div class="container-fluid">
+					<div class="row formFieldMg">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:dataTable id="tableCdrTemplate" var="item"
+									widgetVar="tableCdrTemplate"
+									value="#{cdrTemplateBean.listCdrTemplate}"
+									rowKey="#{item.cdrTemplateId}" rowIndexVar="index"
+									emptyMessage="#{msg['common.noData']}" paginator="true"
+									rows="20" paginatorPosition="bottom"
+									paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									rowsPerPageTemplate="10,20,50,100">
+									<p:ajax event="filter" ignoreAutoUpdate="false" />
+									<f:facet name="header">
+										<p:outputLabel value="#{msg['title.CdrTemplate']}"
+											style="font-weight:bold" />
+									</f:facet>
+									<p:column headerText="#" style="width:6%">
+										<h:outputText value="#{index + 1}" title="#{index + 1}" />
+									</p:column>
+
+									<p:column headerText="#{msg['cdrTemplate.templateCode']}"
+										sortBy="#{item.templateCode}" filterBy="#{item.templateCode}"
+										filterMatchMode="contains">
+										<h:outputText value="#{item.templateCode}"
+											styleClass="preformatted" />
+									</p:column>
+
+									<p:column headerText="#{msg['common.desc']}"
+										sortBy="#{item.description}" filterBy="#{item.description}"
+										filterMatchMode="contains">
+										<h:outputText value="#{item.description}"
+											styleClass="preformatted" />
+									</p:column>
+
+									<p:column headerText="#{msg['cdrTemplate.serviceCode']}"
+										sortBy="#{cdrTemplateBean.codeOfCdrService(item)}"
+										filterBy="#{cdrTemplateBean.codeOfCdrService(item)}"
+										filterMatchMode="contains">
+										<h:outputText
+											value="#{cdrTemplateBean.codeOfCdrService(item)}" />
+									</p:column>
+
+									<p:column headerText="#{msg['common.action']}"
+										styleClass="actionColumn">
+										<p:commandLink
+											actionListener="#{cdrTemplateBean.editCdrTemplate(item)}"
+											resetValues="true"
+											update="myPanel categoryCommonTop contentPanel contentTitle "
+											styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+											<i class="fa fa-pencil icon-only mr-0"></i>
+										</p:commandLink>
+										<p:commandLink
+											actionListener="#{cdrTemplateBean.deleteCdrTemplate(item)}"
+											resetValues="true"
+											update="tableCdrTemplate form-template-category treeCommon"
+											styleClass="btn btn-sm btn-action-del colorRed">
+											<i class="fa fa-times icon-only mr-0"></i>
+											<p:confirm header="#{msg['common.delete']}"
+												message="#{msg['common.confirmDelete']}"
+												icon="ui-icon-alert" />
+										</p:commandLink>
+										<f:facet name="header">
+											<p:commandButton id="btnNew" value="#{msg['common.addNew']}"
+												actionListener="#{cdrTemplateBean.addNewTemplate}" icon="fa fa-plus"
+												update="categoryCommonTop contentPanel myPanel contentTitle"
+												styleClass="btn btn-primary" immediate="true"
+												resetValues="true">
+											</p:commandButton>
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+
+			<h:form id="form-template-detail" class="container-fluid"
+				rendered="#{cdrTemplateBean.formType == 'detail' and  categoryCommonBean.formType ne 'category' }">
+				<div class="row formFieldMg">
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['cdrTemplate.cdrTemplateId']}"
+									></p:outputLabel>
+							</div>
+							<div class="col-xs-12">
+								<p:inputText
+									value="#{cdrTemplateBean.cdrTemplate.cdrTemplateId}"
+									styleClass="form-control" readonly="true"></p:inputText>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['cdrTemplate.category']}"
+									 for="txtCategoryId"></p:outputLabel>
+							</div>
+							<div class="col-xs-12">
+								<h:selectOneMenu
+									value="#{cdrTemplateBean.cdrTemplate.categoryId}"
+									styleClass="form-control select" required="true"
+									id="txtCategoryId">
+									<f:selectItems value="#{cdrTemplateBean.listCategory}"
+										var="cat" itemValue="#{cat.categoryId}"
+										itemLabel="#{cat.categoryName}"></f:selectItems>
+								</h:selectOneMenu>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['cdrTemplate.templateCode']}"
+									 for="txtTemplateCode"></p:outputLabel>
+							</div>
+							<div class="col-xs-12">
+								<p:inputText value="#{cdrTemplateBean.cdrTemplate.templateCode}"
+									styleClass="form-control" maxlength="100" required="true"
+									id="txtTemplateCode"></p:inputText>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['cdrTemplate.delimiter']}"
+									></p:outputLabel>
+							</div>
+							<div class="col-xs-12">
+								<p:inputText value="#{cdrTemplateBean.cdrTemplate.delimiter}"
+									styleClass="form-control" maxlength="10"></p:inputText>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['cdrTemplate.serviceCode']}"
+									 for="txtServiceCode"></p:outputLabel>
+							</div>
+							<div class="col-xs-12">
+								<table class="table-choosing">
+									<tr>
+										<td>
+											<p:inputText value="#{cdrTemplateBean.selectedCdrServiceName}"
+												readonly="true" styleClass="form-control" required="true"
+												id="txtServiceCode" maxlength="100">
+											</p:inputText>
+										</td>
+										<td class="td-btn-fix">
+											<p:commandLink
+												disabled="#{!cdrTemplateBean.editting}" actionListener="#{cdrTemplateBean.chooseServieCode()}"
+												id="btnAddServieCode" immediate="true" update="form-template-detail categoryCommonTop contentPanel"
+												styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+												<i class="fa fa-pencil"></i>
+												<p:ajax event="dialogReturn"
+													update="form-template-detail:txtServiceCode"
+													listener="#{cdrTemplateBean.onDialogServieCodeReturn}" />
+											</p:commandLink>
+											<p:commandLink
+												disabled="#{!cdrTemplateBean.editting}" actionListener="#{cdrTemplateBean.deleteServieCode()}"
+												update="form-template-detail" immediate="true"
+												styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+												<i class="fa fa-times icon-only mr-0"></i>
+											</p:commandLink>
+										</td>
+									</tr>
+								</table>						
+							</div>
+							<!-- <div class="col-xs-10">
+								<p:panel id="pnlService" styleClass="nopadding">
+									
+								</p:panel>
+							</div>
+							<div class="col-xs-2">
+								<p:commandButton id="btnAddServieCode" value="..."
+									immediate="true" styleClass="pull-right"
+									update="form-template-detail categoryCommonTop contentPanel"
+									actionListener="#{cdrTemplateBean.chooseServieCode()}">
+									<p:ajax event="dialogReturn"
+										update="form-template-detail:txtServiceCode"
+										listener="#{cdrTemplateBean.onDialogServieCodeReturn}" />
+								</p:commandButton>
+							</div> -->
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['cdrTemplate.description']}"
+									></p:outputLabel>
+							</div>
+							<div class="col-xs-12">
+								<p:inputText value="#{cdrTemplateBean.cdrTemplate.description}"
+									styleClass="form-control" maxlength="255"></p:inputText>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row formFieldMg">
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:dataTable id="tblCdrTemplateProp"
+									widgetVar="cdrTemplatePropTable"
+									rowStyleClass="#{index % 2 == 1? 'rowColorBlue': null}"
+									value="#{cdrTemplateBean.listCdrTemplateProp}" paginator="true"
+									rows="10" paginatorPosition="bottom" var="item"
+									rowIndexVar="index"
+									paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									rowsPerPageTemplate="10,20,50,100" editable="true"
+									editMode="cell">
+									<f:facet name="header">
+										<p:outputLabel
+											value="#{msg['cdrTemplate.TemplateProperties']}"
+											></p:outputLabel>
+									</f:facet>
+									<p:column headerText="#" style="width:6%">
+										<h:outputText value="#{index + 1}" title="#{index + 1}" />
+									</p:column>
+									<p:column
+										headerText="#{msg['cdrTemplate.TemplatePropertyName']}">
+										<p:commandLink value="#{item.propName}"
+											styleClass="preformatted" immediate="true"
+											actionListener="#{cdrTemplateBean.changeItemTable(item)}">
+											<p:ajax event="dialogReturn"
+												listener="#{cdrTemplateBean.onDialogPropertiesReturn}"
+												update="tblCdrTemplateProp" />
+										</p:commandLink>
+										<!-- 										<p:cellEditor> -->
+										<!-- 											<f:facet name="output"> -->
+										<!-- 												<h:outputText /> -->
+										<!-- 											</f:facet> -->
+										<!-- 											<f:facet name="input"> -->
+										<!-- 												<h:selectOneMenu styleClass="form-control" -->
+										<!-- 													value="#{item.cdrPropId}"> -->
+										<!-- 													<f:selectItems -->
+										<!-- 														value="#{cdrTemplateBean.listSelectProperty}" /> -->
+										<!-- 													<p:ajax event="change" -->
+										<!-- 														listener="#{cdrTemplateBean.changePropertySetting(item)}" -->
+										<!-- 														update="tblCdrTemplateProp" /> -->
+										<!-- 												</h:selectOneMenu> -->
+										<!-- 											</f:facet> -->
+										<!-- 										</p:cellEditor> -->
+									</p:column>
+
+									<p:column headerText="#{msg['cdrTemplate.nullable']}"
+										styleClass="text-center">
+										<p:selectBooleanCheckbox value="#{item.nullable}">
+											<p:ajax event="change"
+												listener="#{cdrTemplateBean.changePropertySetting(item)}"
+												update="tblCdrTemplateProp" />
+										</p:selectBooleanCheckbox>
+									</p:column>
+
+									<p:column headerText="#{msg['cdrTemplate.status']}"
+										styleClass="text-center">
+										<p:selectBooleanCheckbox value="#{item.status}">
+											<p:ajax event="change"
+												listener="#{cdrTemplateBean.changePropertySetting(item)}"
+												update="tblCdrTemplateProp" />
+										</p:selectBooleanCheckbox>
+									</p:column>
+
+									<p:column headerText="#{msg['cdrTemplate.format']}"
+										styleClass="text-truncate">
+										<p:cellEditor>
+											<f:facet name="output">
+												<h:outputText value="#{item.format}" />
+											</f:facet>
+											<f:facet name="input">
+												<p:inputText value="#{item.format}" maxlength="255"
+													title="#{item.format}" style="width: 100%" />
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+
+									<p:column headerText="#{msg['cdrTemplate.defaultValue']}"
+										styleClass="text-truncate">
+										<p:cellEditor>
+											<f:facet name="output">
+												<h:outputText value="#{item.defaultValue}" />
+											</f:facet>
+											<f:facet name="input">
+												<p:inputText value="#{item.defaultValue}" maxlength="255"
+													title="#{item.defaultValue}" style="width: 100%" />
+											</f:facet>
+										</p:cellEditor>
+									</p:column>
+
+									<p:column headerText="#{msg['cdrTemplate.displayable']}"
+										styleClass="text-center" style="width:20%">
+										<p:selectBooleanCheckbox value="#{item.displayable}" />
+									</p:column>
+
+									<p:column headerText="#{msg['common.action']}"
+										style="text-align:center; width: 200px;">
+										<p:commandLink disabled="#{!cdrTemplateBean.editting}"
+											actionListener="#{cdrTemplateBean.addPropAt(item)}"
+											update="tblCdrTemplateProp"
+											styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+											<i class="fa fa-plus icon-only mr-0"></i>
+											<p:ajax event="dialogReturn" update="tblCdrTemplateProp"
+												listener="#{cdrTemplateBean.onDialogPropertiesReturn}" />
+										</p:commandLink>
+
+										<p:commandLink
+											rendered="#{cdrTemplateBean.editRowTemplateProp}"
+											update="tblCdrTemplateProp"
+											actionListener="#{cdrTemplateBean.lockTemplateProp(item)}"
+											styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+											<i class="fa fa-floppy-o icon-only mr-0"></i>
+										</p:commandLink>
+										<!-- 										<p:commandLink -->
+										<!-- 											rendered="#{!cdrTemplateBean.editRowTemplateProp}" -->
+										<!-- 											update="tblCdrTemplateProp" immediate="true" -->
+										<!-- 											actionListener="#{cdrTemplateBean.editTemplateProp(item)}" -->
+										<!-- 											styleClass="btn btn-sm btn-action-edit colorStrongGreen"> -->
+										<!-- 											<i class="fa fa-pencil icon-only mr-0"></i> -->
+										<!-- 										</p:commandLink> -->
+										<p:commandLink update="myPanel" immediate="true"
+											disabled="#{cdrTemplateBean.listCdrTemplateProp.indexOf(item) eq 0 || !cdrTemplateBean.editting}"
+											actionListener="#{cdrTemplateBean.moveUpProperty(item)}"
+											styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+											<i class="fa fa-arrow-circle-up icon-only mr-0"></i>
+										</p:commandLink>
+										<p:commandLink update="myPanel" immediate="true"
+											disabled="#{index eq (cdrTemplateBean.listCdrTemplateProp.size() - 1) || !cdrTemplateBean.editting}"
+											actionListener="#{cdrTemplateBean.moveDownProperty(item)}"
+											styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+											<i class="fa fa-arrow-circle-down icon-only mr-0"></i>
+										</p:commandLink>
+										<p:commandLink update="tblCdrTemplateProp" immediate="true"
+											disabled="#{!cdrTemplateBean.editting}"
+											actionListener="#{cdrTemplateBean.removeTemplateProp(item)}"
+											styleClass="btn btn-sm btn-action-del colorRed">
+											<i class="fa fa-times icon-only mr-0"></i>
+											<p:confirm header="#{msg['common.delete']}"
+												message="#{msg['common.confirmDelete']}"
+												icon="ui-icon-alert" />
+										</p:commandLink>
+										<f:facet name="header">
+											<p:commandButton value="#{msg['common.addNew']}" icon="fa fa-plus"
+												resetValues="true" disabled="#{!cdrTemplateBean.editting}"
+												actionListener="#{cdrTemplateBean.addItemTable}"
+												styleClass="btn btn-primary" immediate="true">
+												<p:ajax event="dialogReturn"
+													listener="#{cdrTemplateBean.onDialogPropertiesReturn}"
+													update="tblCdrTemplateProp" />
+											</p:commandButton>
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-10">
+						<p:outputLabel ></p:outputLabel>
+					</div>
+					<div class="col-xs-12 col-sm-2">
+						<p:commandButton value="#{msg['common.apply']}" icon="fa fa-save"
+							update="treeCommon myPanel" styleClass="pull-right"
+							disabled="#{!cdrTemplateBean.editting}" 
+							actionListener="#{cdrTemplateBean.submitTemplate}">
+							<p:confirm header="#{msg['common.apply']}"
+								message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+						</p:commandButton>
+					</div>
+				</div>
+
+				<!-- 				<div class="col-xs-12"> -->
+				<!-- 					<p:commandButton value="#{msg['common.apply']}" -->
+				<!-- 						update="treeCommon myPanel" styleClass="pull-right" -->
+				<!-- 						rendered="#{cdrTemplateBean.editting}" -->
+				<!-- 						actionListener="#{cdrTemplateBean.submitTemplate}"> -->
+				<!-- 						<p:confirm header="#{msg['common.apply']}" -->
+				<!-- 							message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" /> -->
+				<!-- 					</p:commandButton> -->
+				<!-- 				</div> -->
+
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

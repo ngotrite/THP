@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:form id="form-group" class="container-fluid">
+
+	<div class="row formFieldMg">
+		<div class="col-xs-6">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['group.name']}" for="groupName" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText id="groupName" value="#{groupBean.sysGroup.name}"
+								maxlength="100" required="true"
+								requiredMessage="#{msg['common.required']}"
+								styleClass="form-control" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['group.desc']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{groupBean.sysGroup.description}"
+								maxlength="100" styleClass="form-control" />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['group.ID']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{groupBean.sysGroup.id}" readonly="true"
+								styleClass="form-control" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:selectBooleanCheckbox value="#{groupBean.sysGroup.isActive}" itemLabel="#{msg['common.active']}">
+							</p:selectBooleanCheckbox>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="row">
+						<div class="col-xs-12 text-right">
+							<p:commandButton id="btnNew" value="#{msg['common.addNew']}"
+								actionListener="#{groupBean.btnNew}" icon="fa fa-plus"
+								disabled="#{groupBean.editing}" update="form-group"
+								styleClass="btn btn-primary" immediate="true" resetValues="true">
+							</p:commandButton>
+							<p:commandButton id="btnSave" value="#{msg['common.save']}"
+								actionListener="#{groupBean.btnSave}" icon="fa fa-save"
+								disabled="#{!groupBean.editing}"
+								update="form-group-list:ID_GroupTable form-group"
+								styleClass="btn btn-default">
+								<p:confirm header="#{msg['common.apply']}"
+									message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+							</p:commandButton>
+							<p:commandButton id="btnCancel" value="#{msg['common.cancel']}"
+								actionListener="#{groupBean.btnCancel}" icon="fa fa-refresh"
+								disabled="#{!groupBean.editing}" update="form-group"
+								styleClass="btn btn-default" immediate="true" resetValues="true">
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-6">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:tabView prependId="false" styleClass="fix-height-tab">
+						<p:tab title="#{msg['group.userOf']}">
+							<p:dataTable id="ID_GroupUserTable" var="user"
+								value="#{groupBean.listSysUser}" rowIndexVar="rowIndex"
+								selectionMode="single" rowKey="#{user.id}" scrollable="true"
+								scrollHeight="180"
+								rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+
+								<p:column headerText="#" styleClass="widthSTTcolumn">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+								<p:column headerText="#{msg['user.userName']}"
+									sortBy="#{user.userName}">
+									<h:outputText value="#{user.userName}" />
+								</p:column>
+								<p:column headerText="#{msg['user.email']}"
+									sortBy="#{user.userName}">
+									<h:outputText value="#{user.email}" />
+								</p:column>
+								<p:column headerText="#{msg['user.fullName']}"
+									sortBy="#{user.fullName}">
+									<h:outputText value="#{user.fullName}" />
+								</p:column>
+
+								<p:column headerText="#{msg['common.action']}"
+									styleClass="actionColumn">
+									<p:commandLink actionListener="#{groupBean.removeUser(user)}"
+										update="ID_GroupUserTable"
+										styleClass="btn btn-sm btn-action-del colorRed">
+										<i class="fa fa-times icon-only mr-0"></i>
+									</p:commandLink>
+
+									<f:facet name="header">
+										<p:commandButton value="#{msg['user.addUser']}"
+											disabled="#{!groupBean.editing}" icon="fa fa-plus"
+											actionListener="#{groupBean.btnShowSelectUserDlg()}"
+											update="formdlgSelectUserOfGroup"
+											oncomplete="PF('dlgSelectUserOfGroup').show()"
+											immediate="true">
+										</p:commandButton>
+									</f:facet>
+								</p:column>
+							</p:dataTable>
+						</p:tab>
+					</p:tabView>
+				</div>
+			</div>
+		</div>
+	</div>
+</h:form>
+
+
+
+<h:form id="form-group-list" class="container-fluid">
+	<div class="row">
+		<div class="col-xs-12">
+			<p:dataTable id="ID_GroupTable" var="group"
+				value="#{groupBean.listSysGroup}" rowIndexVar="rowIndex"
+				paginator="true" rows="20" paginatorPosition="bottom"
+				selectionMode="single" rowKey="#{group.id}"
+				rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,20,50,100"
+				emptyMessage="#{msg['common.noData']}">
+
+				<f:facet name="header">
+					<h:outputLabel value="#{msg['group.list']}"></h:outputLabel>
+				</f:facet>
+
+				<p:column headerText="#" styleClass="widthSTTcolumn">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+				<p:column headerText="#{msg['group.name']}" sortBy="#{group.name}"
+					filterBy="#{group.name}" filterMatchMode="contains">
+					<h:outputText value="#{group.name}" />
+				</p:column>
+				<p:column headerText="#{msg['common.active']}"
+					styleClass="checkboxColumn">
+					<p:selectBooleanCheckbox value="#{group.isActive}" disabled="true">
+					</p:selectBooleanCheckbox>
+				</p:column>
+				<p:column headerText="#{msg['group.desc']}"
+					sortBy="#{group.description}" filterBy="#{group.description}"
+					filterMatchMode="contains">
+					<h:outputText value="#{group.description}" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.action']}"
+					styleClass="actionColumn">
+					<p:commandLink actionListener="#{groupBean.onRowEdit(group)}"
+						update="form-group" immediate="true"
+						styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+						<i class="fa fa-pencil icon-only mr-0"></i>
+					</p:commandLink>
+					<p:commandLink actionListener="#{groupBean.onRowDelete(group)}"
+						update="ID_GroupTable" immediate="true"
+						styleClass="btn btn-sm btn-action-del colorRed">
+						<i class="fa fa-times icon-only mr-0"></i>
+						<p:confirm header="#{msg['common.delete']}"
+							message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</div>
+	</div>
+</h:form>
+
+<p:dialog header="#{msg['title.select']}" modal="true"
+	id="dlgSelectUserOfGroup" resizable="false" showEffect="fade"
+	position="center" widgetVar="dlgSelectUserOfGroup" height="300"
+	width="600">
+	<h:form id="formdlgSelectUserOfGroup">
+		<div class="row formFieldMg">
+			<div class="col-xs-12">
+				<p:dataTable id="ID_GroupUserTableDlg" var="user"
+					value="#{groupBean.listSysUserDlg}" rowIndexVar="rowIndex"
+					paginator="true" rows="20" paginatorPosition="bottom"
+					selection="#{groupBean.selectedUsers}" rowKey="#{user.id}">
+
+					<f:facet name="header">
+						<h:outputLabel value="#{msg['user.list']}"></h:outputLabel>
+					</f:facet>
+
+					<p:column selectionMode="multiple" styleClass="widthSTTcolumn" />
+
+					<p:column headerText="#" styleClass="widthSTTcolumn">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{msg['user.userName']}"
+						sortBy="#{user.userName}" filterBy="#{user.userName}"
+						filterMatchMode="contains">
+						<h:outputText value="#{user.userName}" />
+					</p:column>
+					<p:column headerText="#{msg['user.email']}"
+						sortBy="#{user.userName}" filterBy="#{user.email}"
+						filterMatchMode="contains">
+						<h:outputText value="#{user.email}" />
+					</p:column>
+					<p:column headerText="#{msg['user.fullName']}"
+						sortBy="#{user.fullName}" filterBy="#{user.fullName}"
+						filterMatchMode="contains">
+						<h:outputText value="#{user.fullName}" />
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 text-right">
+				<p:commandButton value="#{msg['common.save']}" icon="fa fa-save"
+					action="#{groupBean.btnSelectUserDlg()}"
+					update="form-group:ID_GroupUserTable" styleClass="btn btn-default">
+				</p:commandButton>
+				<p:commandButton id="btnClose" value="#{msg['common.close']}"
+					onclick="PF('dlgSelectUserOfGroup').hide()" icon="fa fa-close"
+					styleClass="btn btn-default" immediate="true">
+				</p:commandButton>
+			</div>
+		</div>
+	</h:form>
+</p:dialog>
+</html>

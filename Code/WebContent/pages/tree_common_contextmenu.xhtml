@@ -1,0 +1,560 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<p:contextMenu for="treeCommonCatalog" id="ctxMenuTreeCommon"
+	widgetVar="ctxMenuTreeCommon" event="contextmenu" nodeType="CATEGORY">
+	<p:menuitem value="Add Child Category"
+		actionListener="#{treeCommonBean.addChildCatContext(treeCommonBean.nodeSelectEvent)}"
+		update="categoryCommonTop contentPanel formDlgCategory"
+		oncomplete="PF('dlgCategory').show()" />
+	<p:menuitem value="Add Object" resetValues="true"
+		actionListener="#{treeCommonBean.addChildObjectContext(treeCommonBean.nodeSelectEvent)}"
+		update="contentTitle categoryCommonTop contentPanel" />
+	<p:menuitem value="Delete Category"
+		actionListener="#{treeCommonBean.removeCatContext(treeCommonBean.nodeSelectEvent)}"
+		update="treeCommonCatalog categoryCommonTop">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="#{msg['common.moveUp']}"
+		actionListener="#{treeCommonBean.moveUpCategory()}"
+		update="treeCommonCatalog" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		actionListener="#{treeCommonBean.moveDownCategory()}"
+		update="treeCommonCatalog" />
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_SERVICE">
+	<!-- 	<p:menuitem value="#{msg['common.addNew']}" -->
+	<!-- 		actionListener="#{serviceBean.addNew(treeCommonBean.nodeSelectEvent)}" -->
+	<!-- 		update="treeCommonCatalog" /> -->
+	<!-- 	<p:menuitem value="#{msg['common.moveCate']}" -->
+	<!-- 		onclick="triggerMoveToCatDlg();" /> -->
+
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{serviceBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{serviceBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{serviceBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{serviceBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_PARAMETER">
+	<p:menuitem value="#{msg['common.clone']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{parameterBean.cloneContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.clone']}"
+			message="#{msg['common.confirmClone']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{parameterBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{parameterBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{parameterBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{parameterBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_BILLING_CYCLE">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{billingCycleTypeBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{billingCycleTypeBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{billingCycleTypeBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{billingCycleTypeBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_STATE_GROUP">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{stateSetBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{stateSetBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{stateSetBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{stateSetBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_STATE_TYPE">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{stateSetBean.moveUpDownStateTypeInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{stateSetBean.moveUpDownStateTypeInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{stateSetBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{stateSetBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:commandButton id="btnHiddenOpenMoveToCatServiceDlg"
+	styleClass="button"
+	actionListener="#{serviceBean.moveTo(treeCommonBean.nodeSelectEvent)}"
+	style="display:none">
+	<p:ajax listener="#{serviceBean.onDialogCatReturn}"
+		event="dialogReturn"
+		update="treeCommon:treeCommonCatalog contentPanel" />
+</p:commandButton>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_UNIT_TYPE">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{unitBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{unitBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{unitBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{unitBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_BAL_TYPE">
+	<p:menuitem value="#{msg['common.clone']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{balTypeBean.cloneContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.clone']}"
+			message="#{msg['common.confirmClone']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{balTypeBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{balTypeBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{balTypeBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{balTypeBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_RESERVE_INFO">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{reserveBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{reserveBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{reserveBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{reserveBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_TRIGGER_OCS">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{triggerOcsBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{triggerOcsBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{triggerOcsBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{triggerOcsBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="Check Dependencies"
+		actionListener="#{triggerOcsBean.commandCheckDependencies(treeCommonBean.nodeSelectEvent)}" />
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_TRIGGER_DESTINATION">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{triggerDesBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{triggerDesBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{triggerDesBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{triggerDesBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_TRIGGER_MSG">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{triggerMsgBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{triggerMsgBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{triggerMsgBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{triggerMsgBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_GEO_HOME_ZONE">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{geoBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{geoBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{geoBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{geoBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_TRIGGER_TYPE">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{triggerOcsBean.moveUpDownTriggerTypeInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{triggerOcsBean.moveUpDownTriggerTypeInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{triggerOcsBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{triggerOcsBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_ZONE_MAP">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{zoneMapBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{zoneMapBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{zoneMapBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{zoneMapBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_MAP_SHARE_BAL">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{mapShareBalBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{mapShareBalBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{mapShareBalBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{mapShareBalBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_MAP_ACM_BAL">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{mapAcmBalBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{mapAcmBalBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{mapAcmBalBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{mapAcmBalBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_CDR_SERVICE">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{cdrServiceBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{cdrServiceBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{cdrServiceBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{cdrServiceBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_CDR_TEMP">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{cdrTemplateBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{cdrTemplateBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{cdrTemplateBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{cdrTemplateBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_CDR_GEN_FILENAME">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{cdrGenFileNameBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{cdrGenFileNameBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.clone']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{cdrGenFileNameBean.cloneCdrGenFileName(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm message="#{msg['common.cfg.clone']}"
+			header="#{msg['cdrProperties.submit']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{cdrGenFileNameBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{cdrGenFileNameBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_CDR_PROCESS_CFG">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{cdrProcessConfigBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{cdrProcessConfigBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.clone']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{cdrProcessConfigBean.cloneCdrProcessConfig(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm message="#{msg['common.cfg.clone']}"
+			header="#{msg['cdrProperties.submit']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{cdrProcessConfigBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{cdrProcessConfigBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="POLICY_PEP_PROFILE">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{policyProfileBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{policyProfileBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{policyProfileBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="POLICY_PCC_RULE">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{pccRuleBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{pccRuleBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{pccRuleBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="SETTING_SYS_COMFIG">
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{systemConfigBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{systemConfigBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{systemConfigBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_STATISTIC_ITEM">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{statisticItemBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{statisticItemBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{statisticItemBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{statisticItemBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_SMS_NOTIFY_TEMPLATE">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{smsNotiTemBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{smsNotiTemBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{smsNotiTemBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{smsNotiTemBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonCatalog" event="contextmenu"
+	nodeType="CAT_CSS_USSD_RESPONSE">
+	<p:menuitem value="#{msg['common.moveUp']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{cssUssdResponseBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, true)}" />
+	<p:menuitem value="#{msg['common.moveDown']}"
+		update="treeCommonCatalog contentPanel"
+		actionListener="#{cssUssdResponseBean.moveUpDownInCat(treeCommonBean.nodeSelectEvent, false)}" />
+	<p:menuitem value="#{msg['common.edit']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{cssUssdResponseBean.editContextMenu(treeCommonBean.nodeSelectEvent)}" />
+	<p:menuitem value="#{msg['common.delete']}"
+		update="treeCommonCatalog categoryCommonTop contentPanel contentTitle"
+		actionListener="#{cssUssdResponseBean.removeContextMenu(treeCommonBean.nodeSelectEvent)}">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<h:outputScript>
+      function triggerMoveToCatDlg() {
+        document.getElementById("treeCommon:btnHiddenOpenMoveToCatServiceDlg").click();
+      }
+</h:outputScript>
+
+</html>

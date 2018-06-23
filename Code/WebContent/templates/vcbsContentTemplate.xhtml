@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright HuongTV Viettel Telecom. All rights reserved.
+VIETTEL PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<h:head>
+	<title><ui:insert name="title">OCS 3.0</ui:insert></title>
+	<meta http-equiv="content-type" content="text/html; charset=utf8" />
+	<link rel="shortcut icon"
+		href="#{request.contextPath}/resources/favicon.png"
+		type="image/x-icon" />
+	<link href="#{request.contextPath}/resources/css/layout_vocs.css"
+		rel="stylesheet" type="text/css" />
+	<link href="#{request.contextPath}/resources/css/tree.css"
+		rel="stylesheet" type="text/css" />
+
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<!-- font roboto -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/roboto/roboto.css" />
+	<!-- font themify -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/themify/themify-icons.css" />
+	<!-- simple line font -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/simpleLineIcon/css/simple-line-icons.css" />
+
+	<!-- end font -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/webfonts/stylesheet.css" />
+	<!-- Basic Styles -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-widget.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-jqueryui.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-datepicker.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/js/rappid/css/leftmenu.css" />
+	<!-- <link rel="stylesheet" type="text/css" media="screen" href="#{request.contextPath}/resources/themes/smartadmin/css/demo.css"/> -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/custom.css" />
+	<link rel="apple-touch-icon"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/sptouch-icon-iphone.png" />
+	<link rel="apple-touch-icon" sizes="76x76"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-ipad.png" />
+	<link rel="apple-touch-icon" sizes="120x120"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-iphone-retina.png" />
+	<link rel="apple-touch-icon" sizes="152x152"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-ipad-retina.png" />
+
+	<!-- huan -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-skins.css" />
+	<!-- <link rel="stylesheet" type="text/css" media="screen" href="#{request.contextPath}/resources/themes/smartadmin/css/demo.css"/> -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/css/custom.css" />
+
+	<!-- hieupv -->
+	<!-- Font Awesome -->
+	<link rel="stylesheet"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/font-awesome/css/font-awesome.min.css" />
+	<!-- Ocsicon -->
+	<link rel="stylesheet"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/font-ocs/osicon.css" />
+
+	<!-- Content Template CSS -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/customContent.css" />
+
+	<!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+	<!-- Startup image for web apps -->
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/ipad-landscape.png"
+		media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/ipad-portrait.png"
+		media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/iphone.png"
+		media="screen and (max-device-width: 320px)" />
+
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/js/advance.js" />
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/js/util.js" />
+
+	<!-- Custom JS -->
+	<script
+		src="#{request.contextPath}/resources/themes/smartadmin/js/custom.js"></script>
+</h:head>
+
+<body oncontextmenu="return false;" class="#{userSession.sysUser.theme}">
+	<f:view locale="#{userSession.language}" contentType="text/html"
+		id="viewLocale">
+		<p:ajaxStatus
+			onstart="checkOpenDlg('statusDialog');trimAllInputText();"
+			oncomplete="checkCloseDlg('statusDialog');" />
+		<p:ajaxStatus onstart="trimAllInputText();" oncomplete="" />
+		<p:dialog id="modalOverlay" modal="true" hideEffect="" widgetVar="statusDialog"
+			draggable="false" closable="false" resizable="false"
+			style="background: transparent !important;" styleClass="loading">
+			<img src="#{request.contextPath}/resources/themes/images/loading.gif"
+				style="width: 64px;" />
+		</p:dialog>
+		<!-- <p:tooltip /> -->
+		<p:growl id="growlInfo" autoUpdate="true" severity="info"
+			showSummary="true" showDetail="true" life="3000" />
+		<p:growl showSummary="false" showDetail="true" severity="error"
+			autoUpdate="true" sticky="true" id="growlError" />
+		<p:growl showSummary="false" showDetail="true" severity="warn"
+			autoUpdate="true" sticky="true" id="growlWarn" />
+
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="explode"
+			width="250">
+			<p:commandButton
+				style="background: #3276b1;color: #fff;border-radius: 3px;float: left; padding: 5px 10px; margin-left: 20px;"
+				value="Yes" type="button" styleClass="ui-confirmdialog-yes"
+				icon="fa fa-check" />
+			<p:commandButton
+				style="background: #c79121; color: #fff;border-radius: 3px; float: right; padding: 5px 10px; margin-right: 20px"
+				value="No" type="button" styleClass="ui-confirmdialog-no"
+				icon="fa fa-times" />
+		</p:confirmDialog>
+
+
+		<ui:insert name="header">
+			<ui:include src="vcbsHeader.xhtml" />
+		</ui:insert>
+
+		<div class="wrapper" style="clear: both;">
+			<ui:insert name="header">
+				<ui:include src="vcbsLeftMenu.xhtml" />
+			</ui:insert>
+
+			<!-- MAIN PANEL -->
+			<div id="main" role="main">
+
+				<!-- BREADCUMB -->
+				<div class="breadcumb">
+					<i class="ti-home"></i>
+					<span>#{userSession.getBreadCumb()}</span>
+				</div>
+					
+				<!-- MAIN CONTENT -->
+				<div id="content" class="container-fluid">				
+					<ui:insert name="content">
+					</ui:insert>
+				</div>				
+				<!-- END MAIN CONTENT -->
+				
+				<ui:insert name="footer">
+					<ui:include src="vcbsFooter.xhtml" />
+				</ui:insert>
+			</div>
+			
+			
+		</div>
+		<!-- END MAIN PANEL -->
+		<!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+		<!--<script src="#{request.contextPath}/resources/themes/smartadmin/js/libs/jquery-2.0.2.min.js"></script>-->
+		<!-- 		<script src="#{request.contextPath}/resources/themes/smartadmin/js/libs/jquery-ui-1.10.3.min.js"></script> -->
+		<!-- 		<script src="#{request.contextPath}/resources/js/primeui.js"></script> -->
+
+		<!--JS TOUCH : include this plugin for mobile drag / drop touch events-->
+		<!-- <script src="#{request.contextPath}/resources/themes/smartadmin/js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> -->
+
+		<!-- BOOTSTRAP JS -->
+		<script
+			src="#{request.contextPath}/resources/themes/smartadmin/js/bootstrap/bootstrap.min.js"></script>
+
+		<!-- JARVIS WIDGETS -->
+		<script
+			src="#{request.contextPath}/resources/themes/smartadmin/js/smartwidgets/jarvis.widget.min.js"></script>
+
+		<!-- JQUERY MASKED INPUT -->
+		<!-- <script src="#{request.contextPath}/resources/themes/smartadmin/js/plugin/masked-input/jquery.maskedinput.min.js"></script> -->
+
+		<!-- browser msie issue fix -->
+		<!-- <script src="#{request.contextPath}/resources/themes/smartadmin/js/plugin/msie-fix/jquery.mb.browser.min.js"></script> -->
+
+		<!-- Notification -->
+		<!-- 		<script src="#{request.contextPath}/resources/js/primeui.min.js"></script> -->
+		<!-- MAIN APP JS FILE -->
+		<script
+			src="#{request.contextPath}/resources/themes/smartadmin/js/app.js"></script>
+		<!-- huannn -->
+		<!-- <script src="#{request.contextPath}/resources/themes/smartadmin/js/demo.js"></script> -->
+		<script src="#{request.contextPath}/resources/js/tree_ocs.js"></script>
+
+		<script type="text/javascript">
+            $(document).ready(function () {
+                $(".calendar input").css("border", "none").css("background-color", "transparent").css("padding", "0px");
+                $(".combobox-container label").css("padding", "0px").css("width", "100%");
+                pageSetUp();
+                keyUpSearch();
+                changeBreacum();
+                
+//                 document.onkeypress = stopRKey;
+            });
+
+            function confirmDelete() {
+                var r = confirm("Are you sure?");
+                if (r == true) {
+                    return true;
+                } else {
+                    return false;
+                }
+            };
+            
+            function stopRKey(evt) { 
+	           	  var evt = (evt) ? evt : ((event) ? event : null); 
+	           	  if (evt.keyCode == 13)  {
+	           		  return false;
+	              }
+            }
+            </script>
+		<ui:insert name="footer_script"></ui:insert>
+	</f:view>
+</body>
+</html>

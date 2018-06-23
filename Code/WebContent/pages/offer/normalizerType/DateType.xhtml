@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<!--BEGIN Panel Date type -->
+	<p:panel id="pnlDateType" styleClass="nopadding"
+		rendered="#{normalizerBean.selectedNormType == 5}">
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['normalizer.inputFieldSpecial']}"
+							></p:outputLabel>
+					</div>
+					<div class="col-xs-12">
+						<p:inputText id="specialFieldDateType" styleClass="form-control"
+							value="#{normalizerBean.normalizer.specialFileds}" readonly="true"></p:inputText>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6">
+				<div class="row">
+					<div class="col-xs-12 pd-top20">
+						<p:selectBooleanCheckbox value="#{normalizerBean.isCurrentTimeUsing}" itemLabel="#{msg['normalizer.isCurrentTimeUsing']}">
+							<p:ajax event="change" listener="#{normalizerBean.onchangeSomeFields()}" update="contentPanel inputTextField01"/>
+						</p:selectBooleanCheckbox>
+					</div>
+					<div class="col-xs-12">
+						<p:selectBooleanCheckbox value="#{normalizerBean.isStaticInput}" itemLabel="#{msg['normalizer.isStaticInput']}">
+							<p:ajax event="change" listener="#{normalizerBean.onchangeSomeFields()}" update="contentPanel"/>
+						</p:selectBooleanCheckbox>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p:outputLabel value="#{msg['normalizer.default']}"
+					></p:outputLabel>
+				<p:outputLabel value="*" styleClass="colorRed"></p:outputLabel>
+			</div>
+			<div class="col-xs-12">
+				<h:selectOneMenu styleClass="form-control" value="#{normalizerBean.selectedNormDefaultWithNormValue}">
+					<f:selectItems value="#{normalizerBean.listSelectNormValue}" />
+				</h:selectOneMenu>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12" style="padding-top: 15px;">
+				<p:commandButton value="#{msg['normalizer.editValues']}" disabled="#{!normalizerBean.isEdit}" icon="fa fa-edit"
+					styleClass="mgRight10" onclick="PF('dlgValueManager').show()"></p:commandButton>
+				<p:commandButton value="#{msg['normalizer.addNewParams']}" disabled="#{!normalizerBean.isEdit}" icon="fa fa-plus"
+					styleClass="mgRight10" actionListener="#{normalizerBean.addChildForListTableNVPstring()}" update="TableNormValueParamForDate"></p:commandButton>
+<!-- 				<p:commandButton value="#{msg['normalizer.validate']}" -->
+<!-- 					styleClass="mgRight10" actionListener="#{normalizerBean.validateChildForListTableNVPstring()}" update="TableNormValueParamForDate"></p:commandButton> -->
+			</div>
+<!-- 			<div class="col-xs-12"> -->
+<!-- 				<p:messages id="messagesConfigInputDate" severity="error, warn" showDetail="true" autoUpdate="true" closable="true" /> -->
+<!-- 			</div> -->
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p:dataTable
+					id="TableNormValueParamForDate"
+					var="item"
+					editable="true" editMode="cell"
+					value="#{normalizerBean.listTableNormValueParamForString}"
+					paginator="true" rows="20" paginatorPosition="bottom"
+					rowIndexVar="rowIndex"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="10,20,50,100"
+					rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+					<p:column headerText="#" styleClass="widthSTTcolumn">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+	
+					<p:column headerText="#{msg['normalizer.valueName']}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<div class="col-xs-12 colorFieldValue" style="background: #{item.normValue.colorBG}">
+									<h:outputText value="#{item.normValue.valueName}" style="color: #{item.normValue.color};"/>
+								</div>
+							</f:facet>
+							<f:facet name="input">
+								<h:selectOneMenu styleClass="form-control" value="#{item.selectedNormValue}">
+									<f:selectItems value="#{normalizerBean.listSelectNormValue}" />
+									<p:ajax event="change" listener="#{normalizerBean.onChangeNormValueInTableNVP(item)}" oncomplete="$('.btnUpdateHiddenAll').click();"/>
+								</h:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					
+					<p:column headerText="#{msg['normalizer.startType']}">
+						<h:selectOneMenu styleClass="form-control" value="#{item.selectedStartValue}">
+							<f:selectItems value="#{normalizerBean.listDateNormDateType}" />
+							<p:ajax event="change" listener="#{normalizerBean.onChangeNormValueInTableNVP(item)}" oncomplete="$('.btnUpdateHiddenAll').click();"/>
+						</h:selectOneMenu>
+					</p:column>
+		
+					<p:column headerText="#{msg['normalizer.startValueRange']}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<!-- <h:outputText value="#{item.startValueStr}" /> -->
+								<h:outputText value="#{item.startValue}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:calendar value="#{item.startValueDate}" yearRange="-50:+50" rendered="#{item.selectedStartValue == 1}"
+									pattern="#{userSession.timeFormat}" styleClass="normalizerStartdate calendarIcon" mask="true" maxlength="20" navigator="true">
+									<p:ajax event="change" listener="#{normalizerBean.onChangeNormValueInTableNVP(item)}" update="TableNormValueParamForDate"/>
+								</p:calendar>
+								<h:outputText value="none" rendered="#{item.selectedStartValue == 2}"/>
+								<p:inputNumber minValue="-9999999999" maxValue="9999999999" 
+												value="#{item.startValueNumber}" rendered="#{item.selectedStartValue == 3}">
+									<p:ajax event="change" listener="#{normalizerBean.onChangeNormValueInTableNVP(item)}" oncomplete="$('.btnUpdateHiddenAll').click();"/>
+								</p:inputNumber>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					
+					<p:column headerText="#{msg['normalizer.endType']}">
+						<h:selectOneMenu styleClass="form-control" value="#{item.selectedEndValue}">
+							<f:selectItems value="#{normalizerBean.listDateNormDateType}" />
+							<p:ajax event="change" listener="#{normalizerBean.onChangeNormValueInTableNVP(item)}" oncomplete="$('.btnUpdateHiddenAll').click();"/>
+						</h:selectOneMenu>
+					</p:column>
+		
+					<p:column headerText="#{msg['normalizer.endValueRange']}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<!-- <h:outputText value="#{item.endValueStr}" /> -->
+								<h:outputText value="#{item.endValue}" />
+							</f:facet>
+							<f:facet name="input">
+<!-- 								<p:inputMask styleClass="form-control" rendered="#{item.selectedEndValue == 1}" value="#{item.endValue}" mask="99-99-9999 99:99:99"> -->
+<!-- 									<p:ajax event="change" listener="#{normalizerBean.onChangeNormValueInTableNVP(item)}" oncomplete="$('.btnUpdateHiddenAll').click();" update="TableNormValueParamForDate"/> -->
+<!-- 								</p:inputMask> -->
+								<p:calendar value="#{item.endValueDate}" yearRange="-50:+50" rendered="#{item.selectedEndValue == 1}"
+									pattern="#{userSession.timeFormat}" styleClass="normalizerStartdate calendarIcon" mask="true" maxlength="20" navigator="true">
+									<p:ajax event="change" listener="#{normalizerBean.onChangeNormValueInTableNVP(item)}" update="TableNormValueParamForDate"/>
+								</p:calendar>
+								<h:outputText value="none" rendered="#{item.selectedEndValue == 2}"/>
+								<p:inputNumber value="#{item.endValueNumber}" minValue="0" maxValue="999999" rendered="#{item.selectedEndValue == 3}">
+									<p:ajax event="change" listener="#{normalizerBean.onChangeNormValueInTableNVP(item)}" oncomplete="$('.btnUpdateHiddenAll').click();"/>
+								</p:inputNumber>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+	
+					<!-- <p:column headerText="#{msg['common.action']}"
+						style="text-align:center;">
+						<p:commandLink disabled="#{!normalizerBean.isEdit}"
+							actionListener="#{normalizerBean.removeChildForListTableNVPstring(item)}"
+							styleClass="btn btn-sm btn-action-del colorRed"
+							update="TableNormValueParamForDate">
+							<i class="fa fa-times icon-only mr-0"></i>
+							<p:confirm header="#{msg['common.delete']}"
+								message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+						</p:commandLink>
+					</p:column> -->
+				</p:dataTable>
+			</div>
+		</div>
+	</p:panel>
+	<!--END Panel Date type -->
+</html>

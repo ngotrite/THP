@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright YYYY Viettel Telecom. All rights reserved.
+VIETTEL PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<p:dialog id="dlUserProfile" widgetVar="wvUserProfile"
+	header="User Profile" modal="true" appendToBody="true"
+	resizable="false">
+	<p:tabView id="tab">
+		<p:tab title="#{msg['user.Profile']}">
+			<f:view locale="#{userSession.language}" contentType="text/html"
+				id="viewLocale">
+				<h:form id="form-user-profile" class="container-fluid">
+					<div class="formFieldMg">
+						<div class="col-xs-12 col-sm-6">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['user.userName']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:inputText id="userName" readonly="true"
+										value="#{userProfileBean.user.userName}"
+										styleClass="form-control" maxlength="20" />
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['user.firstName']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:inputText value="#{userProfileBean.user.firstName}"
+										styleClass="form-control" maxlength="100">
+									</p:inputText>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['user.lastName']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:inputText value="#{userProfileBean.user.lastName}"
+										styleClass="form-control" maxlength="100">
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-6">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['user.languague']}" />
+								</div>
+								<div class="col-xs-12">
+									<h:selectOneMenu styleClass="form-control"
+										value="#{userProfileBean.user.languague}">
+										<f:selectItem itemLabel="" />
+										<f:selectItems value="#{userProfileBean.listLang}" var="item"
+											itemValue="#{item.langCode}" itemLabel="#{item.langName}" />
+									</h:selectOneMenu>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['user.theme']}" />
+								</div>
+								<div class="col-xs-12">
+									<h:selectOneMenu styleClass="form-control"
+										value="#{userProfileBean.user.theme}">
+										<f:selectItem itemLabel="Default Theme"
+											itemValue="defaultTheme" />
+										<f:selectItem itemLabel="Blue Theme" itemValue="blueTheme" />
+										<f:selectItem itemLabel="Sea Theme" itemValue="seaTheme" />
+										<f:selectItem itemLabel="Purple Theme" itemValue="purpleTheme" />
+										<f:selectItem itemLabel="Orange Theme" itemValue="orangeTheme" />
+									</h:selectOneMenu>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['user.dateformat']}" />
+								</div>
+								<div class="col-xs-12">
+									<h:selectOneMenu styleClass="form-control"
+										value="#{userProfileBean.user.dateformat}">
+										<f:selectItem itemLabel="dd/MM/yyyy" itemValue="dd/MM/yyyy" />
+										<f:selectItem itemLabel="MM/dd/yyyy" itemValue="MM/dd/yyyy" />
+										<f:selectItem itemLabel="yyyy-MM-dd" itemValue="yyyy-MM-dd" />
+									</h:selectOneMenu>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12 text-right">
+									<p:commandButton id="btnSave" value="#{msg['common.save']}"
+										actionListener="#{userProfileBean.btnSave}" resetValues="true"
+										styleClass="btn btn-default">
+									</p:commandButton>
+									<p:commandButton id="btnCancel"
+										value="#{msg['normalizer.close']}" resetValues="true"
+										styleClass="btn btn-default" immediate="true"
+										onclick="PF('wvUserProfile').hide()">
+									</p:commandButton>
+								</div>
+							</div>
+						</div>
+					</div>
+				</h:form>
+			</f:view>
+		</p:tab>
+		<p:tab title="#{msg['user.changepassword']}">
+			<f:view locale="#{userSession.language}" contentType="text/html"
+				id="viewLocale">
+				<h:form id="form-password" class="container-fluid">
+					<div class="formFieldMg">
+						<div class="col-xs-12 ">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['user.password']}" for="password" />
+								</div>
+								<div class="col-xs-12">
+									<p:password id="password" value="#{userProfileBean.password}"
+										styleClass="form-control" maxlength="20" required="true" />
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['user.newPassword']}"
+										for="newpassword" />
+								</div>
+								<div class="col-xs-12">
+									<p:password id="newpassword"
+										value="#{userProfileBean.newPassword}" match="renterpassword"
+										styleClass="form-control" maxlength="20" required="true" />
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['user.reenterPassword']}"
+										for="renterpassword" />
+								</div>
+								<div class="col-xs-12">
+									<p:password id="renterpassword"
+										value="#{userProfileBean.reenterPassword}"
+										styleClass="form-control" maxlength="20" required="true" />
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12 text-right">
+									<p:commandButton id="btnSave" value="#{msg['common.save']}"
+										actionListener="#{userProfileBean.doChangePassword()}"
+										resetValues="true" styleClass="btn btn-default">
+										<p:confirm message="#{msg['common.confirmChangePass']}"
+											header="#{msg['common.save']}" />
+									</p:commandButton>
+									<p:commandButton id="btnCancelPassword"
+										value="#{msg['normalizer.close']}" resetValues="true"
+										styleClass="btn btn-default" immediate="true"
+										onclick="PF('wvUserProfile').hide()">
+									</p:commandButton>
+								</div>
+							</div>
+						</div>
+					</div>
+				</h:form>
+			</f:view>
+		</p:tab>
+	</p:tabView>
+</p:dialog>
+</html>

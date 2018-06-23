@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<!--BEGIN Panel Time type -->
+	<p:panel id="pnlTimeType" styleClass="nopadding"
+		rendered="#{normalizerBean.selectedNormType == 4}">
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['normalizer.inputFieldSpecial']}"
+							></p:outputLabel>
+					</div>
+					<div class="col-xs-12">
+						<p:inputText id="specialFieldTimeType" styleClass="form-control"
+							value="#{normalizerBean.normalizer.specialFileds}" readonly="true"></p:inputText>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6">
+				<div class="row">
+					<div class="col-xs-12 pd-top33">
+						<p:selectBooleanCheckbox value="#{normalizerBean.isCurrentTimeUsing}" itemLabel="#{msg['normalizer.isCurrentTimeUsing']}">
+							<p:ajax event="change" listener="#{normalizerBean.onchangeSomeFields()}" update="contentPanel inputTextField01"/>
+						</p:selectBooleanCheckbox>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p:outputLabel value="#{msg['normalizer.default']}"
+					></p:outputLabel>
+				<p:outputLabel value="*" styleClass="colorRed"></p:outputLabel>
+			</div>
+			<div class="col-xs-12">
+				<h:selectOneMenu styleClass="form-control" value="#{normalizerBean.selectedNormDefaultWithNormValue}">
+					<f:selectItems value="#{normalizerBean.listSelectNormValue}" />
+				</h:selectOneMenu>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p:commandButton value="#{msg['normalizer.editValues']}" disabled="#{!normalizerBean.isEdit}" icon="fa fa-edit"
+					styleClass="mgRight10" onclick="PF('dlgValueManager').show()"></p:commandButton>
+				<p:commandButton value="#{msg['normalizer.addNewParams']}" disabled="#{!normalizerBean.isEdit}" icon="fa fa-plus"
+					styleClass="mgRight10" onclick="PF('dlgAddNewTimeParam').show()"></p:commandButton>
+<!-- 				<p:commandButton value="#{msg['normalizer.addNewParams']}" -->
+<!-- 					styleClass="mgRight10" actionListener="#{normalizerBean.addChildForListTableNVPstring()}" update="TableNormValueParamForTime"></p:commandButton> -->
+<!-- 				<p:commandButton value="#{msg['normalizer.validate']}" -->
+<!-- 					styleClass="mgRight10" actionListener="#{normalizerBean.validateChildForListTableNVPstring()}" update="TableNormValueParamForTimeTemp"></p:commandButton> -->
+			</div>
+<!-- 			<div class="col-xs-12"> -->
+<!-- 				<p:messages id="messagesConfigInputTime" severity="error, warn" showDetail="true" autoUpdate="true" closable="true" /> -->
+<!-- 			</div> -->
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p:dataTable 
+					id="TableNormValueParamForTimeTemp"
+					styleClass="text-center"
+					var="item"
+					value="#{normalizerBean.listTableTimeType}"
+					paginator="true" rows="20" paginatorPosition="bottom"
+					rowIndexVar="rowIndex"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="10,20,50,100">
+	
+					<p:column headerText="#{msg['normalizer.legend']}" styleClass="clmFixed">
+						<div class="div-clmFixed">
+							<h:outputText value="#{item.timeStr}"/>
+						</div>
+					</p:column>
+	
+					<p:column headerText="#{msg['normalizer.sunday']}" styleClass="clmFixed">
+						<div class="div-clmFixed" style="background: #{item.lstDateInWeek.get(0).getColorBG()};">
+							<h:outputText value="#{item.lstDateInWeek.get(0).getValueName()}" style="color: #{item.lstDateInWeek.get(0).getColor()};"/>
+						</div>
+					</p:column>
+	
+					<p:column headerText="#{msg['normalizer.monday']}" styleClass="clmFixed">
+						<div class="div-clmFixed" style="background: #{item.lstDateInWeek.get(1).getColorBG()};">
+							<h:outputText value="#{item.lstDateInWeek.get(1).getValueName()}" style="color: #{item.lstDateInWeek.get(1).getColor()};"/>
+						</div>
+					</p:column>
+	
+					<p:column headerText="#{msg['normalizer.tuesday']}" styleClass="clmFixed">
+						<div class="div-clmFixed" style="background: #{item.lstDateInWeek.get(2).getColorBG()};">
+							<h:outputText value="#{item.lstDateInWeek.get(2).getValueName()}" style="color: #{item.lstDateInWeek.get(2).getColor()};"/>
+						</div>
+					</p:column>
+	
+					<p:column headerText="#{msg['normalizer.wednesday']}" styleClass="clmFixed">
+						<div class="div-clmFixed" style="background: #{item.lstDateInWeek.get(3).getColorBG()};">
+							<h:outputText value="#{item.lstDateInWeek.get(3).getValueName()}" style="color: #{item.lstDateInWeek.get(3).getColor()};"/>
+						</div>
+					</p:column>
+	
+					<p:column headerText="#{msg['normalizer.thursday']}" styleClass="clmFixed">
+						<div class="div-clmFixed" style="background: #{item.lstDateInWeek.get(4).getColorBG()};">
+							<h:outputText value="#{item.lstDateInWeek.get(4).getValueName()}" style="color: #{item.lstDateInWeek.get(4).getColor()};"/>
+						</div>
+					</p:column>
+	
+					<p:column headerText="#{msg['normalizer.friday']}" styleClass="clmFixed">
+						<div class="div-clmFixed" style="background: #{item.lstDateInWeek.get(5).getColorBG()};">
+							<h:outputText value="#{item.lstDateInWeek.get(5).getValueName()}" style="color: #{item.lstDateInWeek.get(5).getColor()};"/>
+						</div>
+					</p:column>
+	
+					<p:column headerText="#{msg['normalizer.saturday']}" styleClass="clmFixed">
+						<div class="div-clmFixed" style="background: #{item.lstDateInWeek.get(6).getColorBG()};">
+							<h:outputText value="#{item.lstDateInWeek.get(6).getValueName()}" style="color: #{item.lstDateInWeek.get(6).getColor()};"/>
+						</div>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+	</p:panel>
+	<!--END Panel Time type -->
+</html>

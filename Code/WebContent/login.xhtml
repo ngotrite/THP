@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>OCS - Login</title>
+	<!-- 	<link -->
+	<!-- 		href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" -->
+	<!-- 		rel="stylesheet" /> -->
+
+	<link href="#{request.contextPath}/resources/css/login.css"
+		rel="stylesheet" type="text/css" />
+	<style>
+/*
+ * Specific styles of signin component
+ */
+/*
+ * General styles
+ */
+body, html {
+	height: 100%;
+	background:
+		url('#{request.contextPath}/resources/img/viettel/login_background1.jpg');
+	background-size: 100% 100% !important;
+	background-repeat: no-repeat;
+	z-index: 0;
+}
+
+.modalview {
+	width: 100%;
+	height: 100%;
+	background: #000;
+	opacity: 0.01;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+}
+
+.container {
+	z-index: 2;
+}
+
+.card-container.card {
+	max-width: 350px;
+	padding: 40px 40px;
+}
+
+.btn {
+	font-weight: 700;
+	height: 36px;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
+	cursor: default;
+}
+
+/*
+ * Card component
+ */
+.card {
+	background-color: #e8ecf2;
+	/* just in case there no content*/
+	padding: 20px 25px 30px;
+	margin: 0 auto 25px;
+	margin-top: 100px;
+	/* shadows and rounded borders */
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+	-moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+	box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.profile-img-card {
+	width: 96px;
+	height: 96px;
+	margin: 0 auto 10px;
+	display: block;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+}
+
+/*
+ * Form styles
+ */
+.profile-name-card {
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+	margin: 10px 0 0;
+	min-height: 1em;
+}
+
+.reauth-email {
+	display: block;
+	color: #404040;
+	line-height: 2;
+	margin-bottom: 10px;
+	font-size: 14px;
+	text-align: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.form-signin {
+	z-index: 10000;
+	position: fixed;
+	margin: auto;
+	left: 0;
+	right: 0;
+	top: 10px;
+}
+
+.form-signin #inputEmail, .form-signin #inputPassword {
+	direction: ltr;
+	height: 44px;
+	font-size: 16px;
+}
+.form-signin .form-control {
+	border: 1px solid #cccfff;
+	border-radius:0px;	
+}
+
+.form-signin input[type=email], .form-signin input[type=password],
+	.form-signin input[type=text], .form-signin button {
+	width: 100%;
+	display: block;
+	margin-bottom: 10px;
+	z-index: 1;
+	position: relative;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;	
+}
+
+.form-signin .form-control:focus {
+	border-color: rgb(104, 145, 162);
+	outline: 0;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px
+		rgb(104, 145, 162);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px
+		rgb(104, 145, 162);	
+}
+
+.form-signin .ui-panel .ui-panel-content {
+	padding: 0px;
+}
+
+.btn.btn-signin {
+	background-color: #4d90fe;
+	box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+	/* background-color: #284A85; */
+	/* background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
+	padding: 0px;
+	font-weight: 700;
+	font-size: 14px;
+	height: 36px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 0px;
+	border: none;
+	-o-transition: all 0.218s;
+	-moz-transition: all 0.218s;
+	-webkit-transition: all 0.218s;
+	transition: all 0.218s;
+	padding: 0px;
+}
+
+.btn.btn-signin:hover, .btn.btn-signin:active, .btn.btn-signin:focus {
+	background-color: #284A85;
+}
+
+.forgot-password {
+	color: rgb(104, 145, 162);
+}
+
+.forgot-password:hover, .forgot-password:active, .forgot-password:focus
+	{
+	color: rgb(12, 97, 33);
+}
+</style>
+</h:head>
+<h:body>
+	<p:panel id="pnlLogin">
+	<h:form id="loginForm" class="form-signin" rendered="#{!userSession.showChangePassword}">
+		<p:growl id="msg" showDetail="true" life="5000" />
+		<div class="container">
+			<div class="card card-container">
+				<!-- <img id="profile-img" class="profile-img-card"
+					src="#{request.contextPath}/resources/img/viettel/vietnam.png" />
+				<p id="profile-name" class="profile-name-card"></p>
+				<span id="reauth-email" class="reauth-email"></span> -->
+
+				<h:outputLabel value="#{msg['user.userName']}" />
+				<p:inputText styleClass="form-control" id="username"
+					value="#{userSession.userName}"></p:inputText>
+
+				<p:spacer></p:spacer>
+				<h:outputLabel value="#{msg['user.password']}" />
+				<p:password id="password" value="#{userSession.password}"
+					styleClass="form-control" feedback="false"></p:password>
+				
+				<p:spacer></p:spacer>
+				<h:outputLabel value="#{msg['common.domain']}" />	
+				<h:selectOneMenu value="#{userSession.domainId}" class="form-control" >
+	         		<f:selectItems value="#{userSession.lstDomain}" var="domain"
+							itemValue="#{domain.id}" itemLabel="#{domain.name}"></f:selectItems>
+				</h:selectOneMenu>
+				
+				<p:panel rendered="#{userSession.loginCount > 5}" style="padding:0px;">
+					<p:spacer></p:spacer>
+		    		<h:outputLabel for="txtCaptchaId" value="Enter text shown in the Image*" />
+					<table>
+						<tr>
+							<td style="width:50%">
+								<p:inputText id="txtCaptchaId" required="true"
+									value="#{userSession.captchaText}" class="form-control">
+									<f:validator validatorId="ValidatorCaptcha" />
+								</p:inputText>
+							</td>
+							<td style="width:50%; padding-left: 5px; padding-bottom: 10px;">
+								<h:graphicImage id="imgCaptchaId" value="captcha.jpg" />					
+								<h:commandLink	onclick="document.getElementById('loginForm:imgCaptchaId').src = 'captcha.jpg?' + Math.random();  return false">
+									<h:graphicImage library="images" value="/resources/themes/images/refresh.png" />
+								</h:commandLink>
+							</td>
+						</tr>
+					</table> 
+				</p:panel>					
+    
+				<p:spacer></p:spacer>
+				<p:commandButton action="#{userSession.doLogin}" value="Login"
+					styleClass="btn btn-lg btn-primary btn-block btn-signin"
+					update="loginForm" ajax="false"></p:commandButton>
+			</div>
+		</div>
+	</h:form>
+	<h:form id="form-password" class="form-signin" rendered="#{userSession.showChangePassword}">
+		<p:growl id="msgPass" showDetail="true" life="5000" autoUpdate="true"/>
+		<div class="container">
+			<div class="card card-container">
+				<p:outputLabel value="#{msg['changepass.expireMsg']}" style="color:blue;"/>
+				
+				<p:spacer></p:spacer>
+				<p:outputLabel value="#{msg['user.password']}" for="password" />
+				<p:password id="password" value="#{userSession.password}"
+							styleClass="form-control" maxlength="20" required="true" />
+							
+				<p:spacer></p:spacer>
+				<p:outputLabel value="#{msg['user.newPassword']}" for="newpassword" />
+				<p:password id="newpassword"
+							value="#{userSession.newPassword}" match="newPasswordConfirm"
+							styleClass="form-control" maxlength="20" required="true" />
+							
+				<p:spacer></p:spacer>
+				<p:outputLabel value="#{msg['user.reenterPassword']}"
+							for="newPasswordConfirm" />
+				<p:password id="newPasswordConfirm"
+							value="#{userSession.newPasswordConfirm}"
+							styleClass="form-control" maxlength="20" required="true" />
+				
+				<p:spacer></p:spacer>
+				<p:commandButton id="btnSave" value="#{msg['common.save']}"
+					actionListener="#{userSession.doChangePassword()}"
+					update="pnlLogin"
+					styleClass="btn btn-lg btn-primary btn-block btn-signin">
+				</p:commandButton>
+			</div>			
+		</div>
+	</h:form>
+	</p:panel>
+	
+	<script src="#{request.contextPath}/resources/themes/smartadmin/js/libs/jquery-ui-1.10.3.min.js"></script>
+	<script	src="#{request.contextPath}/resources/themes/smartadmin/js/app.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+		var body = $('body');
+		var backgrounds = new Array(
+		'url("#{request.contextPath}/resources/img/viettel/login_background1.jpg")'
+		);
+		var current = 0;
+
+		function nextBackground() {
+		body.css('background',backgrounds[current = ++current % backgrounds.length]);
+		setTimeout(nextBackground, 7000);
+		}
+		setTimeout(nextBackground, 7000);
+		body.css('background', backgrounds[0]);
+		
+		clearAppCache();
+		});
+	</script>
+</h:body>
+</html>

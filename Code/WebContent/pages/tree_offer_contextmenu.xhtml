@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<p:contextMenu for="treeCommonOffer" nodeType="CATEGORY">
+	<p:menuitem value="Add Child Category"
+		actionListener="#{treeOfferBean.addChildCatContext(treeOfferBean.nodeSelectEvent)}"
+		update="categoryCommonTop contentPanel formDlgCategory"
+		oncomplete="PF('dlgCategory').show()" />
+	<p:menuitem value="Add Object"
+		actionListener="#{treeOfferBean.addChildObjectContext(treeOfferBean.nodeSelectEvent)}"
+		update="contentTitle categoryCommonTop contentPanel" />
+	<p:menuitem value="Delete Category"
+		actionListener="#{treeOfferBean.removeCatContext(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommonOffer categoryCommonTop">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="Move Up"
+		actionListener="#{treeOfferBean.moveUpCategory()}"
+		update="treeCommonOffer" />
+	<p:menuitem value="Move Down"
+		actionListener="#{treeOfferBean.moveDownCategory()}"
+		update="treeCommonOffer" />
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonOffer" nodeType="OFF_BLOCK">
+	<p:menuitem value="Edit Block"
+		actionListener="#{blockBean.commandEditBlockTree(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel contentTitle" />
+	<p:menuitem value="Add New Block"
+		rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{blockBean.commandAddNewBlockTree(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Clone" rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{blockBean.commandEditBlockTree(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		oncomplete="$('.btnCallTreeBlock').click();">
+	</p:menuitem>
+	<p:menuitem value="Remove Block"
+		actionListener="#{blockBean.commandDeleteBlockTree(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="Move to category"
+		actionListener="#{blockBean.commandEditBlockTree(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		oncomplete="$('.btnChangeCategoryBlock').click()"></p:menuitem>
+	<p:menuitem value="Move Up Block"
+		actionListener="#{blockBean.moveUpBlock(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Move Down Block"
+		actionListener="#{blockBean.moveDownBlock(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Check Dependencies"
+		actionListener="#{blockBean.commandCheckDependencies(treeOfferBean.nodeSelectEvent)}" />
+	<p:submenu label="New Rate Table">
+		<p:menuitem value="Basic"
+			actionListener="#{blockBean.onNodeSelect(treeOfferBean.nodeSelectEvent, 1)}"
+			update="treeCommon categoryCommonTop contentPanel"
+			oncomplete="$('.btn-AddRatetableBasic').click();" />
+		<p:menuitem value="Discount"
+			actionListener="#{blockBean.onNodeSelect(treeOfferBean.nodeSelectEvent, 2)}"
+			update="treeCommon categoryCommonTop contentPanel"
+			oncomplete="$('.btn-AddRatetableDiscount').click();" />
+		<p:menuitem value="Condition"
+			actionListener="#{blockBean.onNodeSelect(treeOfferBean.nodeSelectEvent, 3)}"
+			update="treeCommon categoryCommonTop contentPanel"
+			oncomplete="$('.btn-AddRatetableCondition').click();" />
+	</p:submenu>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonOffer" nodeType="OFF_SORT_PRICE_COMPONENT">
+	<p:menuitem value="Edit SPC"
+		actionListener="#{sortPriceComponentBean.commandEditSPCTree(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel contentTitle" />
+	<p:menuitem value="Add New SPC" rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{sortPriceComponentBean.commandAddNewSPCTree(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Clone SPC" rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{sortPriceComponentBean.commandEditSPCTree(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		oncomplete="$('.btnCallTreeSPC').click();">
+	</p:menuitem>
+	<p:menuitem value="Add Rate Table"
+		actionListener="#{sortPriceComponentBean.commandEditSPCTree(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		oncomplete="$('.btnAddRatetableSPC').click();" />
+	<p:menuitem value="Remove SPC"
+		actionListener="#{sortPriceComponentBean.commandDeleteSPCTree(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="Move to category"
+		actionListener="#{sortPriceComponentBean.commandEditSPCTree(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		oncomplete="$('.btnChangeCategorySPC').click()"></p:menuitem>
+	<p:menuitem value="Move Up SPC"
+		actionListener="#{sortPriceComponentBean.moveUpDownInCat(treeOfferBean.nodeSelectEvent, true)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Move Down SPC"
+		actionListener="#{sortPriceComponentBean.moveUpDownInCat(treeOfferBean.nodeSelectEvent, false)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Check Dependencies"
+		actionListener="#{sortPriceComponentBean.commandCheckDependencies(treeOfferBean.nodeSelectEvent)}" />
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonOffer" nodeType="OFF_RATE_TABLE">
+	<p:menuitem value="Add New Rate Table"
+		rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{rateTableBean.commandAddNewContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Edit Rate Table"
+		actionListener="#{rateTableBean.commandEditContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel contentTitle" />
+	<p:menuitem value="Move to category"
+		actionListener="#{rateTableBean.commandEditContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		oncomplete="$('.btnShowCate').click()">
+	</p:menuitem>
+	<p:menuitem value="Add Decision Table"
+		actionListener="#{rateTableBean.addChildren(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		oncomplete="$('.btn-AddDecisionRateTable').click();" />
+	<p:menuitem value="Clone Rate Table"
+		rendered="#{treeOfferBean.isShowClone}"
+		oncomplete="$('.btnCallTreeRateTable').click();"
+		actionListener="#{rateTableBean.commandEditContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Remove Rate Table"
+		actionListener="#{rateTableBean.commandRemoveContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="Move Up"
+		actionListener="#{rateTableBean.moveUpRT(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Move Down"
+		actionListener="#{rateTableBean.moveDownRT(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Check Dependencies"
+		actionListener="#{rateTableBean.commandCheckDependencies(treeOfferBean.nodeSelectEvent)}" />
+</p:contextMenu>
+
+<p:contextMenu id="contextMenuNormId" for="treeCommonOffer"
+	nodeType="OFF_NORMALIZER">
+	<p:menuitem value="Edit"
+		actionListener="#{normalizerBean.editContext(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Move to category"
+		actionListener="#{normalizerBean.editContext(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		oncomplete="$('.btnShowCate').click()">
+		<!-- 			<p:ajax event="dialogReturn" listener="#{normalizerBean.onDialogReturnCategory}" update="treeCommon categoryCommonTop contentPanel" /> -->
+	</p:menuitem>
+	<p:menuitem value="Add New Normalizer"
+		rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{normalizerBean.commandAddNew(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Clone Normalizer"
+		rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{normalizerBean.commandCloneNormContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel">
+		<p:confirm header="#{msg['common.clone']}"
+			message="#{msg['common.confirmClone']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="Move Up" async="false"
+		rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{normalizerBean.moveUpDownInCat(treeOfferBean.nodeSelectEvent, true)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Move Down" async="false"
+		rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{normalizerBean.moveUpDownInCat(treeOfferBean.nodeSelectEvent, false)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Remove Normalizer"
+		actionListener="#{normalizerBean.commandRemoveNormContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="Check Dependencies"
+		actionListener="#{normalizerBean.commandCheckDependencies(treeOfferBean.nodeSelectEvent)}" />
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonOffer" nodeType="OFF_ACTION">
+	<p:menuitem value="Edit Action"
+		actionListener="#{actionBean.editContext(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel contentTitle" />
+	<p:menuitem value="Add New Action"
+		actionListener="#{actionBean.addNewAction(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Clone" rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{actionBean.commandHideCloneActionTree(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		oncomplete="$('.btnCallTreeAction').click();" />
+	<p:menuitem value="Move to category"
+		actionListener="#{actionBean.editContext(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		oncomplete="$('.btnChangeCategoryAction').click()"></p:menuitem>
+	<p:menuitem value="Move Up Action"
+		actionListener="#{actionBean.moveUpAction(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Move Down Action"
+		actionListener="#{actionBean.moveDownAction(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Remove Action"
+		actionListener="#{actionBean.removeActionInTree(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="Check Dependencies"
+		actionListener="#{actionBean.commandCheckDependencies(treeOfferBean.nodeSelectEvent)}" />
+	<p:submenu label="New Child Item">
+		<p:menuitem value="Dynamic Reserve"
+			actionListener="#{actionBean.editContext(treeOfferBean.nodeSelectEvent)}"
+			update="treeCommon categoryCommonTop contentPanel"
+			oncomplete="$(PrimeFaces.escapeClientId('form-action-detail:chooseDR')).click();" />
+		<p:menuitem value="Sorting Price Component"
+			actionListener="#{actionBean.editContext(treeOfferBean.nodeSelectEvent)}"
+			update="treeCommon categoryCommonTop contentPanel"
+			oncomplete="$(PrimeFaces.escapeClientId('form-action-detail:chooseSPC')).click();" />
+		<p:menuitem value="Price Component"
+			actionListener="#{actionBean.editContext(treeOfferBean.nodeSelectEvent)}"
+			update="treeCommon categoryCommonTop contentPanel"
+			oncomplete="$('.btn-addnewPC').click();" />
+	</p:submenu>
+	<p:submenu label="Deploy">
+		<p:menuitem value="#{actionBean.action.state ? 'Disable': 'Enable'}"
+			actionListener="#{actionBean.actionDeploy(treeOfferBean.nodeSelectEvent)}"
+			update="treeCommon categoryCommonTop contentPanel" />
+	</p:submenu>
+</p:contextMenu>
+
+<!-- 	DECISIONTABLE -->
+<p:contextMenu for="treeCommonOffer" nodeType="OFF_DECISION_TABLE"
+	event="contextmenu">
+	<p:menuitem value="New Decision Table"
+		rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{decisionTableBean.addNewDecisionContext(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Edit DecisionTable"
+		actionListener="#{decisionTableBean.editDecisionContext(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel contentTitle" />
+	<p:menuitem value="Clone Decision Table"
+		rendered="#{treeOfferBean.isShowClone}"
+		onclick="triggerOpenCloneDesicionDlg()"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Move Up" rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{decisionTableBean.moveUpDownInCat(treeOfferBean.nodeSelectEvent, true)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Move Down" rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{decisionTableBean.moveUpDownInCat(treeOfferBean.nodeSelectEvent, false)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Remove Decision Table"
+		actionListener="#{decisionTableBean.removeDecisionTableContext(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="Move to Category"
+		onclick="triggerOpenMoveToCatDesicionDlg();"
+		update="treeCommon categoryCommonTop contentPanel" />
+
+	<p:menuitem value="Check Dependencies"
+		actionListener="#{decisionTableBean.showDependenciesContext(treeOfferBean.nodeSelectEvent)}" />
+</p:contextMenu>
+
+
+<!-- 	OFFER -->
+<p:contextMenu for="treeCommonOffer" nodeType="OFF_OFFER"
+	id="contextMenuOfferId" widgetVar="tableContextMenuWV">
+	<p:menuitem value="Add New Action"
+		rendered="#{offerBean.showAddNewVersionContext(treeOfferBean.nodeSelectEvent)}"
+		onclick="triggerOpenChooseActionDlg();">
+	</p:menuitem>
+	<p:menuitem value="New Version"
+		rendered="#{offerBean.showAddNewVersionContext(treeOfferBean.nodeSelectEvent)}"
+		actionListener="#{offerBean.addNewVersionContext(treeOfferBean.nodeSelectEvent)}"
+		update="contentPanel categoryCommonTop contentTitle" />
+	<p:menuitem value="Edit Version"
+		actionListener="#{offerBean.editOfferVersionContext(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentTitle contentPanel" />
+	<p:menuitem value="Clone Offer"
+		rendered="#{offerBean.showCloneOffer(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		onclick="triggerOpenCloneDlg();" />
+	<p:menuitem value="Generate an offer"
+		rendered="#{offerBean.showGenOfferTempToCom(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		onclick="triggerOpenGenDlg();" />
+	<p:menuitem value="Re-Compiled an offer"
+		rendered="#{offerBean.showReCompiledComp(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		onclick="triggerOpenReCompiledCompDlg();">
+	</p:menuitem>
+	<p:menuitem value="Re-Compiled offers"
+		rendered="#{offerBean.showReCompiledTemp(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		onclick="triggerOpenReCompiledTempDlg();">
+	</p:menuitem>
+	<p:menuitem value="Convert to Offer Template"
+		rendered="#{offerBean.showConvertToTemp(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		onclick="triggerOpenConvertToTempDlg();" />
+
+	<p:menuitem value="Show Parameters List"
+		rendered="#{offerBean.showParameterList(treeOfferBean.nodeSelectEvent)}"
+		actionListener="#{offerBean.parameterList(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Remove this version"
+		update="treeCommon:treeCommonOffer dlgDeleteOfferTemp"
+		rendered="#{!offerBean.showRemoveVersion(treeOfferBean.nodeSelectEvent)}"
+		actionListener="#{offerBean.removeOfferContext(treeOfferBean.nodeSelectEvent)}">
+	</p:menuitem>
+	<p:menuitem value="Remove this version"
+		rendered="#{offerBean.showRemoveVersion(treeOfferBean.nodeSelectEvent)}"
+		onclick="PF('confirmation_normal_case_4_id').show()">
+	</p:menuitem>
+	<p:menuitem value="Check Dependencies"
+		actionListener="#{offerBean.commandCheckDependencies(treeOfferBean.nodeSelectEvent)}" />
+	<p:submenu label="State..."
+		rendered="#{offerBean.showState(treeOfferBean.nodeSelectEvent)}">
+		<p:menuitem value="Test this version"
+			rendered="#{offerBean.showTesting(treeOfferBean.nodeSelectEvent)}"
+			actionListener="#{offerBean.testing(treeOfferBean.nodeSelectEvent)}"
+			update="treeCommon categoryCommonTop contentPanel">
+			<p:confirm header="#{msg['offer.cfm.change_state']}"
+				message="#{msg['offer.cfm.inactive_testing']}" icon="ui-icon-alert" />
+		</p:menuitem>
+
+		<p:menuitem value="Suspend"
+			rendered="#{offerBean.showSuspend(treeOfferBean.nodeSelectEvent)}"
+			actionListener="#{offerBean.suspend(treeOfferBean.nodeSelectEvent)}"
+			update="treeCommon categoryCommonTop contentPanel">
+			<p:confirm header="#{msg['offer.cfm.change_state']}"
+				message="#{msg['offer.cfm.active_suspend']}" icon="ui-icon-alert" />
+		</p:menuitem>
+		<p:menuitem value="Undeploy"
+			rendered="#{offerBean.showUndeploy(treeOfferBean.nodeSelectEvent)}"
+			actionListener="#{offerBean.undeploy(treeOfferBean.nodeSelectEvent)}"
+			update="treeCommon categoryCommonTop contentPanel">
+			<p:confirm header="#{msg['offer.cfm.change_state']}"
+				message="#{msg['offer.cfm.active_inactive']}" icon="ui-icon-alert" />
+		</p:menuitem>
+
+		<p:menuitem value="Active"
+			rendered="#{offerBean.showActive(treeOfferBean.nodeSelectEvent)}"
+			actionListener="#{offerBean.active(treeOfferBean.nodeSelectEvent)}"
+			update="treeCommon categoryCommonTop contentPanel" />
+
+		<p:menuitem value="Recover this version"
+			rendered="#{offerBean.showRecover(treeOfferBean.nodeSelectEvent)}"
+			actionListener="#{offerBean.recover(treeOfferBean.nodeSelectEvent)}"
+			update="treeCommon contentPanel">
+			<p:confirm header="#{msg['offer.cfm.change_state']}"
+				message="#{msg['offer.cfm.removed_inactive']}" icon="ui-icon-alert" />
+		</p:menuitem>
+
+		<p:menuitem value="Inactive"
+			rendered="#{offerBean.showUnTesting(treeOfferBean.nodeSelectEvent)}"
+			actionListener="#{offerBean.unTesting(treeOfferBean.nodeSelectEvent)}"
+			update="treeCommon categoryCommonTop contentPanel">
+			<p:confirm header="#{msg['offer.cfm.change_state']}"
+				message="#{msg['offer.cfm.testing_inactive']}" icon="ui-icon-alert" />
+		</p:menuitem>
+
+		<p:submenu label="Deploy"
+			style="box-shadow: 12px 1px 15px -3px #888888 !important;"
+			rendered="#{offerBean.showDeploy(treeOfferBean.nodeSelectEvent)}">
+			<p:menuitem value="Upgrade version"
+				update="confirmation_normal_case_1_id confirmation_normal_case_2_id confirmation_normal_case_3_id"
+				actionListener="#{offerBean.prepareDeployWith(treeOfferBean.nodeSelectEvent)}" />
+			<p:menuitem value="Normal"
+				update="confirmation_normal_case_1_id confirmation_normal_case_2_id"
+				actionListener="#{offerBean.prepareDeployWithout(treeOfferBean.nodeSelectEvent)}">
+			</p:menuitem>
+		</p:submenu>
+
+		<p:menuitem value="Temporary Delete"
+			rendered="#{offerBean.showTemporatyDelete(treeOfferBean.nodeSelectEvent)}"
+			actionListener="#{offerBean.temporatyDelete(treeOfferBean.nodeSelectEvent)}"
+			update="treeCommon categoryCommonTop contentPanel">
+			<p:confirm header="#{msg['offer.cfm.change_state']}"
+				message="#{msg['offer.cfm.inactive_removed']}" icon="ui-icon-alert" />
+		</p:menuitem>
+	</p:submenu>
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonOffer" nodeType="OFF_OFFER_GROUP"
+	event="contextmenu">
+	<p:menuitem value="Edit Offer"
+		rendered="#{offerBean.showEditOffer(treeOfferBean.nodeSelectEvent)}"
+		actionListener="#{offerBean.editOffer(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Move to"
+		onclick="triggerOpenCatDlg(); return false;">
+	</p:menuitem>
+	<p:menuitem value="Remove this Offer"
+		actionListener="#{offerBean.removeOfferGroup(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon contentPanel">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+</p:contextMenu>
+
+<p:commandButton id="btnHiddenOpenCat" styleClass="button"
+	action="#{offerBean.moveToCategory(treeOfferBean.nodeSelectEvent)}"
+	style="display:none">
+	<p:ajax event="dialogReturn"
+		update="treeCommon:treeCommonOffer categoryCommonTop contentPanel"
+		listener="#{offerBean.onMoveToDialogReturn}" />
+</p:commandButton>
+<p:commandButton id="btnHiddenOpenClone" styleClass="button"
+	actionListener="#{offerBean.cloneOffer(treeOfferBean.nodeSelectEvent)}"
+	style="display:none">
+	<p:ajax event="dialogReturn"
+		update="treeCommon categoryCommonTop contentPanel"
+		listener="#{offerBean.onCloneDialogReturn}" />
+</p:commandButton>
+<p:commandButton id="btnHiddenOpenConvertToTemp" styleClass="button"
+	actionListener="#{offerBean.convertToTemp(treeOfferBean.nodeSelectEvent)}"
+	style="display:none">
+	<p:ajax event="dialogReturn"
+		update="treeCommon categoryCommonTop contentPanel"
+		listener="#{offerBean.onCloneDialogReturn}" />
+</p:commandButton>
+
+<p:commandButton id="btnHiddenOpenGenOffer" styleClass="button"
+	actionListener="#{offerBean.genOfferTempToCom(treeOfferBean.nodeSelectEvent)}"
+	style="display:none">
+	<p:ajax event="dialogReturn"
+		update="treeCommon categoryCommonTop contentPanel"
+		listener="#{offerBean.onCloneDialogReturn}" />
+</p:commandButton>
+
+<p:commandButton id="btnHiddenOpenReCompiledComp" styleClass="button"
+	actionListener="#{offerBean.reCompiledComp(treeOfferBean.nodeSelectEvent)}"
+	style="display:none">
+	<p:ajax event="dialogReturn"
+		update="treeCommon:treeCommonOffer contentPanel"
+		listener="#{offerBean.onCloneDialogReturn}" />
+</p:commandButton>
+
+<p:commandButton id="btnHiddenOpenReCompiledTemp" styleClass="button"
+	actionListener="#{offerBean.reCompiledTemp(treeOfferBean.nodeSelectEvent)}"
+	style="display:none">
+	<p:ajax event="dialogReturn"
+		update="treeCommon categoryCommonTop contentPanel"
+		listener="#{offerBean.onCloneDialogReturn}" />
+</p:commandButton>
+
+<p:commandButton id="btnHiddenOpenChooseAction" styleClass="button"
+	update="contentPanel categoryCommonTop"
+	actionListener="#{offerBean.addNewActionContext(treeOfferBean.nodeSelectEvent)}"
+	style="display:none">
+	<p:ajax listener="#{offerBean.onDialogActionReturn}"
+		event="dialogReturn"
+		update="treeCommon categoryCommonTop contentPanel" />
+</p:commandButton>
+
+<p:commandButton id="btnHiddenOpenCloneDesicionDlg" styleClass="button"
+	actionListener="#{decisionTableBean.cloneDecisionContext(treeOfferBean.nodeSelectEvent)}"
+	style="display:none">
+	<p:ajax listener="#{decisionTableBean.onDialogContextDecisionReturn}"
+		event="dialogReturn"
+		update="treeCommon categoryCommonTop contentPanel" />
+</p:commandButton>
+
+<p:commandButton id="btnHiddenOpenMoveToCatDesicionDlg"
+	styleClass="button"
+	actionListener="#{decisionTableBean.moveTo(treeOfferBean.nodeSelectEvent)}"
+	style="display:none">
+	<p:ajax listener="#{decisionTableBean.onDialogCatMoveToReturn}"
+		event="dialogReturn"
+		update="treeCommon categoryCommonTop contentPanel" />
+</p:commandButton>
+<h:outputScript>
+      function triggerOpenCatDlg() {
+        document.getElementById("treeCommon:btnHiddenOpenCat").click();
+      }
+      
+      function triggerOpenCloneDlg() {
+        document.getElementById("treeCommon:btnHiddenOpenClone").click();
+      }
+      
+      function triggerOpenGenDlg() {
+        document.getElementById("treeCommon:btnHiddenOpenGenOffer").click();
+      }
+      
+      function triggerOpenConvertToTempDlg() {
+        document.getElementById("treeCommon:btnHiddenOpenConvertToTemp").click();
+      }
+      
+      function triggerOpenReCompiledCompDlg() {
+        document.getElementById("treeCommon:btnHiddenOpenReCompiledComp").click();
+      }
+      
+      function triggerOpenReCompiledTempDlg() {
+        document.getElementById("treeCommon:btnHiddenOpenReCompiledTemp").click();
+      }
+      
+      function triggerOpenChooseActionDlg() {
+        document.getElementById("treeCommon:btnHiddenOpenChooseAction").click();
+      }
+      
+      function triggerOpenCloneDesicionDlg() {
+        document.getElementById("treeCommon:btnHiddenOpenCloneDesicionDlg").click();
+      }
+      
+      function triggerOpenMoveToCatDesicionDlg() {
+        document.getElementById("treeCommon:btnHiddenOpenMoveToCatDesicionDlg").click();
+      }
+</h:outputScript>
+
+<p:contextMenu for="treeCommonOffer" nodeType="OFF_DYNAMIC_RESERVE">
+	<p:menuitem value="Add New" rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{dynamicReservesBean.commandAddNewContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Edit DR"
+		actionListener="#{dynamicReservesBean.commandEditContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel contentTitle" />
+	<p:menuitem value="Move to category"
+		actionListener="#{dynamicReservesBean.commandEditContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		oncomplete="$('.btnShowCate').click()">
+	</p:menuitem>
+	<p:menuitem value="Add Child" oncomplete="$('.btn-rv-addRT').click();"
+		actionListener="#{dynamicReservesBean.commandEditContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Clone" rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{dynamicReservesBean.commandEditContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		oncomplete="$('.btnCloneDRfromContext').click();" />
+	<p:menuitem value="Remove"
+		actionListener="#{dynamicReservesBean.removeDynamicReserve(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="Move up"
+		actionListener="#{dynamicReservesBean.moveUpDownInCat(treeOfferBean.nodeSelectEvent, true)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Move down"
+		actionListener="#{dynamicReservesBean.moveUpDownInCat(treeOfferBean.nodeSelectEvent, false)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Check Dependencies"
+		actionListener="#{dynamicReservesBean.commandCheckDependencies(treeOfferBean.nodeSelectEvent)}" />
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonOffer" nodeType="OFF_PRICE_COMPONENT">
+	<p:menuitem value="Edit PC"
+		actionListener="#{priceComponentsBean.editPriceComponents(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel contentTitle" />
+	<p:menuitem value="Add New" rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{priceComponentsBean.btnAddNew(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Add Child"
+		actionListener="#{priceComponentsBean.editChildPriceComponents(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		oncomplete="$('.btn-pc-addBL').click();" />
+	<p:menuitem value="Clone" rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{priceComponentsBean.commandHideClonePCTree(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		oncomplete="$('.btnCallTreePC').click();" />
+	<p:menuitem value="Remove"
+		actionListener="#{priceComponentsBean.deletePriceComponents(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="Move to category"
+		actionListener="#{priceComponentsBean.editPriceComponents(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		oncomplete="$('.btnChangeCategoryPC').click()"></p:menuitem>
+	<p:menuitem value="Move up"
+		actionListener="#{priceComponentsBean.moveUpPC(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Move down"
+		actionListener="#{priceComponentsBean.moveDownPC(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Check Dependencies"
+		actionListener="#{priceComponentsBean.commandCheckDependencies(treeOfferBean.nodeSelectEvent)}" />
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonOffer" nodeType="OFF_EVENT">
+	<p:menuitem value="Add New" rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{eventBean.commandAddNewContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Add Child" oncomplete="$('.btn-rv-addAT').click();"
+		actionListener="#{eventBean.commandEditContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Edit Event"
+		actionListener="#{eventBean.commandEditContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel contentTitle" />
+	<p:menuitem value="Move to category"
+		actionListener="#{eventBean.commandEditContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		oncomplete="$('.btnShowCate').click()">
+	</p:menuitem>
+	<!-- 	<p:menuitem value="Clone" onclick="triggerOpenCloneEventType()" -->
+	<!-- 		update="treeCommon categoryCommonTop contentPanel" /> -->
+	<p:menuitem value="Remove"
+		actionListener="#{eventBean.commandRemoveContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="Move up"
+		actionListener="#{eventBean.moveUpEventContext(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Move down"
+		actionListener="#{eventBean.moveDownEventContext(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonOffer" nodeType="OFF_ACTIONTYPE">
+	<p:menuitem value="Add New" rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{actionTypeBean.commandAddNewContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Add Child"
+		oncomplete="$('.btn-rv-addEvent').click();"
+		actionListener="#{actionTypeBean.commandEditContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Edit ActionType"
+		actionListener="#{actionTypeBean.commandEditContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Move to category"
+		actionListener="#{actionTypeBean.commandEditContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel"
+		oncomplete="$('.btnShowCate').click()">
+	</p:menuitem>
+	<!-- 	<p:menuitem value="Clone" onclick="triggerOpenCloneActionType()" -->
+	<!-- 		update="treeCommon categoryCommonTop contentPanel" /> -->
+	<p:menuitem value="Remove"
+		actionListener="#{actionTypeBean.commandRemoveContextMenu(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="Move up" rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{actionTypeBean.moveUpActionTypeContext(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Move down" rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{actionTypeBean.moveDownActionTypeContext(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonOffer" nodeType="OFF_PACKAGE">
+	<p:menuitem value="Edit"
+		actionListener="#{offerPackageBean.editOfferPackage(treeOfferBean.nodeSelectEvent)}"
+		update="contentPanel" />
+	<p:menuitem value="Remove"
+		actionListener="#{offerPackageBean.deleteOfferPackage(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Move up"
+		actionListener="#{offerPackageBean.moveUpOfferPackage(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Move down"
+		actionListener="#{offerPackageBean.moveDownOfferPackage(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+</p:contextMenu>
+
+<p:contextMenu for="treeCommonOffer" nodeType="OFF_PC_TYPE">
+	<p:menuitem value="Add New" rendered="#{treeOfferBean.isShowClone}"
+		actionListener="#{pcTypeBean.addNewPcTypeCT(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Edit"
+		actionListener="#{pcTypeBean.editPcTypeCT(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel contentTitle" />
+	<p:menuitem value="Add Child" oncomplete="$('.btn-rv-addBL').click();"
+		actionListener="#{pcTypeBean.editPcTypeCT(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Remove"
+		actionListener="#{pcTypeBean.removePcTypeCT(treeOfferBean.nodeSelectEvent)}"
+		update="treeCommon categoryCommonTop contentPanel">
+		<p:confirm header="#{msg['common.delete']}"
+			message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+	</p:menuitem>
+	<p:menuitem value="Move up"
+		actionListener="#{pcTypeBean.moveUpDownInCat(treeOfferBean.nodeSelectEvent, true)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Move down"
+		actionListener="#{pcTypeBean.moveUpDownInCat(treeOfferBean.nodeSelectEvent, false)}"
+		update="treeCommon categoryCommonTop contentPanel" />
+	<p:menuitem value="Check Dependencies"
+		actionListener="#{pcTypeBean.commandCheckDependencies(treeOfferBean.nodeSelectEvent)}" />
+</p:contextMenu>
+
+<p:dialog id="dlgDeleteOfferTemp" widgetVar="dlgDeleteOfferTemp"
+	rendered="#{treeOfferBean.treeType eq 'OFFER_OFFER'}" width="900px"
+	height="400px" header="Delete" closable="true" modal="true"
+	resizable="false" closeOnEscape="true">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xs-12">
+				<p:dataTable value="#{offerBean.offerModels}" var="rowItem"
+					paginator="true" rows="10" editable="true" editMode="cell"
+					paginatorPosition="bottom" rowIndexVar="index"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15,20,50,100">
+					<p:column headerText="#" style="width:5%">
+						<h:outputText value="#{index + 1}" />
+					</p:column>
+
+					<p:column headerText="#{msg['offer.compiled_offers_name']}">
+						<h:outputText
+							value="#{rowItem.offer.offerName}
+									v#{rowItem.offer.versionInfo}" />
+					</p:column>
+
+
+					<p:columns value="#{offerBean.parametersOfOffer}" var="column">
+						<f:facet name="header">
+							<h:outputText value="#{column.parameterName}" />
+						</f:facet>
+						<h:outputText
+							value="#{offerBean.findParameterInList(offerBean.parametersMap.get(rowItem.offer.offerId), column.parameterId)}" />
+					</p:columns>
+				</p:dataTable>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-1">
+				<p:outputLabel value="#{msg['common.category']}"
+					 for="offerContextCategoryId"></p:outputLabel>
+			</div>
+			<div class="col-xs-3">
+				<h:selectOneMenu id="offerContextCategoryId"
+					value="#{offerBean.categoryId}" styleClass="form-control">
+					<f:selectItems value="#{offerBean.categoriesForConvert}" var="item"
+						itemValue="#{item.categoryId}" itemLabel="#{item.categoryName}" />
+				</h:selectOneMenu>
+			</div>
+			<div class="col-xs-4 form-group">
+				<p:commandButton value="#{msg['offer.cfm.converttotemp']}"
+					update="treeCommon:treeCommonOffer contentTitle categoryCommonTop contentPanel"
+					actionListener="#{offerBean.deleteOfferVersionTemp()}" />
+			</div>
+			<div class="col-xs-3 form-group">
+				<p:commandButton value="#{msg['common.close']}"
+					onclick="PF('dlgDeleteOfferTemp').hide();" />
+			</div>
+		</div>
+	</div>
+</p:dialog>
+<p:confirmDialog widgetVar="confirmActiveOffer" closeOnEscape="true"
+	width="266px" height="auto" header="#{msg['common.confirm_active']}"
+	message="#{msg['offer.cfg.active']}">
+	<p:commandButton value="#{msg['common.yes']}"
+		update="treeCommon categoryCommonTop contentPanel"
+		actionListener="#{offerBean.activeOneVersion()}"
+		oncomplete="PF('confirmActiveOffer').hide()" />
+	<p:commandButton value="#{msg['common.no']}"
+		onclick="PF('confirmActiveOffer').hide()" />
+</p:confirmDialog>
+</html>

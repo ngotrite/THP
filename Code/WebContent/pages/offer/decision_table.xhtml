@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jstl/core">
+<h:form id="form-decisiontable-list"
+	rendered="#{decisionTableBean.formType eq 'form-decisiontable-list'}">
+	<div class="col-xs-12 col-md-12">
+
+		<p:dataTable var="item" value="#{decisionTableBean.decisionTables}"
+			id="dtDecision" rowKey="#{item.decisionTableId}"
+			emptyMessage="#{msg['common.noData']}" paginator="true" rows="10"
+			paginatorPosition="bottom" rowIndexVar="rowIndex"
+			rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"
+			paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			rowsPerPageTemplate="10,20,50,100" widgetVar="wgDecision"
+			styleClass="myTable">
+			<p:ajax event="filter" ignoreAutoUpdate="false" />
+
+			<f:facet name="header">
+				<p:outputLabel value="#{msg['decision.titleOfCategory']}"
+					style="font-weight:bold;padding-bottom: -10px;" />
+			</f:facet>
+			<p:column headerText="#" styleClass="widthSTTcolumn">
+				<h:outputText value="#{rowIndex+1}" />
+			</p:column>
+
+			<p:column headerText="#{msg['common.name']}"
+				sortBy="#{item.decisionTableName}"
+				filterBy="#{item.decisionTableName}" filterMatchMode="contains"
+				style="text-align: left;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+				<h:outputText value="#{item.decisionTableName}"
+					id="decisionTableName" title="#{item.decisionTableName}"
+					styleClass="preformatted" />
+			</p:column>
+
+			<p:column headerText="#{msg['common.desc']}" sortBy="#{item.remark}"
+				filterBy="#{item.remark}" filterMatchMode="contains" id="remarkID"
+				style="text-align: left;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+				<h:outputText value="#{item.remark}" title="#{item.remark}"
+					styleClass="preformatted" />
+			</p:column>
+
+			<p:column headerText="#{msg['common.action']}"
+				styleClass="text-center">
+				<p:commandLink update="categoryCommonTop contentPanel contentTitle"
+					resetValues="true"
+					actionListener="#{decisionTableBean.editDecisionTable(item)}"
+					styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+					<i class="fa fa-pencil icon-only mr-0"></i>
+				</p:commandLink>
+				<p:commandLink
+					update="dtDecision treeCommon contentPanel categoryCommonTop"
+					actionListener="#{decisionTableBean.cloneDecisionTable(item)}"
+					styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+					<i class="fa fa-clone icon-only mr-0"></i>
+					<p:ajax event="dialogReturn"
+						listener="#{decisionTableBean.onDialogContextDecisionReturn}"
+						update="treeCommon categoryCommonTop contentPanel dtDecision" />
+				</p:commandLink>
+
+				<p:commandLink
+					update="dtDecision treeCommon contentPanel categoryCommonTop"
+					actionListener="#{decisionTableBean.deleteDecisionTable(item)}"
+					styleClass="btn btn-sm btn-action-del colorRed">
+					<i class="fa fa-times icon-only mr-0"></i>
+					<p:confirm header="#{msg['common.delete']}"
+						message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+				</p:commandLink>
+
+				<f:facet name="header">
+					<p:commandButton value="#{msg['common.addNew']}" resetValues="true"
+						update="categoryCommonTop contentPanel contentTitle" icon="fa fa-plus"
+						actionListener="#{decisionTableBean.addNewDecisionTable()}"
+						styleClass="btn btn-default">
+					</p:commandButton>
+				</f:facet>
+			</p:column>
+		</p:dataTable>
+	</div>
+</h:form>
+<h:form id="form-decisiontable-detail"
+	rendered="#{decisionTableBean.formType eq 'form-decisiontable-detail'}">
+	<div class="container-fluid">
+
+
+		<div class="row formFieldMg">
+			<div class="col-xs-12 col-sm-6">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['common.ID']}" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText
+							value="#{decisionTableBean.decisionTable.decisionTableId}"
+							styleClass="form-control" readonly="true" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['decisontable.name']}" for="dtName" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText id="dtName" maxlength="100"
+							value="#{decisionTableBean.decisionTable.decisionTableName}"
+							styleClass="form-control" required="true" />
+					</div>
+				</div>
+
+			</div>
+
+			<div class="col-xs-12 col-sm-6">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['decisontable.category']}"
+							for="CatType" />
+					</div>
+					<div class="col-xs-12">
+						<h:selectOneMenu id="CatType" required="true"
+							value="#{decisionTableBean.decisionTable.categoryId}"
+							styleClass="form-control col-xs-12">
+							<f:selectItems value="#{decisionTableBean.categories}"
+								var="category" itemValue="#{category.categoryId}"
+								itemLabel="#{category.categoryName}"></f:selectItems>
+						</h:selectOneMenu>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['common.desc']}" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText value="#{decisionTableBean.decisionTable.remark}"
+							styleClass="form-control" maxlength="255" />
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row formFieldMg">
+			<div class="col-xs-12"
+				style="text-align: right; margin-bottom: 15px;">
+				<p:commandButton value="#{msg['decisontable.addcolumn']}" icon="fa fa-plus"
+					disabled="#{!decisionTableBean.editable}" immediate="true"
+					styleClass="btn btn-default" onclick="PF('dlgAddColumn').show()" />
+				<p:commandButton value="#{msg['decisontable.addrow']}"
+					disabled="#{!decisionTableBean.editable}" icon="fa fa-plus"
+					actionListener="#{decisionTableBean.addRowDecition()}"
+					update="dtRows " immediate="true" styleClass="btn btn-default" />
+
+				<p:commandButton value="#{msg['decisontable.validate']}"
+					rendered="false"
+					actionListener="#{decisionTableBean.rowValidate()}"
+					immediate="true" styleClass="btn btn-default" />
+
+			</div>
+		</div>
+
+		<div class="row formFieldMg">
+			<div class="col-xs-12">
+				<p:dataTable id="dtRows" value="#{decisionTableBean.rowDts}"
+					resizableColumns="true" var="rowitem" paginator="true" rows="5"
+					editable="true" editMode="cell" paginatorPosition="bottom"
+					rowIndexVar="rowIndex"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15,20,50,100">
+					<p:column headerText="#" style="width:5%">
+						<h:outputText value="#{rowIndex + 1}" />
+					</p:column>
+					<p:column headerText="#{msg['decisontable.default']}"
+						style="width:68px;">
+						<p:selectBooleanCheckbox value="#{rowitem.defaultValue}"
+							disabled="#{!decisionTableBean.editable}"
+							style="padding-left: 40%;">
+							<p:ajax event="change" update="dtRows"
+								listener="#{decisionTableBean.onChangeCheckbox(rowitem)}" />
+						</p:selectBooleanCheckbox>
+					</p:column>
+					<p:columns value="#{decisionTableBean.columns}" var="column"
+						resizable="true" styleClass="text-truncate">
+						<f:facet name="header">
+							<h:outputText value="#{column.header}" />
+						</f:facet>
+						<p:cellEditor>
+							<f:facet name="output">
+								<div style="#{decisionTableBean.getStringColorNormValue(rowitem.value.split('/')[decisionTableBean.columns.indexOf(column)], column.normalizerId)}">
+									<h:outputText styleClass="text-truncate"
+										value="#{decisionTableBean.getNormName(rowitem.value.split('/')[decisionTableBean.columns.indexOf(column)], column.normalizerId)}" />
+								</div>
+							</f:facet>
+							<f:facet name="input">
+								<h:selectOneMenu styleClass="form-control"
+									value="#{rowitem.value.split('/')[decisionTableBean.columns.indexOf(column)]}"
+									onchange="onChangedCombobox(this, #{decisionTableBean.rowDts.indexOf(rowitem)}, #{decisionTableBean.columns.indexOf(column)})">
+									<!-- 										<f:selectItem itemLabel="(#{msg['common.none']})" /> -->
+									<f:selectItems
+										value="#{decisionTableBean.normValuesMap.get(column.normalizerId)}"
+										var="item" itemLabel="#{item.valueName}"
+										itemValue="#{item.valueId}" />
+								</h:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:columns>
+					<p:column headerText="Combined Value" width="20%" id="colRowValue">
+						<h:outputText value="#{rowitem.value}" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.action']}" resizable="false"
+						styleClass="text-center" style="width: 135px;">
+						<p:commandLink update="dtRows"
+							disabled="#{decisionTableBean.rowDts.indexOf(rowitem) eq 0 or !decisionTableBean.editable}"
+							actionListener="#{decisionTableBean.upRow(rowitem)}"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-arrow-circle-up icon-only mr-0"></i>
+						</p:commandLink>
+						<p:commandLink update="dtRows"
+							disabled="#{decisionTableBean.rowDts.indexOf(rowitem) eq decisionTableBean.rowDts.size() - 1 or !decisionTableBean.editable}"
+							actionListener="#{decisionTableBean.downRow(rowitem)}"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-arrow-circle-down icon-only mr-0"></i>
+						</p:commandLink>
+						<p:commandLink disabled="#{!decisionTableBean.editable}"
+							actionListener="#{decisionTableBean.deleteRow(rowitem)}"
+							update="dtRows" styleClass="btn btn-sm btn-action-del colorRed"
+							immediate="true">
+							<i class="fa fa-times icon-only mr-0"></i>
+							<p:confirm header="#{msg['common.delete']}"
+								message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+
+		<div class="row formFieldMg">
+			<div class="col-md-9"></div>
+			<div class="col-md-3 text-right" style="text-align: right; margin-bottom: 2px">
+				<p:commandButton value="#{msg['common.apply']}"
+					disabled="#{!decisionTableBean.editable}" icon="fa fa-save"
+					styleClass="btn btn-default"
+					update="dtRows treeCommon contentPanel" 
+					actionListener="#{decisionTableBean.applyChangeRow()}">
+					<p:confirm header="#{msg['common.apply']}"
+						message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+				</p:commandButton>
+				<p:commandButton value="#{msg['common.cancel']}" immediate="true"
+					rendered="false" icon="fa fa-refresh"
+					actionListener="#{decisionTableBean.cancelChangeRow()}"
+					update="dtRows dtColumn" styleClass="btn btn-default" />
+			</div>
+		</div>
+
+	</div>
+	<p:remoteCommand name="passValueToBean" id="passValueToBean"
+		update="dtRows " action="#{decisionTableBean.onChangedNormValue}"
+		process="@this" />
+	<script type="text/javascript">
+		function onChangedCombobox(select, rowIndex, colIndex) {
+		 	passValueToBean ([{name : 'newValue', value : select.options[select.selectedIndex].value}
+		 					, {name : 'rowIndex', value : rowIndex}
+		 					, {name : 'colIndex', value : colIndex}]);   
+ 		}
+	</script>
+
+
+	<!-- Dialog -->
+	<p:dialog header="#{msg['decisontable.addcolumn']}" modal="true"
+		closable="false" resizable="false" showEffect="explode"
+		widgetVar="dlgAddColumn" styleClass="dlg-center-fix">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xs-12 col-md-12">
+					<p:dataTable var="item" value="#{decisionTableBean.columnDts}"
+						editable="true" editMode="cell" id="dtColumn"
+						rowKey="#{item.columnId}" emptyMessage="#{msg['common.noData']}"
+						paginator="true" rows="20" paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15,20,50,100" rowIndexVar="index">
+						<p:column headerText="#{msg['column.column_index']}">
+							<h:outputText value="#{index+ 1}" />
+						</p:column>
+
+						<p:column headerText="#{msg['column.column_name']}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{item.columnName}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:inputText value="#{item.columnName}" />
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column headerText="#{msg['column.normalizer_id']}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{item.normalizerId}" />
+								</f:facet>
+								<f:facet name="input">
+									<p:commandLink value="#{msg['common.edit']}" process="@this"
+										actionListener="#{decisionTableBean.chosseNormalizer(item)}"
+										style="margin-top: 15px; color: #33a872;">
+										<p:ajax event="dialogReturn" update="dtColumn"
+											listener="#{decisionTableBean.onDialogReturn}" />
+									</p:commandLink>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column headerText="#{msg['column.norm_name']}">
+							<h:outputText
+								value="#{decisionTableBean.getNormalizerName(item.normalizerId)}" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.action']}"
+							styleClass="text-center">
+							<p:commandLink update="dtColumn"
+								disabled="#{decisionTableBean.columnDts.indexOf(item) eq 0}"
+								actionListener="#{decisionTableBean.upColumn(item)}"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-arrow-circle-up icon-only mr-0"></i>
+							</p:commandLink>
+							<p:commandLink update="dtColumn"
+								disabled="#{decisionTableBean.columnDts.indexOf(item) eq decisionTableBean.columnDts.size() - 1}"
+								actionListener="#{decisionTableBean.downColumn(item)}"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-arrow-circle-down icon-only mr-0"></i>
+							</p:commandLink>
+							<p:commandLink
+								actionListener="#{decisionTableBean.deleteColumn(item)}"
+								update="dtColumn"
+								styleClass="btn btn-sm btn-action-del colorRed" immediate="true">
+								<i class="fa fa-times icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandLink>
+
+							<f:facet name="header">
+								<p:commandButton value="#{msg['decisontable.addcolumn']}"
+									styleClass="btn btn-default" immediate="true" icon="fa fa-plus"
+									actionListener="#{decisionTableBean.addRowColumn()}"
+									update="dtColumn" />
+							</f:facet>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="col-sm-8"></div>
+
+				<!-- 				<div class="col-xs-12 col-md-3"> -->
+				<!-- 					<p:commandButton value="#{msg['decisontable.addcolumn']}" -->
+				<!-- 						styleClass="btn btn-default" immediate="true" -->
+				<!-- 						actionListener="#{decisionTableBean.addRowColumn()}" -->
+				<!-- 						update="dtColumn" /> -->
+				<!-- 				</div> -->
+				<div class="col-sm-4" style="text-align: right;">
+					<p:commandButton value="#{msg['common.apply']}" icon="fa fa-save"
+						id="commandButtonApply" update="dtColumn dtRows " immediate="true"
+						actionListener="#{decisionTableBean.applyChangeColumn()}"
+						styleClass="btn btn-default">
+						<p:confirm header="#{msg['common.apply']}"
+							message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+					</p:commandButton>
+
+					<p:commandButton value="#{msg['common.close']}" immediate="true"
+						actionListener="#{decisionTableBean.cancelChangeColumn()}" icon="fa fa-times"
+						update="dtColumn dtRows" onclick="PF('dlgAddColumn').hide()"
+						styleClass="btn btn-default" />
+				</div>
+			</div>
+		</div>
+	</p:dialog>
+</h:form>
+</html>

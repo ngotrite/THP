@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="../tree_common.xhtml">
+	<ui:define name="subcontent">
+		<h:form id="form-stategroup-detail" class="container-fluid"
+			rendered="#{stateSetBean.formType eq 'detail-stategroup'}">
+			<div class="row formFieldMg">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.ID']}" styleClass="line32"></p:outputLabel>
+							<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="20"
+								value="#{stateSetBean.stateGroupUI.stateGroupId}"
+								readonly="true"></p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['stategroup.stateGroupName']}"
+								styleClass="line32" for="txtStateGroupName" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="100"
+								required="true" id="txtStateGroupName"
+								value="#{stateSetBean.txtStateGroupName}"></p:inputText>
+						</div>
+					</div>
+
+				</div>
+
+
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.category']}"
+								styleClass="line32" for="category"/>
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu id="category" effect="fold" required="true"
+								value="#{stateSetBean.stateGroupUI.categoryId}"
+								styleClass="form-control" editable="true">
+								<f:selectItems value="#{stateSetBean.loadCategoryStateGroup()}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.desc']}" styleClass="line32"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="255"
+								value="#{stateSetBean.stateGroupUI.stateGroupDesc}"></p:inputText>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-10">
+					<p:outputLabel ></p:outputLabel>
+				</div>
+				<div class="col-xs-12 text-right">
+					<p:commandButton value="#{msg['common.apply']}" icon="fa fa-save"
+						disabled="#{stateSetBean.apply}"
+						update="treeCommon categoryCommonTop contentPanel"
+						actionListener="#{stateSetBean.commandSaveOrUpdateStateGroup()}">
+						<p:confirm header="#{msg['common.apply']}"
+							message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+					</p:commandButton>
+				</div>
+				<!-- 				<div class="col-xs-12 col-sm-2"> -->
+				<!-- 					<p:commandButton value="#{msg['common.cancel']}" -->
+				<!-- 						styleClass="col-xs-12" -->
+				<!-- 						update="treeCommon categoryCommonTop contentPanel" -->
+				<!-- 						actionListener="#{stateSetBean.commandCancelStateGroup()}" /> -->
+				<!-- 				</div> -->
+			</div>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Yes" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+		<h:form id="form-stategroup-by-cat" class="container-fluid"
+			rendered="#{stateSetBean.formType eq 'list-stategroup-by-category'}">
+			<div class="row" style="padding-bottom: 10px;">
+				<p:commandButton value="clear" update="@form"
+					styleClass="stateGroupTableClearFilter hidden"
+					oncomplete="PF('tblstateGroupWidgetVar').clearFilters()" />
+				<div class="col-xs-12 col-md-12">
+					<p:dataTable id="tableStateGroup" var="item"
+						value="#{stateSetBean.listStateGroupByCat}"
+						rowKey="#{item.stateGroupId}" widgetVar="tblstateGroupWidgetVar"
+						emptyMessage="#{msg['common.noData']}" paginator="true" rows="20"
+						paginatorPosition="bottom" rowIndexVar="rowIndex"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="10,20,50,100">
+
+						<f:facet name="header">
+							<p:outputLabel value="#{msg['stategroup']}"
+								style="font-weight:bold" />
+						</f:facet>
+
+						<p:ajax event="filter" ignoreAutoUpdate="false" />
+
+
+						<p:column headerText="#" style="width:7%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column headerText="#{msg['stategroup']}"
+							filterBy="#{item.stateGroupName}" filterMatchMode="contains">
+							<h:outputText value="#{item.stateGroupName}"
+								styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.desc']}"
+							filterBy="#{item.stateGroupDesc}" filterMatchMode="contains">
+							<h:outputText value="#{item.stateGroupDesc}"
+								styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.action']}"
+							styleClass="actionColumn">
+							<p:commandLink
+								update="treeCommon categoryCommonTop contentPanel contentTitle"
+								actionListener="#{stateSetBean.commandEditTBStateGroup(item)}"
+								resetValues="true"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-pencil icon-only mr-0"></i>
+							</p:commandLink>
+							<p:commandLink
+								update="treeCommon categoryCommonTop contentPanel tableStateGroup"
+								actionListener="#{stateSetBean.commandDeleteTBStateGroup(item)}"
+								styleClass="btn btn-sm btn-action-del colorRed">
+								<i class="fa fa-times icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandLink>
+							<f:facet name="header">
+								<p:commandButton value="#{msg['common.addNew']}"
+									actionListener="#{stateSetBean.commandAddNewStateGroup()}"
+									rendered="#{stateSetBean.edittingStateGroup}"
+									resetValues="true" icon="fa fa-plus"
+									update="treeCommon categoryCommonTop contentPanel contentTitle" />
+							</f:facet>
+
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+
+		</h:form>
+		<h:form id="form-detail-statetype" class="container-fluid"
+			rendered="#{stateSetBean.formType eq 'detail-statetype'}">
+			<div class="row formFieldMg">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['stateset.statesetID']}"
+								></p:outputLabel>
+							<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control col-xs-12" maxlength="9"
+								readonly="#{stateSetBean.editting or true}"
+								value="#{stateSetBean.stateTypeUI.stateTypeId}">
+								<pe:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['stateset.stateName']}"
+								 for="txtStateTypeName" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{stateSetBean.txtStateTypeName}"
+								required="true" id="txtStateTypeName"
+								styleClass="form-control col-xs-12" maxlength="100" />
+						</div>
+					</div>
+					<!-- 					<div class="row"> -->
+					<!-- 						<div class="col-xs-12"> -->
+					<!-- 							<p:outputLabel value="#{msg['common.desc']}" -->
+					<!-- 								></p:outputLabel> -->
+					<!-- 						</div> -->
+					<!-- 						<div class="col-xs-12"> -->
+					<!-- 							<p:inputText maxlength="255" styleClass="form-control col-xs-12" -->
+					<!-- 								value="#{stateSetBean.stateTypeUI.stateDesc}"></p:inputText> -->
+					<!-- 						</div> -->
+					<!-- 					</div> -->
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['stateset.stateMask']}"
+								 for="txtStateMask" />
+						</div>
+						<div class="col-xs-12">
+							<!-- 							<p:inputText maxlength="20" styleClass="form-control col-xs-12" -->
+							<!-- 								title="#{msg['common.onlyNumber']}"  -->
+							<!-- 								value="#{stateSetBean.stateTypeUI.stateMask}"> -->
+							<!-- 								<pe:keyFilter regEx="/[0-9-*#]/i" /> -->
+							<!-- 							</p:inputText> -->
+
+							<p:inputMask styleClass="form-control" mask="9999-9999-9999-9999"
+								title="#{msg['common.onlyNumber']}" required="true"
+								id="txtStateMask" value="#{stateSetBean.stateTypeUI.stateMask}" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['stateset.filterValue']}"
+								 for="txtFilterValue" />
+						</div>
+						<div class="col-xs-12">
+							<!-- 							<p:inputText maxlength="20" styleClass="form-control col-xs-12" -->
+							<!-- 								title="#{msg['common.onlyNumber']}" -->
+							<!-- 								value="#{stateSetBean.stateTypeUI.filterValue}"> -->
+							<!-- 								<pe:keyFilter regEx="/[0-9-*#]/i" /> -->
+							<!-- 							</p:inputText> -->
+
+							<p:inputMask styleClass="form-control" mask="9999-9999-9999-9999"
+								title="#{msg['common.onlyNumber']}" required="true"
+								id="txtFilterValue"
+								value="#{stateSetBean.stateTypeUI.filterValue}" />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.category']}" for="categoryST"/>
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu id="categoryST" effect="fold" required="true"
+								value="#{stateSetBean.stateTypeUI.categoryId}"
+								styleClass="form-control" editable="true">
+								<f:selectItems value="#{stateSetBean.loadCategoryStateType()}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['stateset.stateGroup']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu id="group" effect="fold"
+								styleClass="form-control col-xs-12"
+								value="#{stateSetBean.stateTypeUI.stateGroupId}" editable="true">
+								<f:selectItems value="#{stateSetBean.loadComboListStateGroup()}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.type']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu id="type" effect="fold"
+								styleClass="form-control col-xs-12"
+								value="#{stateSetBean.stateTypeUI.stateType}" editable="true">
+								<f:selectItems value="#{stateSetBean.loadComboListType()}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:selectBooleanCheckbox id="isE" itemLabel="#{msg['action.enable']}"
+								value="#{stateSetBean.stateTypeUI.status}" />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-12">
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.desc']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText maxlength="255" styleClass="form-control col-xs-12"
+								value="#{stateSetBean.stateTypeUI.stateDesc}"></p:inputText>
+						</div>
+					</div>
+
+					<p:outputLabel ></p:outputLabel>
+				</div>
+				<div class="col-xs-12 col-sm-10">
+					<p:outputLabel ></p:outputLabel>
+				</div>
+				<div class="col-xs-12 text-right">
+					<p:commandButton value="#{msg['common.apply']}" icon="fa fa-save"
+						disabled="#{stateSetBean.apply}"
+						update="treeCommon categoryCommonTop contentPanel"
+						actionListener="#{stateSetBean.commandSaveOrUpdateStateType()}">
+						<p:confirm header="#{msg['common.apply']}"
+							message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+					</p:commandButton>
+				</div>
+				<!-- 				<div class="col-xs-12 col-sm-2"> -->
+				<!-- 					<p:commandButton value="#{msg['common.cancel']}" -->
+				<!-- 						styleClass="col-xs-12" -->
+				<!-- 						update="treeCommon categoryCommonTop contentPanel" -->
+				<!-- 						actionListener="#{stateSetBean.commandCancel()}" /> -->
+				<!-- 				</div> -->
+			</div>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Yes" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+		<h:form id="form-statetype-by-cat" class="container-fluid"
+			rendered="#{stateSetBean.formType eq 'list-statetype-by-category'}">
+			<div class="row" style="padding-bottom: 10px;">
+				<div class="col-xs-12 col-md-12">
+					<div class="col-xs-12 col-md-10"></div>
+					<div class="col-xs-12 col-md-2">
+						<!-- 						<p:commandButton value="#{msg['common.addNew']}" -->
+						<!-- 							actionListener="#{stateSetBean.commandAddNew()}" -->
+						<!-- 							update="treeCommon categoryCommonTop contentPanel contentTitle" -->
+						<!-- 							styleClass="col-xs-12" /> -->
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12">
+					<p:dataTable var="item" value="#{stateSetBean.listStateTypeByCat}"
+						rowKey="#{item.stateTypeId}" id="tabStateSet"
+						emptyMessage="#{msg['common.noData']}" paginator="true" rows="20"
+						paginatorPosition="bottom" rowIndexVar="rowIndex"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="10,20,50,100">
+						<p:ajax event="filter" ignoreAutoUpdate="false" />
+						<f:facet name="header">
+						<p:outputLabel value="#{msg['stateset']}"></p:outputLabel>
+							
+						</f:facet>
+						<p:column headerText="#" style="width:7%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column headerText="#{msg['stateset.stateName']}">
+							<h:outputText value="#{item.stateName}" styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.desc']}">
+							<h:outputText value="#{item.stateDesc}" styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.action']}"
+							styleClass="actionColumn">
+							<p:commandLink
+								update="treeCommon categoryCommonTop contentPanel contentTitle"
+								actionListener="#{stateSetBean.commandEditTBStateType(item)}"
+								resetValues="true"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-pencil icon-only mr-0"></i>
+							</p:commandLink>
+							<!-- 							<p:commandLink update="treeCommon categoryCommonTop contentPanel" -->
+							<!-- 								actionListener="#{stateSetBean.commandUp(item)}" -->
+							<!-- 								styleClass="btn btn-sm btn-action-edit colorStrongGreen"> -->
+							<!-- 								<i class="fa fa-arrow-circle-up icon-only mr-0"></i> -->
+							<!-- 							</p:commandLink> -->
+							<!-- 							<p:commandLink update="treeCommon categoryCommonTop contentPanel" -->
+							<!-- 								actionListener="#{stateSetBean.commandDown(item)}" -->
+							<!-- 								styleClass="btn btn-sm btn-action-edit colorStrongGreen"> -->
+							<!-- 								<i class="fa fa-arrow-circle-down icon-only mr-0"></i> -->
+							<!-- 							</p:commandLink> -->
+							<p:commandLink styleClass="btn btn-sm btn-action-del colorRed"
+								update="treeCommon categoryCommonTop contentPanel"
+								actionListener="#{stateSetBean.commandDeleteTBStateType(item)}">
+								<i class="fa fa-times icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandLink>
+							<f:facet name="header">
+								<p:commandButton value="#{msg['common.addNew']}"
+									resetValues="true" icon="fa fa-plus"
+									actionListener="#{stateSetBean.commandAddNew()}"
+									update="treeCommon categoryCommonTop contentPanel contentTitle"/>
+							</f:facet>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Yes" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

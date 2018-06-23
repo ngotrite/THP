@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="../../templates/vcbsContentTemplate.xhtml">
+	<ui:define name="content">
+		<h:form id="form-cell" class="container-fluid">
+
+			<div class="row">
+				<div class="col-xs-12 col-md-2">
+					<p:outputLabel value="#{msg['cell.cellId']}" />
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:inputText value="#{cellBean.cell.cellId}" readonly="true"
+						styleClass="form-control"
+						requiredMessage="#{msg['common.required']}" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 col-md-2">
+					<p:outputLabel value="#{msg['cell.cellCode']}" />
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:inputText value="#{cellBean.cell.cellCode}"
+						styleClass="form-control"
+						requiredMessage="#{msg['common.required']}" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 col-md-2">
+					<p:outputLabel value="#{msg['cell.cellName']}" />
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:inputText value="#{cellBean.cell.cellName}"
+						styleClass="form-control"
+						requiredMessage="#{msg['common.required']}" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 col-md-2">
+					<p:outputLabel for="mask" value="#{msg['cell.cellUpdateTime']}" />
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:calendar id="mask" effect="fold"
+						value="#{cellBean.cell.cellUpdateTime}"
+						requiredMessage="#{msg['common.required']}"  pattern="#{userSession.dateFormat}"
+						mask="true" />
+
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 col-md-4 col-md-offset-6">
+					<p:commandButton value="#{msg['common.addNew']}"
+						rendered="#{cellBean.isEnable == 1}"
+						action="#{cellBean.btnAddNew()}" update="form-cell"
+						styleClass="btn btn-default">
+					</p:commandButton>
+					<p:commandButton value="#{msg['common.save']}"
+						rendered="#{cellBean.isEnable == 0}"
+						action="#{cellBean.saveCell()}" update="ID_CellTable form-cell"
+						styleClass="btn btn-default">
+					</p:commandButton>
+					<p:commandButton value="#{msg['common.cancel']}"
+						rendered="#{cellBean.isEnable == 0}"
+						action="#{cellBean.cancelCell()}" update="ID_CellTable form-cell"
+						styleClass="btn btn-default">
+					</p:commandButton>
+
+
+				</div>
+			</div>
+
+
+			<p:dataTable id="ID_CellTable" var="item"
+				value="#{cellBean.cellList}" paginator="true" rows="6"
+				rowKey="#{item.cellId}">
+
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="#{msg['common.ID']}" />
+					</f:facet>
+				#{item.cellId}
+			</p:column>
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="#{msg['cell.cellCode']}" />
+					</f:facet>
+				#{item.cellCode}
+			</p:column>
+
+				<p:column>
+					<f:facet name="header">
+						<p:outputLabel value="#{msg['cell.cellName']}" />
+					</f:facet>
+				#{item.cellName}
+			</p:column>
+
+				<p:column headerText="#{msg['cell.cellUpdateTime']}">
+					<h:outputText value="#{item.cellUpdateTime}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+
+				<p:column headerText="#{msg['common.action']}"
+					styleClass="text-center">
+					<p:commandLink actionListener="#{cellBean.editCell(item)}"
+						update="form-cell">
+						<h:outputText value="#{msg['common.edit']}"></h:outputText>
+					</p:commandLink>
+					<h:outputText value=" / "></h:outputText>
+					<p:commandLink actionListener="#{cellBean.deleteCell(item)}"
+						update="ID_CellTable">
+						<h:outputText value="#{msg['common.delete']}"></h:outputText>
+						<p:confirm header="#{msg['common.delete']}"
+							message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+
+
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Yes" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

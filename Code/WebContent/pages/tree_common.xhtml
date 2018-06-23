@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:metadata>
+	<f:viewParam id="treeType" name="treeType"
+		value="#{treeCommonBean.treeType}" />
+	<!-- 	<f:event type="preRenderView" listener="#{treeCommonBean.onload}"  />  -->
+	<f:viewAction action="#{treeCommonBean.onload}" />
+</f:metadata>
+
+<h:head>
+	<!-- <link href="#{request.contextPath}/resources/css/tree_ocs.css"	rel="stylesheet" type="text/css" /> -->
+</h:head>
+<ui:composition template="../templates/vcbsContentTemplate.xhtml">
+	<ui:define name="content">
+		<div class="col-sm-4 col-xs-12 treeContainer" style="padding: 2px;">
+			<div class="box box-default box-solid">
+				<div class="box-header with-border">
+					<h3 class="box-title box-title-tree"><h:outputText value="#{msg['title.treeNav']}"></h:outputText></h3>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool minimumTree"
+							data-widget="collapse">
+							<i class="fa fa-angle-left"></i>
+						</button>
+					</div>
+				</div>
+				<div class="box-body treeViewData">
+					<div>
+						<h:form>
+							<p:inputText id="txtTreeSearch" maxlength="100"	 value="#{treeCommonBean.txtTreeSearch}"		styleClass="form-control"
+							placeholder="#{msg['title.searchNode']}"></p:inputText>
+							<p:commandButton styleClass="hidden" actionListener="#{treeCommonBean.onSearchTree}" update="treeCommon:treeCommonCatalog">
+							</p:commandButton>
+						</h:form>
+					</div>
+					<div class="widget-body content-tree heightTree">
+						<h:form id="treeCommon">
+							<p:tree id="treeCommonCatalog" value="#{treeCommonBean.root}"
+								var="nodeData" cache="false" dynamic="true"
+								selectionMode="single"
+								selection="#{treeCommonBean.selectedNode}">
+								<p:ajax event="expand" listener="#{treeCommonBean.onNodeExpand}" />
+								<p:ajax event="collapse"
+									listener="#{treeCommonBean.onNodeCollapse}" />
+								<p:ajax event="select" listener="#{treeCommonBean.onNodeSelect}"
+									resetValues="true"
+									update="contentTitle categoryCommonTop contentPanel" />
+								<p:ajax event="contextMenu" update="treeCommon"
+									oncomplete="PF('ctxMenuTreeCommon').show()"
+									listener="#{treeCommonBean.onNodeSelectContext}" />
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}">
+									<h:outputText value="#{nodeData.nodeName}" title="#{nodeData}" styleClass="preformatted"/>
+								</p:treeNode>
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CATEGORY">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.remark}" styleClass="preformatted"/>
+								</p:treeNode>
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_SERVICE">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.serviceDesc}" styleClass="preformatted"/>
+								</p:treeNode>
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_PARAMETER">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.remark}" styleClass="preformatted"/>
+								</p:treeNode>
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_BILLING_CYCLE">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.remark}" styleClass="preformatted"/>
+								</p:treeNode>
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_STATE_TYPE">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.stateDesc}" styleClass="preformatted"/>
+								</p:treeNode>
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_STATE_GROUP">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.stateGroupDesc}" styleClass="preformatted"/>
+								</p:treeNode>
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_STATE_TYPE">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.stateDesc}" styleClass="preformatted"/>
+								</p:treeNode>
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_UNIT_TYPE">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.remark}" styleClass="preformatted"/>
+								</p:treeNode>
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_BAL_TYPE">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.description}" styleClass="preformatted"/>
+								</p:treeNode>
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_RESERVE_INFO">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.resvDesc}" styleClass="preformatted"/>
+								</p:treeNode>
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_RESERVE_INFO">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.resvDesc}" styleClass="preformatted"/>
+								</p:treeNode>
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_TRIGGER_OCS">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.description}" styleClass="preformatted"/>
+								</p:treeNode>
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_TRIGGER_MSG">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.msgDesc}" styleClass="preformatted"/>
+								</p:treeNode>
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_GEO_HOME_ZONE">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.remark}" styleClass="preformatted"/>
+								</p:treeNode>
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_TRIGGER_TYPE">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.triggerTypeDescription}" styleClass="preformatted"/>
+								</p:treeNode>
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_ZONE_MAP">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.remark}" styleClass="preformatted"/>
+								</p:treeNode>
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_MAP_SHARE_BAL">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.remark}" styleClass="preformatted"/>
+								</p:treeNode>
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_MAP_ACM_BAL">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.remark}" styleClass="preformatted"/>
+								</p:treeNode>
+
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_CDR_SERVICE">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.remark}" styleClass="preformatted"/>
+								</p:treeNode>
+								
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_TRIGGER_DESTINATION">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.destDescription}" styleClass="preformatted"/>
+								</p:treeNode>
+								
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_CDR_TEMP">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.description}" styleClass="preformatted"/>
+								</p:treeNode>
+								
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_CDR_GEN_FILENAME">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.description}" styleClass="preformatted"/>
+								</p:treeNode>
+								
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_CDR_GEN_FILENAME">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.description}" styleClass="preformatted"/>
+								</p:treeNode>
+								
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_CDR_PROCESS_CFG">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="" styleClass="preformatted"/>
+								</p:treeNode>
+								
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="POLICY_PEP_PROFILE">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.remark}" styleClass="preformatted"/>
+								</p:treeNode>
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="POLICY_PCC_RULE">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.remark}" styleClass="preformatted"/>
+								</p:treeNode>
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="SETTING_SYS_COMFIG">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.description}" styleClass="preformatted"/>
+								</p:treeNode>
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_STATISTIC_ITEM">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.statisticItemDesc}" styleClass="preformatted"/>
+								</p:treeNode>
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_SMS_NOTIFY_TEMPLATE">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.remark}" styleClass="preformatted"/>
+								</p:treeNode>
+								<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+									type="CAT_CSS_USSD_RESPONSE">
+									<h:outputText value="#{nodeData.nodeName}"
+										title="#{nodeData.remark}" styleClass="preformatted"/>
+								</p:treeNode>
+							</p:tree>
+							<ui:include src="/pages/tree_common_contextmenu.xhtml" />
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-8 col-xs-12 contentTreeContainer"
+			style="padding: 2px;">
+			<div class="box box-default box-solid">
+				<div class="box-header with-border">
+					<h3 class="box-title">
+						<h:outputLabel id="contentTitle"
+							value="#{treeCommonBean.contentTitle}"></h:outputLabel>
+					</h3>
+					<div class="box-tools pull-right">
+						<!-- <button type="button" class="btn btn-box-tool"><i class="fa fa-angle-left"></i>
+						</button> -->
+					</div>
+				</div>
+				<div class="box-body">
+					<div class="heightContentTree">
+						<p:panel id="categoryCommonTop">
+							<p:panel rendered="#{treeCommonBean.formType eq 'cat-list' }">
+								<ui:include src="tree_common_category_list.xhtml"></ui:include>
+							</p:panel>
+							<p:panel rendered="#{treeCommonBean.formType eq 'cat-form'}">
+								<ui:include src="tree_common_category_form.xhtml"></ui:include>
+							</p:panel>
+						</p:panel>
+						<p:panel id="contentPanel">
+							<p:panel rendered="#{treeCommonBean.formType ne 'cat-list'}">
+								<ui:insert name="subcontent" />
+							</p:panel>
+							<p:panel
+								rendered="#{treeCommonBean.page eq 'policy_profile' and treeCommonBean.formType ne 'cat-list'}">
+								<ui:include src="/pages/policy/policy_profile.xhtml"></ui:include>
+							</p:panel>
+							<p:panel
+								rendered="#{treeCommonBean.page eq 'pcc_rule' and treeCommonBean.formType ne 'cat-list'}">
+								<ui:include src="/pages/policy/pcc_rule.xhtml"></ui:include>
+							</p:panel>
+
+							<p:panel
+								rendered="#{treeCommonBean.page eq 'baltype' and treeCommonBean.formType ne 'cat-list'}">
+								<ui:include src="/pages/catalog/baltype.xhtml"></ui:include>
+							</p:panel>
+
+							<p:panel
+								rendered="#{treeCommonBean.page eq 'trigger_ocs' and treeCommonBean.formType ne 'cat-list'}">
+								<ui:include src="/pages/catalog/triggerocs.xhtml"></ui:include>
+							</p:panel>
+
+							<p:panel
+								rendered="#{treeCommonBean.page eq 'trigger_msg' and treeCommonBean.formType ne 'cat-list'}">
+								<ui:include src="/pages/catalog/triggermsg.xhtml"></ui:include>
+							</p:panel>
+						</p:panel>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<p:dialog header="#{msg['title.category']}" modal="true"
+			id="dlgCategory" resizable="false" showEffect="fade"
+			position="center" widgetVar="dlgCategory"
+			width="600px">
+			<h:form id="formDlgCategory" styleClass="container-fluid">
+				<!-- <p:messages id="msgDlgCategory" severity="error,warn" showDetail="true" autoUpdate="true" closable="true" /> -->
+				<div class="row formFieldMg">
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['cat.ID']}" ></p:outputLabel>
+							</div>
+							<div class="col-xs-12">
+								<p:inputText value="#{treeCommonBean.dlgCategory.categoryId}"
+									readonly="true" styleClass="form-control" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel for="CatName" value="#{msg['cat.name']}"
+									 />
+							</div>
+							<div class="col-xs-12">
+								<p:inputText id="CatName"
+									value="#{treeCommonBean.dlgCategory.categoryName}"
+									maxlength="50" required="true" styleClass="form-control" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<div class="row" style="display: none;">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['cat.type']}"  />
+							</div>
+							<div class="col-xs-12">
+								<h:selectOneMenu required="true"
+									value="#{treeCommonBean.dlgCategory.categoryType}"
+									styleClass="form-control select">
+									<f:selectItems value="#{treeCommonBean.listCatType}" />
+								</h:selectOneMenu>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['cat.parent']}"
+									 />
+							</div>
+							<div class="col-xs-12">
+								<h:selectOneMenu value="#{treeCommonBean.dlgCategoryParentId}"
+									styleClass="form-control select">
+									<f:selectItems value="#{treeCommonBean.listCatParentDlg}"
+										var="cat" itemValue="#{cat.categoryId}"
+										itemLabel="#{cat.categoryName}"></f:selectItems>
+								</h:selectOneMenu>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['cat.remark']}"
+									 />
+							</div>
+							<div class="col-xs-12">
+								<p:inputText value="#{treeCommonBean.dlgCategory.remark}"
+									maxlength="200" styleClass="form-control" />
+							</div>
+						</div>
+					</div>
+
+					
+					<div class="col-xs-12 text-right">
+						<p:commandButton id="btnSaveDlg" value="#{msg['common.save']}"
+							action="#{treeCommonBean.btnCatSaveDlg()}" icon="fa fa-save"
+							update="treeCommon categoryCommonTop"
+							styleClass="btn btn-default">
+						</p:commandButton>
+						<p:commandButton id="btnCloseDlg" value="#{msg['common.close']}" icon="fa fa-close"
+							onclick="PF('dlgCategory').hide()" styleClass="btn btn-default"
+							immediate="true">
+						</p:commandButton>
+					</div>
+						
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

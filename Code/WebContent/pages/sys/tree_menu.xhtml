@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:metadata>
+	<f:viewAction/>
+</f:metadata>
+<h:head>
+	<!-- <link href="#{request.contextPath}/resources/css/tree_ocs.css"	rel="stylesheet" type="text/css" /> -->
+</h:head>
+<ui:composition template="../../templates/vcbsContentTemplate.xhtml">
+	<ui:define name="content">
+		<div class="col-sm-4 col-xs-12 treeContainer" style="padding: 2px;">
+			<div class="box box-default box-solid">
+				<div class="box-header with-border">
+					<h3 class="box-title box-title-tree">Tree Menu</h3>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool minimumTree"
+							data-widget="collapse">
+							<i class="fa fa-angle-left"></i>
+						</button>
+					</div>
+				</div>
+				<div class="box-body treeViewData">
+					<div class="widget-body content-tree heightTree">
+						<div>
+							<p:inputText id="txtTreeSearch" maxlength="100"
+								styleClass="form-control"
+								placeholder="#{msg['title.searchNode']}"></p:inputText>
+						</div>
+						<h:form id="treeMenu">
+							<p:tree id="treeTreeMenu" value="#{menuBean.root}"
+								var="nodeData" cache="false" dynamic="true"
+								selectionMode="single" selection="#{menuBean.selectedNode}">
+								<p:ajax event="expand" listener="#{menuBean.onNodeExpand}" />
+								<p:ajax event="collapse" listener="#{menuBean.onNodeCollapse}" update="treeTreeMenu"/>
+								<p:ajax event="select" listener="#{menuBean.onNodeSelect}" update="menuContent" />
+								<p:ajax event="contextMenu" update="treeTreeMenu"
+									oncomplete="PF('ctxMenu').show()"
+									listener="#{menuBean.onNodeSelectContext}" /> 
+	
+								<p:treeNode icon="category-icon">
+									<h:outputText value="#{nodeData.nodeName}" title="#{nodeData}"/>
+								</p:treeNode>
+								<p:treeNode icon="fa fa-arrow-circle-right" type="TREE_NODE_MENU">
+									<h:outputText value="#{nodeData.nodeName}" title="#{nodeData}"/>
+								</p:treeNode>
+							</p:tree>
+							<p:contextMenu for="treeTreeMenu" id="ctxMenu" widgetVar="ctxMenu" event="contextmenu">
+								<p:menuitem value="Move Up"
+									actionListener="#{menuBean.moveUpTreeNode()}"
+									update="treeTreeMenu" />
+								<p:menuitem value="Move Down"
+									actionListener="#{menuBean.moveDownTreeNode()}"
+									update="treeTreeMenu" />
+							</p:contextMenu>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-8 col-xs-12 contentTreeContainer"
+			style="padding: 2px;">
+			<div class="box box-default box-solid">
+				<div class="box-header with-border">
+					<h3 class="box-title">
+						<h:outputLabel id="contentTitle"
+							value="#{msg['title.menu']}"></h:outputLabel>
+					</h3>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool"><i class="fa fa-angle-left"></i>
+						</button>
+					</div>
+				</div>
+				<div class="box-body">
+					<div class="heightContentTree">
+						<p:panel id="menuContent">
+							<ui:include src="menu.xhtml"></ui:include>
+						</p:panel>						
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	
+		<p:dialog header="#{msg['title.menu']}" modal="true"
+					id="dlgMenu" resizable="false" showEffect="fade"
+					position="center" widgetVar="dlgMenu" height="220px" width="800px">
+			<h:form id="formDlgMenu">
+				<!-- <p:messages id="msgDlgMenu" severity="error,warn" showDetail="true" autoUpdate="true" closable="true" /> -->
+				<div class="row formFieldMg">
+					
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['menu.name']}" for="menuNameDlg" />
+							</div>
+							<div class="col-xs-12">
+								<p:inputText id="menuNameDlg" value="#{menuBean.sysMenuDlg.name}"
+									maxlength="100" required="true"
+									requiredMessage="#{msg['common.required']}"
+									styleClass="form-control" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['menu.path']}" for="menuPathDlg" />
+							</div>
+							<div class="col-xs-12">
+								<p:inputText id="menuPathDlg" value="#{menuBean.sysMenuDlg.url}"
+									maxlength="100" styleClass="form-control" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['menu.parent']}" />
+							</div>
+							<div class="col-xs-12">
+								<h:selectOneMenu value="#{menuBean.parentIdDlg}" styleClass="form-control select" 
+									filter="true" filterMatchMode="startsWith">
+									<f:selectItems value="#{menuBean.listSelectItemParentDlg}"></f:selectItems>
+								</h:selectOneMenu>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['menu.css']}" />
+							</div>
+							<div class="col-xs-12">
+								<p:inputText value="#{menuBean.sysMenuDlg.cssClass}"
+									maxlength="100" styleClass="form-control" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-6">
+								<p:selectBooleanCheckbox value="#{menuBean.sysMenuDlg.isActive}" itemLabel="#{msg['common.active']}">
+								</p:selectBooleanCheckbox>
+							</div>
+							<div class="col-xs-6 text-right">
+								<p:commandButton value="#{msg['common.saveAndNew']}"
+									action="#{menuBean.btnSaveAndNewDlg()}"
+									update="treeMenu menuContent formDlgMenu" styleClass="btn btn-default">
+								</p:commandButton>
+								<p:commandButton value="#{msg['common.save']}"
+									action="#{menuBean.btnSaveDlg()}" icon="fa fa-save"
+									update="treeMenu menuContent" styleClass="btn btn-default">
+								</p:commandButton>
+								<p:commandButton value="#{msg['common.close']}" icon="fa fa-close"
+									onclick="PF('dlgMenu').hide()" styleClass="btn btn-default"
+									immediate="true">
+								</p:commandButton>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

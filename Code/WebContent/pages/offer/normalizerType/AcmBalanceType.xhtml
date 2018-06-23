@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	<!--BEGIN Panel Acm Balance type -->
+	<p:panel id="pnlAcmBalanceType" styleClass="nopadding"
+		rendered="#{normalizerBean.selectedNormType == 10}">
+		<div class="row">
+			<div class="col-xs-12 col-sm-6 nopadding">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['normalizer.default']}"
+						></p:outputLabel>
+					<p:outputLabel value="*" styleClass="colorRed"></p:outputLabel>
+				</div>
+				<div class="col-xs-12">
+					<h:selectOneMenu styleClass="form-control" value="#{normalizerBean.selectedNormDefaultWithNormValue}">
+						<f:selectItems value="#{normalizerBean.listSelectNormValue}" />
+					</h:selectOneMenu>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-6 nopadding">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['normalizer.period']}"
+						></p:outputLabel>
+				</div>
+				<div class="col-xs-12">
+					<p:inputNumber styleClass="inputNumCustom" decimalPlaces="0" thousandSeparator="" value="#{normalizerBean.period}"></p:inputNumber>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p:commandButton value="#{msg['normalizer.editValues']}" disabled="#{!normalizerBean.isEdit}" icon="fa fa-edit"
+					styleClass="mgRight10" onclick="PF('dlgValueManager').show()"></p:commandButton>
+				<p:commandButton value="#{msg['normalizer.addNewParams']}" disabled="#{!normalizerBean.isEdit}" icon="fa fa-plus"
+					styleClass="mgRight10" actionListener="#{normalizerBean.addChildForListTableNVPstring()}" update="TableNormValueParamForAcmBalance"></p:commandButton>
+<!-- 				<p:commandButton value="#{msg['normalizer.validate']}" -->
+<!-- 					styleClass="mgRight10" actionListener="#{normalizerBean.validateChildForListTableNVPstring()}" update="TableNormValueParamForAcmBalance"></p:commandButton> -->
+			</div>
+<!-- 			<div class="col-xs-12"> -->
+<!-- 				<p:messages id="messagesConfigInputAcmBalance" severity="error, warn" showDetail="true" autoUpdate="true" closable="true" /> -->
+<!-- 			</div> -->
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p:dataTable
+					id="TableNormValueParamForAcmBalance"
+					var="item"
+					editable="true" editMode="cell"
+					value="#{normalizerBean.listTableNormValueParamForString}"
+					paginator="true" rows="20" paginatorPosition="bottom"
+					rowIndexVar="rowIndex"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="10,20,50,100"
+					rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+					<p:column headerText="#" styleClass="widthSTTcolumn">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+	
+					<p:column headerText="#{msg['normalizer.valueName']}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<div class="col-xs-12" style="background: #{item.normValue.colorBG}">
+									<h:outputText value="#{item.normValue.valueName}" style="color: #{item.normValue.color}; padding:5px;"/>
+								</div>
+							</f:facet>
+							<f:facet name="input">
+								<h:selectOneMenu styleClass="form-control" value="#{item.selectedNormValue}">
+									<f:selectItems value="#{normalizerBean.listSelectNormValue}" />
+									<p:ajax event="change" listener="#{normalizerBean.onChangeNormValueInTableNVP(item)}" oncomplete="$('.btnUpdateHiddenAll').click();"/>
+								</h:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					
+					<p:column headerText="#{msg['normalizer.useParam']}">
+						<p:selectBooleanCheckbox value="#{item.startIsParam}">
+							<p:ajax event="change" listener="#{normalizerBean.showDialogParameterForStartValue(item)}" update="TableNormValueParamForAcmBalance"/>
+						</p:selectBooleanCheckbox>
+					</p:column>
+		
+					<p:column headerText="#{msg['normalizer.startValueRange']}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{normalizerBean.loadNameOfSelectedParam(item , true)}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputNumber value="#{item.startValue}" decimalPlaces="0" minValue="0" thousandSeparator="">
+									<p:ajax event="focus" listener="#{normalizerBean.showDialogParameterForStartValue(item)}"/>
+									<p:ajax event="change" listener="#{normalizerBean.onChangeNormValueInTableNVP(item)}" oncomplete="$('.btnUpdateHiddenAll').click();"/>
+								</p:inputNumber>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					
+					<p:column headerText="#{msg['normalizer.useParam']}">
+						<p:selectBooleanCheckbox value="#{item.endIsParam}">
+							<p:ajax event="change" listener="#{normalizerBean.showDialogParameterForEndValue(item)}" update="TableNormValueParamForAcmBalance"/>
+						</p:selectBooleanCheckbox>
+					</p:column>
+		
+					<p:column headerText="#{msg['normalizer.endValueRange']}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{normalizerBean.loadNameOfSelectedParam(item , false)}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputNumber value="#{item.endValue}" decimalPlaces="0" minValue="0" thousandSeparator="">
+									<p:ajax event="focus" listener="#{normalizerBean.showDialogParameterForEndValue(item)}"/>
+									<p:ajax event="change" listener="#{normalizerBean.onChangeNormValueInTableNVP(item)}" oncomplete="$('.btnUpdateHiddenAll').click();"/>
+								</p:inputNumber>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					
+					<p:column headerText="#{msg['common.priority']}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{item.priority}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputNumber value="#{item.priority}" decimalPlaces="0" minValue="0" thousandSeparator="">
+									<p:ajax event="change" listener="#{normalizerBean.onChangeNormValueInTableNVP(item)}" oncomplete="$('.btnUpdateHiddenAll').click();"/>
+								</p:inputNumber>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+	
+					<p:column headerText="#{msg['common.action']}"
+						style="text-align:center;">
+						<p:commandLink disabled="#{!normalizerBean.isEdit}"
+							actionListener="#{normalizerBean.removeChildForListTableNVPstring(item)}"
+							styleClass="btn btn-sm btn-action-del colorRed"
+							update="TableNormValueParamForAcmBalance">
+							<i class="fa fa-times icon-only mr-0"></i>
+							<p:confirm header="#{msg['common.delete']}"
+								message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+	</p:panel>
+	<!--END Panel Acm Balance type -->
+</html>

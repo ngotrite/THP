@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:p="http://primefaces.org/ui">
+	<h:head />
+	<ui:composition template="../templates/vcbsContentTemplate.xhtml">
+       <ui:define name="content">
+		<h:form id="form-cat" class="container-fluid">
+			<div class="row">
+				<div class="col-xs-12 col-md-2">
+					<p:outputLabel value="#{msg['cat.ID']}"/>
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:inputText value="#{categoryBean.category.categoryId}" readonly="true" styleClass="form-control">
+					</p:inputText>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-md-2">
+					<p:outputLabel value="#{msg['common.treeType']}"/>
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<!-- <p:selectOneMenu value="#{categoryBean.treeType}" styleClass="form-control select">
+						<f:selectItems value="#{treeTypeBean.lstTreeType}"></f:selectItems>
+						<p:ajax update="CatType"/>
+					</p:selectOneMenu> -->
+				</div>
+				<div class="col-xs-12 col-md-2">
+					<p:outputLabel value="#{msg['cat.type']}"/>
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:selectOneMenu id="CatType" value="#{categoryBean.category.categoryType}" styleClass="form-control select">
+						<f:selectItems value="#{categoryBean.getListType().entrySet()}" var="entry" itemValue="#{entry.key}" itemLabel="#{entry.value}"></f:selectItems>
+					</p:selectOneMenu>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 col-md-2">
+					<p:outputLabel value="#{msg['cat.name']}"/>
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:inputText value="#{categoryBean.category.categoryName}" maxlength="100" required="true" requiredMessage="#{msg['common.required']}" styleClass="form-control"/>
+				</div>
+				<div class="col-xs-12 col-md-2">
+					<p:outputLabel value="#{msg['cat.parent']}"/>
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:selectOneMenu value="#{categoryBean.parentId}" styleClass="form-control select">
+						<f:selectItems value="#{categoryBean.listParent}" var="cat" itemValue="#{cat.categoryId}" itemLabel="#{cat.categoryName}"></f:selectItems>
+					</p:selectOneMenu>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-xs-12 col-md-4 col-md-offset-6">
+					<p:commandButton id="btnNew" value="#{msg['common.addNew']}" actionListener="#{categoryBean.btnNew}" 
+						    rendered="#{!categoryBean.editing}"	update="form-cat" styleClass="btn btn-primary" icon="fa fa-plus"
+						    immediate="true" resetValues="true">
+					</p:commandButton>
+					<p:commandButton id="btnSave" value="#{msg['common.save']}" actionListener="#{categoryBean.btnSave}" icon="fa fa-save"
+							rendered="#{categoryBean.editing}" update="ID_CatTable form-cat" styleClass="btn btn-default">
+					</p:commandButton>
+					<p:commandButton id="btnCancel" value="#{msg['common.cancel']}" actionListener="#{categoryBean.btnCancel}" icon="fa fa-refresh"
+							rendered="#{categoryBean.editing}" update="form-cat" styleClass="btn btn-default" 
+							immediate="true" resetValues="true">
+					</p:commandButton>
+					
+					<!-- <p:commandButton value="#{msg['common.delete']}" actionListener="#{categoryBean.btnDelete()}" update="ID_CatTable form-cat">
+				        <p:confirm header="Confirmation" message="#{msg['common.confirmDelete']}" icon="ui-icon-alert"/>
+				    </p:commandButton> -->
+				</div>
+			</div>
+			
+			<!-- <p:remoteCommand name="commandName" action="#{categoryBean.searchCategory()}" update="ID_CatTable" autoRun="true"/> -->
+		</h:form>
+		
+		<p:dataTable id="ID_CatTable" var="cat" value="#{categoryBean.listCategory}" rowIndexVar="rowIndex" 
+			paginator="true" rows="10" selectionMode="single" rowKey="#{cat.categoryId}">
+			
+			<!-- <p:ajax event="rowSelect" listener="#{categoryBean.onRowSelect}" update="form-cat"/> -->
+                    
+            <p:column headerText="#" style="width:3%">
+                #{rowIndex+1}
+            </p:column>
+			<p:column>
+				<f:facet name="header"><p:outputLabel value="#{msg['cat.type']}"/></f:facet>
+				#{categoryBean.getTypeLabel(cat.categoryType)}
+			</p:column>
+			<p:column>
+				<f:facet name="header"><p:outputLabel value="#{msg['cat.name']}"/></f:facet>
+				#{cat.categoryName}
+			</p:column>
+			<p:column>
+				<f:facet name="header"><p:outputLabel value="#{msg['cat.parent']}"/></f:facet>
+				#{categoryBean.getParentName(cat.categoryParentId)}
+			</p:column>
+			
+			<p:column headerText="#{msg['common.action']}"
+					styleClass="text-center">
+				<p:commandLink actionListener="#{categoryBean.onRowEdit(cat)}"
+					update="form-cat" value="#{msg['common.edit']}"> >
+				</p:commandLink>
+				<h:outputText value=" / "></h:outputText>
+				<p:commandLink actionListener="#{categoryBean.onRowDelete(cat)}"
+					update="form-cat ID_CatTable" value="#{msg['common.delete']}">
+					<p:confirm header="#{msg['common.delete']}"	message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+				</p:commandLink>
+			</p:column>
+		</p:dataTable>
+       </ui:define>
+   </ui:composition>
+</html>

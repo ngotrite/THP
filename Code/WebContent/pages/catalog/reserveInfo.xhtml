@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="../tree_common.xhtml">
+	<ui:define name="subcontent">
+		<h:form id="form-reserveinfo-by-cat" class="container-fluid"
+			rendered="#{reserveBean.formType == 'list-reserveinfo-by-category'}">
+
+			<p:commandButton value="clear" update="@form"
+				styleClass="rVClearFilter hidden"
+				oncomplete="PF('tblRVWidgetVar').clearFilters()" />
+
+			<div class="container-fluid">
+				<div class="row formFieldMg">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:dataTable id="tableReserver" var="item"
+								value="#{reserveBean.listReserveInfoByCategory}"
+								rowKey="#{item.reserveInfoId}" widgetVar="tblRVWidgetVar"
+								emptyMessage="#{msg['common.noData']}" paginator="true"
+								rows="20" paginatorPosition="bottom"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="10,20,50,100">
+								<p:ajax event="filter" ignoreAutoUpdate="false" />
+								<f:facet name="header">
+									<p:outputLabel value="#{msg['title.ReserveInfo']}"
+										style="font-weight:bold" />
+								</f:facet>
+								<p:column headerText="#{msg['common.ID']}"
+									sortBy="#{item.reserveInfoId}" filterBy="#{item.reserveInfoId}"
+									filterMatchMode="contains">
+									<h:outputText value="#{item.reserveInfoId}" />
+								</p:column>
+
+								<p:column headerText="#{msg['common.name']}"
+									sortBy="#{item.resvName}" filterBy="#{item.resvName}"
+									filterMatchMode="contains">
+									<h:outputText value="#{item.resvName}"
+										styleClass="preformatted" />
+								</p:column>
+
+								<p:column headerText="#{msg['common.desc']}"
+									sortBy="#{item.resvDesc}" filterBy="#{item.resvDesc}"
+									filterMatchMode="contains">
+									<h:outputText value="#{item.resvDesc}"
+										styleClass="preformatted" />
+								</p:column>
+								<p:column headerText="#{msg['common.action']}"
+									styleClass="actionColumn">
+									<p:commandLink
+										update="treeCommon categoryCommonTop contentPanel contentTitle"
+										actionListener="#{reserveBean.commandEditTable(item)}"
+										resetValues="true"
+										styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+										<i class="fa fa-pencil icon-only mr-0"></i>
+									</p:commandLink>
+
+									<!-- 									<p:commandLink -->
+									<!-- 										update="treeCommon categoryCommonTop contentPanel" -->
+									<!-- 										actionListener="#{reserveBean.commandUp(item)}" -->
+									<!-- 										styleClass="btn btn-sm btn-action-edit colorStrongGreen"> -->
+									<!-- 										<i class="fa fa-arrow-circle-up icon-only mr-0"></i> -->
+									<!-- 									</p:commandLink> -->
+
+									<!-- 									<p:commandLink -->
+									<!-- 										update="treeCommon categoryCommonTop contentPanel" -->
+									<!-- 										actionListener="#{reserveBean.commandDown(item)}" -->
+									<!-- 										styleClass="btn btn-sm btn-action-edit colorStrongGreen"> -->
+									<!-- 										<i class="fa fa-arrow-circle-down icon-only mr-0"></i> -->
+									<!-- 									</p:commandLink> -->
+
+									<p:commandLink
+										update="treeCommon categoryCommonTop contentPanel"
+										actionListener="#{reserveBean.commandRemoveTable(item)}"
+										styleClass="btn btn-sm btn-action-del colorRed">
+										<i class="fa fa-times icon-only mr-0"></i>
+										<p:confirm header="#{msg['common.delete']}"
+											message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+									</p:commandLink>
+									<f:facet name="header">
+										<p:commandButton id="btnNew" value="#{msg['common.addNew']}"
+											actionListener="#{reserveBean.commandAddNew()}" icon="fa fa-plus"
+											update="categoryCommonTop contentPanel contentTitle"
+											styleClass="btn btn-primary" immediate="true"
+											resetValues="true">
+										</p:commandButton>
+									</f:facet>
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+		<h:form id="form-reserveinfo-detail" class="container-fluid"
+			rendered="#{reserveBean.formType == 'detail-reserveinfo' || !reserveBean.editting}">
+			<div class=" formFieldMg">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.ID']}" />
+							<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{reserveBean.reserveInfoUI.reserveInfoId}"
+								readonly="true" styleClass="form-control"></p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['reserveInfo.resvName']}"
+								for="txtReserveName" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{reserveBean.txtReserveName}"
+								styleClass="form-control preformatted" maxlength="100"
+								required="true" id="txtReserveName" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['reserveInfo.minReserve']}"
+								for="txtMinReserve" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="9"
+								required="true" id="txtMinReserve"
+								value="#{reserveBean.txtMinReserve}">
+								<pe:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['reserveInfo.usageQuotaThreshold']}"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText
+								value="#{reserveBean.reserveInfoUI.usageQuotaThreshold}"
+								maxlength="9" styleClass="form-control">
+								<pe:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.category']}" for="category"/>
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu id="category" effect="fold" required="true"
+								value="#{reserveBean.reserveInfoUI.categoryId}"
+								styleClass="form-control" editable="true">
+								<f:selectItems value="#{reserveBean.categoriesOfRI}" var="cat"
+									itemValue="#{cat.categoryId}" itemLabel="#{cat.categoryName}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['reserveInfo.maxReserve']}"
+								for="txtMaxReserve" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="9"
+								required="true" id="txtMaxReserve"
+								value="#{reserveBean.txtMaxReserve}">
+								<pe:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:selectBooleanCheckbox style="margin-top: 2%;" id="sbCanRollback"
+								value="#{reserveBean.reserveInfoUI.canRollback}" itemLabel="#{msg['reserveInfo.canRollback']}"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['reserveInfo.resvDesc']}"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{reserveBean.reserveInfoUI.resvDesc}"
+								maxlength="250" styleClass="form-control" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-10"></div>
+				<div class="col-xs-12 text-right">
+					<p:commandButton value="#{msg['common.apply']}" id="apply"
+						action="#{reserveBean.commandApply()}" icon="fa fa-save"
+						styleClass="btn btn-default" disabled="#{reserveBean.apply}"
+						update="treeCommon categoryCommonTop contentPanel">
+						<p:confirm header="#{msg['common.apply']}"
+							message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+					</p:commandButton>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

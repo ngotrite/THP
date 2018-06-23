@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<!-- <ui:composition template="../tree_common.xhtml"> -->
+<!-- 	<ui:define name="subcontent"> -->
+<h:form id="form-trigger-ocs-detail" class="container-fluid"
+	rendered="#{triggerOcsBean.formType eq 'detail-trigger-ocs'}">
+	<div class="row formFieldMg">
+		<div class="col-xs-12 col-sm-6">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['common.ID']}" />
+					<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+				</div>
+				<div class="col-xs-12">
+					<p:inputText value="#{triggerOcsBean.triggerOcsUI.triggerOcsId}"
+						styleClass="form-control" readonly="true"
+						requiredMessage="#{msg['common.required']}" />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['triggerMsg.msgName']}"
+						for="txtTriggerOcsName" />
+				</div>
+				<div class="col-xs-12">
+					<p:inputText value="#{triggerOcsBean.txtTriggerOcsName}"
+						required="true" id="txtTriggerOcsName" maxlength="100"
+						styleClass="form-control" />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['triggerOcs.extProperty']}" />
+				</div>
+				<div class="col-xs-12">
+					<p:inputText value="#{triggerOcsBean.triggerOcsUI.extProperty}"
+						maxlength="100" styleClass="form-control" />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['common.desc']}" />
+				</div>
+				<div class="col-xs-12">
+					<p:inputText value="#{triggerOcsBean.triggerOcsUI.description}"
+						maxlength="255" styleClass="form-control" />
+				</div>
+			</div>
+		</div>
+
+		<div class="col-xs-12 col-sm-6">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['common.category']}" for="slCatTriggerOcs"/>
+				</div>
+				<div class="col-xs-12">
+					<h:selectOneMenu styleClass="form-control col-xs-12" id="slCatTriggerOcs" required="true"
+						value="#{triggerOcsBean.triggerOcsUI.categoryId}" editable="true">
+						<f:selectItems value="#{triggerOcsBean.categoriesOfTO}" var="cat"
+							itemValue="#{cat.categoryId}" itemLabel="#{cat.categoryName}" />
+					</h:selectOneMenu>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['triggerType']}" />
+					<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+				</div>
+				<div class="col-xs-12">
+					<h:selectOneMenu id="triggertype" effect="fold"
+						styleClass="form-control col-xs-12"
+						value="#{triggerOcsBean.triggerOcsUI.triggerType}" editable="true">
+						<f:selectItems value="#{triggerOcsBean.loadComboTriggerType()}" />
+					</h:selectOneMenu>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['triggerOcs.module']}" />
+					<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+				</div>
+				<div class="col-xs-12">
+					<h:selectOneMenu id="module" effect="fold"
+						styleClass="form-control col-xs-12"
+						value="#{triggerOcsBean.triggerOcsUI.module}" editable="true">
+						<f:selectItems value="#{triggerOcsBean.loadComboModule()}" />
+					</h:selectOneMenu>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<p:selectBooleanCheckbox itemLabel="#{msg['action.enable']}"
+						value="#{triggerOcsBean.triggerOcsUI.status}" />
+				</div>
+			</div>
+
+		</div>
+		<div class="col-xs-12 col-sm-12">
+			<p:outputLabel ></p:outputLabel>
+		</div>
+		<div class="col-xs-12 col-sm-10">
+			<p:outputLabel ></p:outputLabel>
+		</div>
+		<div class="col-xs-12 text-right">
+			<p:commandButton value="#{msg['common.apply']}" icon="fa fa-save"
+				actionListener="#{triggerOcsBean.commandApplyTriggerOcs()}"
+				disabled="#{triggerOcsBean.apply}"
+				update="treeCommon categoryCommonTop contentPanel">
+				<p:confirm header="#{msg['common.apply']}"
+					message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+			</p:commandButton>
+		</div>
+		<div class="col-xs-12 col-sm-2">
+			<!-- 					<p:commandButton value="#{msg['common.cancel']}" -->
+			<!-- 						actionListener="#{triggerOcsBean.commandCancelTriggerO cs()}" -->
+			<!-- 						styleClass="col-xs-12" -->
+			<!-- 						update="treeCommon categoryCommonTop contentPanel" /> -->
+		</div>
+	</div>
+</h:form>
+
+<h:form id="form-trigger-ocs-cat" class="container-fluid"
+	rendered="#{triggerOcsBean.formType eq 'list-trigger-ocs'}">
+	<div class="row formFieldMg">
+		<div class="col-xs-12 col-md-12">
+			<p:dataTable var="item"
+				value="#{triggerOcsBean.listTriggerOcsByCategory}"
+				rowKey="#{item.triggerOcsId}" emptyMessage="#{msg['common.noData']}"
+				paginator="true" rows="20" paginatorPosition="bottom"
+				rowIndexVar="rowIndex"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,20,50,100">
+
+				<p:ajax event="filter" ignoreAutoUpdate="false" />
+
+				<f:facet name="header">
+					<p:outputLabel value="#{msg['triggerOcs']}"
+						style="font-weight:bold" />
+				</f:facet>
+
+				<p:column headerText="#" style="width:7%">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.name']}">
+					<h:outputText value="#{item.triggerName}" styleClass="preformatted" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.desc']}">
+					<h:outputText value="#{item.description}" styleClass="preformatted" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.action']}"
+					styleClass="actionColumn">
+					<p:commandLink
+						update="treeCommon categoryCommonTop contentPanel contentTitle"
+						resetValues="true"
+						actionListener="#{triggerOcsBean.commandEditTriggerOcsTB(item)}"
+						styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+						<i class="fa fa-pencil icon-only mr-0"></i>
+					</p:commandLink>
+					<!-- 							<p:commandLink update="treeCommon categoryCommonTop contentPanel" -->
+					<!-- 								styleClass="btn btn-sm btn-action-edit colorStrongGreen"> -->
+					<!-- 								<i class="fa fa-clone icon-only mr-0"></i> -->
+					<!-- 							</p:commandLink> -->
+					<p:commandLink styleClass="btn btn-sm btn-action-del colorRed"
+						update="treeCommon categoryCommonTop contentPanel"
+						actionListener="#{triggerOcsBean.commandRemoveTriggerOcsTB(item)}">
+						<i class="fa fa-times icon-only mr-0"></i>
+						<p:confirm header="#{msg['common.delete']}"
+							message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+					</p:commandLink>
+
+					<f:facet name="header">
+						<p:commandButton value="#{msg['common.addNew']}"
+							resetValues="true" icon="fa fa-plus"
+							actionListener="#{triggerOcsBean.commandAddNewTriggerOcs()}"
+							update="treeCommon categoryCommonTop contentPanel contentTitle" />
+					</f:facet>
+				</p:column>
+			</p:dataTable>
+		</div>
+	</div>
+</h:form>
+
+<h:form id="form-trigger-type-detail" class="container-fluid"
+	rendered="#{triggerOcsBean.formType eq 'detail-trigger-type'}">
+	<div class="row formFieldMg">
+		<div class="col-xs-12 col-sm-6">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['common.ID']}"></p:outputLabel>
+					<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+				</div>
+				<div class="col-xs-12">
+					<p:inputText styleClass="form-control" readonly="true"
+						value="#{triggerOcsBean.triggerTypeUI.triggerType}"
+						requiredMessage="#{msg['common.required']}" />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['triggerType.triggerTypeName']}"
+						for="txtTriggerTypeName" />
+				</div>
+				<div class="col-xs-12">
+					<p:inputText styleClass="form-control" maxlength="100"
+						required="true" id="txtTriggerTypeName"
+						value="#{triggerOcsBean.txtTriggerTypeName}" />
+				</div>
+			</div>
+		</div>
+
+		<div class="col-xs-12 col-sm-6">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['common.category']}" for="slCatTriggerType"/>
+				</div>
+				<div class="col-xs-12">
+					<h:selectOneMenu styleClass="form-control col-xs-12" id="slCatTriggerType" required="true"
+						value="#{triggerOcsBean.triggerTypeUI.categoryId}" editable="true">
+						<f:selectItems value="#{triggerOcsBean.categoriesOfTT}"
+							var="catTT" itemValue="#{catTT.categoryId}"
+							itemLabel="#{catTT.categoryName}" />
+					</h:selectOneMenu>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['common.desc']}"></p:outputLabel>
+				</div>
+				<div class="col-xs-12">
+					<p:inputText styleClass="form-control" maxlength="255"
+						value="#{triggerOcsBean.triggerTypeUI.triggerTypeDescription}"
+						requiredMessage="#{msg['common.required']}" />
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-10">
+			<p:outputLabel ></p:outputLabel>
+		</div>
+		<div class="col-xs-12 text-right">
+			<p:commandButton value="#{msg['common.apply']}" icon="fa fa-save"
+				actionListener="#{triggerOcsBean.commandApplyTriggerType()}"
+				disabled="#{triggerOcsBean.apply}"
+				update="treeCommon categoryCommonTop contentPanel">
+				<p:confirm header="#{msg['common.apply']}"
+					message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+			</p:commandButton>
+		</div>
+		<div class="col-xs-12 col-sm-2">
+			<!-- 					<p:commandButton value="#{msg['common.cancel']}" -->
+			<!-- 						styleClass="col-xs-12" -->
+			<!-- 						actionListener="#{triggerOcsBean.commandCancelTriggerType()}" -->
+			<!-- 						update="treeCommon categoryCommonTop contentPanel" /> -->
+		</div>
+	</div>
+</h:form>
+
+<h:form id="form-trigger-type-cat" class="container-fluid"
+	rendered="#{triggerOcsBean.formType eq 'list-trigger-type'}">
+	<div class="row formFieldMg">
+		<div class="col-xs-12 col-md-12">
+			<p:dataTable var="item"
+				value="#{triggerOcsBean.listTriggerTypeByCategory}"
+				rowKey="#{item.triggerType}" emptyMessage="#{msg['common.noData']}"
+				paginator="true" rows="20" paginatorPosition="bottom"
+				rowIndexVar="rowIndex"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,20,50,100">
+
+				<f:facet name="header">
+					<p:outputLabel value="#{msg['triggerType']}"
+						style="font-weight:bold" />
+				</f:facet>
+
+				<p:column headerText="#" style="width:7%">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.name']}">
+					<h:outputText value="#{item.triggerTypeName}"
+						styleClass="preformatted" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.desc']}">
+					<h:outputText value="#{item.triggerTypeDescription}"
+						styleClass="preformatted" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.action']}"
+					styleClass="actionColumn">
+					<p:commandLink
+						update="treeCommon categoryCommonTop contentPanel contentTitle"
+						resetValues="true"
+						actionListener="#{triggerOcsBean.commandEditTriggerTypeTB(item)}"
+						styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+						<i class="fa fa-pencil icon-only mr-0"></i>
+					</p:commandLink>
+					<!-- 							<p:commandLink update="treeCommon categoryCommonTop contentPanel" -->
+					<!-- 								styleClass="btn btn-sm btn-action-edit colorStrongGreen"> -->
+					<!-- 								<i class="fa fa-clone icon-only mr-0"></i> -->
+					<!-- 							</p:commandLink> -->
+					<p:commandLink styleClass="btn btn-sm btn-action-del colorRed"
+						update="treeCommon categoryCommonTop contentPanel"
+						actionListener="#{triggerOcsBean.commandRemoveTriggerTypeTB(item)}">
+						<i class="fa fa-times icon-only mr-0"></i>
+						<p:confirm header="#{msg['common.delete']}"
+							message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+					</p:commandLink>
+
+					<f:facet name="header">
+						<p:commandButton value="#{msg['common.addNew']}"
+							resetValues="true" icon="fa fa-plus"
+							actionListener="#{triggerOcsBean.commandAddNewTriggerType()}"
+							update="treeCommon categoryCommonTop contentPanel contentTitle" />
+					</f:facet>
+
+				</p:column>
+			</p:dataTable>
+		</div>
+	</div>
+</h:form>
+<!-- 	</ui:define> -->
+<!-- </ui:composition> -->
+</html>

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jstl/core">
+<ui:composition>
+	<h:form id="form_offer_package_list"
+		rendered="#{offerPackageBean.formType eq 'form_offer_package_list'}">
+		<div class="container-fluid">
+<!-- 			<div class="row formFieldMg pull-right"> -->
+<!-- 				<div class="col-xs-12"> -->
+<!-- 					<p:commandButton value="#{msg['common.addNew']}" -->
+<!-- 						update="treeCommon categoryCommonTop contentPanel" -->
+<!-- 						actionListener="#{offerPackageBean.addNewOfferPackage()}" -->
+<!-- 						styleClass="btn btn-default"> -->
+<!-- 					</p:commandButton> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+			<div class="row">
+				<div class="col-xs-12">
+					<p:dataTable id="dtNorm" var="rowitem" paginator="true" rows="10"
+						value="#{offerPackageBean.offerPackages}"
+						paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15,20,50,100">
+						<f:facet name="header">
+							<p:outputLabel value="#{msg['title.offerPackage']}"
+								style="font-weight:bold" />
+						</f:facet>
+
+						<p:column headerText="#" style="width:5%" styleClass="text-center">
+							<h:outputText
+								value="#{offerPackageBean.offerPackages.indexOf(rowitem) + 1}" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.name']}"
+							styleClass="text-left">
+							<h:outputText value="#{rowitem.offerPkgName}" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.desc']}"
+							styleClass="text-left">
+							<h:outputText value="#{rowitem.remark}" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.action']}"
+							styleClass="text-center" style="width: 20%;">
+							<p:commandLink
+								actionListener="#{offerPackageBean.editOffePackage(rowitem)}"
+								update="treeCommon categoryCommonTop contentPanel"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-pencil icon-only mr-0"></i>
+							</p:commandLink>
+							<p:commandLink update="dtNorm treeCommon"
+								actionListener="#{offerPackageBean.removeOffePackage(rowitem)}"
+								styleClass="btn btn-sm btn-action-del colorRed">
+								<i class="fa fa-times icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandLink>
+							<f:facet name="header">
+								<p:commandButton value="#{msg['common.addNew']}" icon="fa fa-plus"
+									update="treeCommon categoryCommonTop contentPanel"
+									actionListener="#{offerPackageBean.addNewOfferPackage()}"
+									styleClass="btn btn-default">
+								</p:commandButton>
+							</f:facet>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+		</div>
+	</h:form>
+
+
+	<h:form id="form_offer_package_detail"
+		rendered="#{offerPackageBean.formType eq 'form_offer_package_detail'}">
+		<div class="container-fluid">
+			<div class="row formFieldMg">
+				<div class="col-sm-6">
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel value="#{msg['offerpk.offerpkid']}"
+								for="offerpkgid" />
+						</div>
+						<div class="col-sm-12">
+							<p:inputText value="#{offerPackageBean.offerPackage.offerPkgId}"
+								styleClass="form-control" required="true" id="offerpkgid" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel value="#{msg['common.name']}" for="offerpkgname" />
+						</div>
+						<div class="col-sm-12">
+							<p:inputText
+								value="#{offerPackageBean.offerPackage.offerPkgName}"
+								id="offerpkgname" styleClass="form-control" required="true" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel value="#{msg['offerpk.external_id']}" />
+						</div>
+						<div class="col-sm-12">
+							<p:inputText value="#{offerPackageBean.offerPackage.externalId}"
+								styleClass="form-control" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel value="#{msg['offer.main_offer']}" />
+						</div>
+						<div class="col-sm-12">
+							<div class="row">
+								<div class="col-sm-12">
+									<table class="table-choosing">
+										<tr>
+											<td>
+												<p:inputText value="#{offerPackageBean.mainOffer.nodeName}"
+													readonly="true" id="main_offer_id" styleClass="form-control" />
+											</td>
+											<td class="td-btn-fix">
+												<p:commandLink
+													actionListener="#{offerPackageBean.chooseMainOffer()}"
+													styleClass="btn btn-sm btn-action-del btn-refresh-rt"
+													immediate="true">
+													<p:ajax event="dialogReturn" update="main_offer_id"
+														listener="#{offerPackageBean.onDialogMainOfferReturn}" />
+													<i class="fa fa-pencil"></i>
+												</p:commandLink>
+												<p:commandLink update="main_offer_id" immediate="true"
+													actionListener="#{offerPackageBean.deleteMainOffer()}"
+													styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+													<i class="fa fa-times"></i>
+													<p:resetInput target="main_offer_id" />
+												</p:commandLink>
+											</td>
+										</tr>
+									</table>									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel value="#{msg['action.category']}" for="categoryid" />
+						</div>
+						<div class="col-sm-12">
+							<h:selectOneMenu required="true" id="categoryid"
+								value="#{offerPackageBean.offerPackage.categoryId}"
+								styleClass="form-control">
+								<f:selectItems
+									value="#{offerPackageBean.categoriesOfOfferPackage}"
+									var="category" itemValue="#{category.categoryId}"
+									itemLabel="#{category.categoryName}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel value="#{msg['common.desc']}" for="remark_id" />
+						</div>
+						<div class="col-sm-12">
+							<p:inputText value="#{offerPackageBean.offerPackage.remark}"
+								styleClass="form-control" id="remark_id" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel value="#{msg['common.status']}" />
+						</div>
+						<div class="col-sm-12">
+							<h:selectOneMenu value="#{offerPackageBean.offerPackage.status}"
+								styleClass="form-control" required="true">
+								<f:selectItems value="#{offerPackageBean.getListStatus()}"
+									var="item" itemValue="#{item.key}" itemLabel="#{item.value}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel value="#{msg['offerpk.offerPkgType']}" />
+						</div>
+						<div class="col-sm-12">
+							<h:selectOneMenu value="#{offerPackageBean.offerPackage.offerPkgType}"
+								styleClass="form-control" required="true">
+								<f:selectItem itemValue="1" itemLabel="Normal Pkg" />
+   								<f:selectItem itemValue="2" itemLabel="Add-On Pkg" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row formFieldMg">
+				<div class="col-xs-12">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:dataTable id="dtNormOffer" var="rowItem" paginator="true"
+								rows="10" value="#{offerPackageBean.normOffersOfPackage}"
+								paginatorPosition="bottom" resizableColumns="true"
+								rowIndexVar="index"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="5,10,15,20,50,100">
+								<f:facet name="header">
+									<!-- 									<div class="col-sm-12"> -->
+									<!-- 										<div class="row"> -->
+									<!-- 											<div class="col-sm-10 pull-left"> -->
+									<p:outputLabel value="#{msg['offerpk.table_title']}"
+										 />
+									<!-- 											</div> -->
+									<!-- 											<div class="col-sm-2 pull-right"> -->
+									<!-- 												<p:commandButton value="#{msg['common.addNew']}" -->
+									<!-- 													rendered="#{offerPackageBean.ediable}" -->
+									<!-- 													actionListener="#{offerPackageBean.chooseNormOffer()}" -->
+									<!-- 													styleClass="btn btn-default"> -->
+									<!-- 													<p:ajax event="dialogReturn" update="dtNormOffer" -->
+									<!-- 														listener="#{offerPackageBean.onDialogNormOfferReturn}" /> -->
+									<!-- 												</p:commandButton> -->
+									<!-- 												<p:commandButton rendered="#{offerPackageBean.ediable}" -->
+									<!-- 													value="#{msg['common.save']}" -->
+									<!-- 													update="dtNormOffer treeCommon contentPanel" -->
+									<!-- 													actionListener="#{offerPackageBean.saveOfferPackage()}" -->
+									<!-- 													styleClass="btn btn-default" /> -->
+									<!-- 											</div> -->
+									<!-- 										</div> -->
+									<!-- 									</div> -->
+								</f:facet>
+
+								<p:column headerText="#" style="width:5%"
+									styleClass="text-center">
+									<h:outputText value="#{index + 1}" />
+								</p:column>
+
+								<p:column headerText="#{msg['offerpackage.offer_name']}"
+									styleClass="text-left text-truncate">
+									<p:commandLink value="#{rowItem.offerName}"
+										actionListener="#{offerPackageBean.changeNormOffer(rowItem)}"
+										title="#{rowItem.offerName}">
+										<p:ajax event="dialogReturn" update="dtNormOffer"
+											listener="#{offerPackageBean.onDialogNormOfferReturn}" />
+									</p:commandLink>
+								</p:column>
+								<p:column headerText="#{msg['common.state']}">
+									<h:outputText
+										value="#{offerPackageBean.getSateName(rowItem.state)}" />
+								</p:column>
+
+								<p:column headerText="#{msg['common.desc']}"
+									styleClass="text-left">
+									<h:outputText value="#{rowItem.description}" />
+								</p:column>
+								<p:column headerText="#{msg['offer.addon']}" resizable="false"
+									style="width: 66px;" styleClass="text-center">
+									<p:selectBooleanCheckbox
+										value="#{rowItem.offerPackageMap.addOn}">
+										<p:ajax event="change"/> 
+									</p:selectBooleanCheckbox>
+								</p:column>
+								<p:column headerText="#{msg['offer.exchangeable']}"
+									resizable="false" style="width: 106px;"
+									styleClass="text-center">
+									<p:selectBooleanCheckbox
+										value="#{rowItem.offerPackageMap.exchangeable}">
+										<p:ajax event="change"/> 
+									</p:selectBooleanCheckbox>
+								</p:column>
+								<p:column headerText="#{msg['common.action']}" resizable="false"
+									style="width: 150px;" styleClass="text-center">
+									<p:commandLink update="dtNormOffer"
+										disabled="#{offerPackageBean.normOffersOfPackage.indexOf(rowItem) eq 0}"
+										actionListener="#{offerPackageBean.upRow(rowItem)}"
+										styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+										<i class="fa fa-arrow-circle-up icon-only mr-0"></i>
+									</p:commandLink>
+									<p:commandLink update="dtNormOffer"
+										disabled="#{offerPackageBean.normOffersOfPackage.indexOf(rowItem) eq offerPackageBean.normOffersOfPackage.size() - 1}"
+										actionListener="#{offerPackageBean.downRow(rowItem)}"
+										styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+										<i class="fa fa-arrow-circle-down icon-only mr-0"></i>
+									</p:commandLink>
+									<p:commandLink update="dtNormOffer" immediate="true"
+										actionListener="#{offerPackageBean.removeNormOfferOfPackage(rowItem)}"
+										styleClass="btn btn-sm btn-action-del colorRed">
+										<i class="fa fa-times icon-only mr-0"></i>
+										<p:confirm header="#{msg['common.delete']}"
+											message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+									</p:commandLink>
+									<f:facet name="header">
+										<p:commandButton value="#{msg['common.addNew']}"
+											rendered="#{offerPackageBean.ediable}"  icon="fa fa-plus"
+											actionListener="#{offerPackageBean.chooseNormOffer()}"
+											styleClass="btn btn-default">
+											<p:ajax event="dialogReturn" update="dtNormOffer"
+												listener="#{offerPackageBean.onDialogNormOfferReturn}" />
+										</p:commandButton>
+									</f:facet>
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="col-xs-12 col-sm-8">
+					<p:outputLabel  />
+				</div>
+				<div class="col-xs-12 col-sm-2 pull-right" align="right">
+					<p:commandButton disabled="#{!offerPackageBean.ediable}"
+						value="#{msg['common.save']}" icon="fa fa-save"
+						update="dtNormOffer treeCommon contentPanel"
+						actionListener="#{offerPackageBean.saveOfferPackage()}" />
+				</div>
+
+
+			</div>
+		</div>
+	</h:form>
+</ui:composition>
+</html>

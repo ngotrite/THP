@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="../tree_common.xhtml">
+	<ui:define name="subcontent">
+		<h:form id="form-service-detail" class="container-fluid"
+			rendered="#{serviceBean.formType eq 'detail-service' || !serviceBean.editting}">
+			<div class="row formFieldMg">
+				<div class="col-xs-12 col-sm-6">
+					<!-- 					<p:panel rendered="#{serviceBean.serviceUI.serviceId != 0}"> -->
+					<!-- 						<div class="row"> -->
+					<!-- 							<div class="col-xs-12"> -->
+					<!-- 								<p:outputLabel value="#{msg['service.ID']}" styleClass="line32"></p:outputLabel> -->
+					<!-- 								<p:outputLabel value=" *" style="color:red"></p:outputLabel> -->
+					<!-- 							</div> -->
+					<!-- 							<div class="col-xs-12"> -->
+					<!-- 								<p:inputText styleClass="form-control" maxlength="20" -->
+					<!-- 									value="#{serviceBean.serviceUI.serviceId}" readonly="true"></p:inputText> -->
+					<!-- 							</div> -->
+					<!-- 						</div> -->
+					<!-- 					</p:panel> -->
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['service.ID']}" styleClass="line32"></p:outputLabel>
+							<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="20"
+								value="#{serviceBean.serviceUI.serviceId}" readonly="true"></p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['service.serviceName']}"
+								for="service_name_id" styleClass="line32"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="100"
+								id="service_name_id" required="true"
+								value="#{serviceBean.serviceUI.serviceName}" rendered="true"></p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.category']}"
+								styleClass="line32" for="category" />
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu id="category" effect="fold" required="true"
+								value="#{serviceBean.serviceUI.categoryId}"
+								styleClass="form-control" editable="true">
+								<f:selectItems value="#{serviceBean.categoriesOfService}"
+									var="cat" itemValue="#{cat.categoryId}"
+									itemLabel="#{cat.categoryName}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.desc']}" styleClass="line32"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="255"
+								value="#{serviceBean.serviceUI.serviceDesc}"></p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-12">
+					<p:outputLabel ></p:outputLabel>
+				</div>
+				<div class="col-xs-12 col-sm-10">
+					<p:outputLabel ></p:outputLabel>
+				</div>
+				<div class="col-xs-12 text-right">
+					<p:commandButton value="#{msg['common.apply']}" icon="fa fa-save"
+						disabled="#{serviceBean.apply}"
+						update="treeCommon categoryCommonTop contentPanel"
+						actionListener="#{serviceBean.commandApply()}">
+						<p:confirm header="#{msg['common.apply']}"
+							message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+					</p:commandButton>
+				</div>
+				<!-- 			<div class="col-xs-12 col-sm-2"> -->
+				<!-- 				<p:commandButton value="#{msg['common.cancel']}" -->
+				<!-- 					styleClass="col-xs-12" -->
+				<!-- 					update="treeCommon categoryCommonTop contentPanel" -->
+				<!-- 					actionListener="#{serviceBean.commandCancel()}" /> -->
+				<!-- 			</div> -->
+			</div>
+
+		</h:form>
+
+		<h:form id="form-service-by-cat" class="container-fluid"
+			rendered="#{serviceBean.formType eq 'list-service'}">
+			<div class="row" style="padding-bottom: 10px;">
+				<div class="col-xs-12 col-md-12">
+					<p:dataTable var="item" widgetVar="service_id" id="service_id"
+						value="#{serviceBean.listServiceByCategory}"
+						rowKey="#{item.serviceId}" emptyMessage="#{msg['common.noData']}"
+						paginator="true" rows="20" paginatorPosition="bottom"
+						rowIndexVar="rowIndex"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="10,20,50,100">
+
+						<f:facet name="header">
+							<p:outputLabel value="#{msg['service']}" style="font-weight:bold" />
+						</f:facet>
+
+						<p:ajax event="filter" ignoreAutoUpdate="true" />
+						<p:column headerText="#" style="width:7%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.name']}"
+							filterBy="#{item.serviceName}">
+							<h:outputText value="#{item.serviceName}"
+								styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.desc']}"
+							filterBy="#{item.serviceDesc}">
+							<h:outputText value="#{item.serviceDesc}"
+								styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.action']}"
+							styleClass="actionColumnSmall">
+							<p:commandLink
+								update="treeCommon categoryCommonTop contentPanel contentTitle"
+								actionListener="#{serviceBean.commandEditTB(item)}"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-pencil icon-only mr-0"></i>
+							</p:commandLink>
+							<p:commandLink update="treeCommon categoryCommonTop contentPanel"
+								actionListener="#{serviceBean.commandRemoveTable(item)}"
+								styleClass="btn btn-sm btn-action-del colorRed">
+								<i class="fa fa-times icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandLink>
+							<f:facet name="header">
+								<p:commandButton value="#{msg['common.addNew']}"
+									actionListener="#{serviceBean.commandAddNew()}"
+									rendered="#{serviceBean.editting}" icon="fa fa-plus"
+									update="treeCommon categoryCommonTop contentPanel contentTitle" />
+							</f:facet>
+						</p:column>
+					</p:dataTable>
+				</div>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					<p:commandButton value="Yes" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

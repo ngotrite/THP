@@ -1,0 +1,940 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+	<h:form id="form_offer_detail"
+		rendered="#{offerBean.formType == 'offer_detail'}">
+		<div class="container-fluid">
+			<div class="row formFieldMg">
+				<div class="col-xs-12 col-sm-4">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.ID']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{offerBean.offer.offerId}" readonly="true"
+								styleClass="form-control"></p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel for="offerName" value="#{msg['common.name']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText id="offerName" value="#{offerBean.offer.offerName}"
+								readonly="true" required="true" maxlength="250"
+								styleClass="form-control"></p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel for="priority" value="#{msg['common.priority']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:spinner id="priority" value="#{offerBean.offer.priority}"
+								min="0" max="999999999" required="true" maxlength="9"
+								styleClass="form-control"></p:spinner>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel for="offerState" value="#{msg['common.state']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu id="offerState" value="#{offerBean.offer.state}"
+								disabled="true" required="true" styleClass="form-control">
+								<f:selectItems value="#{offerBean.mapOfferState.entrySet()}"
+									var="entry" itemValue="#{entry.key}" itemLabel="#{entry.value}"></f:selectItems>
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.desc']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{offerBean.offer.description}"
+								maxlength="250" styleClass="form-control"></p:inputText>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-4">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel for="offerCategoryId"
+								value="#{msg['common.category']}" />
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu id="offerCategoryId" disabled="true"
+								value="#{offerBean.offer.categoryId}"
+								styleClass="form-control select">
+								<f:selectItems value="#{offerBean.lstCategory}" var="cat"
+									itemValue="#{cat.categoryId}" itemLabel="#{cat.categoryName}">
+								</f:selectItems>
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel for="effDate" value="#{msg['common.effectDate']}"
+								>
+								<f:convertDateTime pattern="#{userSession.getTimeFormat()}" />
+							</p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:calendar id="effDate" value="#{offerBean.offer.effDate}"
+								navigator="true" mask="true" styleClass="calendarIcon"
+								required="true" pattern="#{userSession.getTimeFormat()}">
+							</p:calendar>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel for="offerType" value="#{msg['offer.type']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu id="offerType"
+								disabled="#{offerBean.offer.offerId != 0 or !offerBean.showStateCombobox()}"
+								value="#{offerBean.offer.offerType}" required="true"
+								styleClass="form-control">
+								<f:selectItems value="#{offerBean.mapOfferType.entrySet()}"
+									var="entry" itemValue="#{entry.key}" itemLabel="#{entry.value}"></f:selectItems>
+								<p:ajax
+									update="form_offer_detail:tabId:update_downgerade form_offer_detail:tabId:table_offer_main form_offer_detail:tabId:table_norm_orther" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['offer.billingCycle']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu value="#{offerBean.offer.billingCycleTypeId}"
+								styleClass="form-control">
+								<f:selectItem itemLabel="--#{msg['common.choose']}--"
+									itemValue="#{null}" />
+								<f:selectItems value="#{offerBean.getbillingCycleTypes()}"
+									var="item" itemValue="#{item.billingCycleTypeId}"
+									itemLabel="#{item.billingCycleTypeName}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.externalId']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{offerBean.offer.offerExternalId}"
+								readonly="true" styleClass="form-control"></p:inputText>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-4">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel for="versionInfo" value="#{msg['common.version']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText id="versionInfo"
+								value="#{offerBean.offer.versionInfo}" required="true"
+								readonly="true" maxlength="10" styleClass="form-control"></p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel for="paymentType"
+								value="#{msg['common.paymentType']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu id="paymentType"
+								value="#{offerBean.offer.paymentType}" required="true"
+								styleClass="form-control" immediate="true">
+								<f:selectItems value="#{offerBean.mapPaymentType.entrySet()}"
+									var="entry" itemValue="#{entry.key}" itemLabel="#{entry.value}"></f:selectItems>
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-5">
+							<div >
+								<p:selectBooleanCheckbox value="#{offerBean.offer.expirable}"
+									itemLabel="#{msg['common.expirable']}" />
+							</div>
+						</div>
+						<div class="col-xs-7">
+							<div >
+								<p:selectBooleanCheckbox value="#{offerBean.offer.suspendable}"
+									itemLabel="#{msg['common.suspendable']}" />
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.expireDate']}"
+								>
+								<f:convertDateTime pattern="#{userSession.getTimeFormat()}" />
+							</p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:calendar value="#{offerBean.offer.expDate}" navigator="true"
+								mask="true" styleClass="calendarIcon"
+								pattern="#{userSession.getTimeFormat()}">
+							</p:calendar>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12 text-right">
+					<p:tabView id="tabId">
+						<p:tab title="#{msg['offer.action_list']}">
+							<div class="container-fluid">
+								<div class="row formFieldMg">
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-xs-12">
+												<p:dataTable id="dtAction" var="rowitem" paginator="true"
+													rows="10" value="#{offerBean.actions}"
+													resizableColumns="true"
+													rowStyleClass="#{index % 2 == 1? 'rowColorBlue': null}"
+													paginatorPosition="bottom" rowIndexVar="index"
+													paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+													rowsPerPageTemplate="5,10,15,20,50,100">
+													<p:column headerText="#" style="width:5%"
+														styleClass="text-center">
+														<h:outputText value="#{index + 1}" />
+													</p:column>
+
+													<p:column headerText="#{msg['common.name']}"
+														styleClass="text-left text-truncate">
+														<p:commandLink value="#{rowitem.actionName}"
+															title="#{rowitem.actionName}"
+															actionListener="#{offerBean.changeAction(rowitem)}">
+															<p:ajax event="dialogReturn" update="dtAction"
+																listener="#{offerBean.onDialogActionReturn}" />
+														</p:commandLink>
+
+													</p:column>
+
+													<p:column headerText="#{msg['common.desc']}"
+														styleClass="text-left text-truncate">
+														<h:outputText value="#{rowitem.remark}"
+															title="#{rowitem.remark}" />
+													</p:column>
+
+													<p:column headerText="#{msg['common.action']}"
+														resizable="false" styleClass="actionColumnExtra">
+
+														<p:commandLink
+															disabled="#{!offerBean.editable}" actionListener="#{offerBean.addActionAt(rowitem)}"
+															update="dtAction"
+															styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+															<i class="fa fa-plus icon-only mr-0"></i>
+															<p:ajax event="dialogReturn" update="dtAction"
+																listener="#{offerBean.onDialogActionReturn}" />
+														</p:commandLink>
+
+														<p:commandLink
+															disabled="#{!offerBean.editable}" actionListener="#{offerBean.editAction(rowitem)}"
+															update="treeCommon contentTitle categoryCommonTop contentPanel"
+															styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+															<i class="fa fa-pencil icon-only mr-0"></i>
+															<p:confirm header="#{msg['common.offer.warning']}"
+																message="#{msg['common.offer.goto_action']}"
+																icon="ui-icon-alert" />
+														</p:commandLink>
+														<p:commandLink
+															disabled="#{!offerBean.editable or offerBean.actions.indexOf(rowitem) eq 0}"
+															actionListener="#{offerBean.moveUpAction(rowitem)}"
+															update="contentPanel"
+															styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+															<i class="fa fa-arrow-circle-up icon-only mr-0"></i>
+														</p:commandLink>
+														<p:commandLink
+															disabled="#{!offerBean.editable or offerBean.actions.indexOf(rowitem) eq offerBean.actions.size() - 1}"
+															actionListener="#{offerBean.moveDownAction(rowitem)}"
+															update="contentPanel"
+															styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+															<i class="fa fa-arrow-circle-down icon-only mr-0"></i>
+														</p:commandLink>
+														<p:commandLink update="dtAction treeCommon"
+															disabled="#{!offerBean.editable}" actionListener="#{offerBean.removeAction(rowitem)}"
+															styleClass="btn btn-sm btn-action-del colorRed">
+															<i class="fa fa-times icon-only mr-0"></i>
+															<p:confirm header="#{msg['common.delete']}"
+																message="#{msg['common.confirmDelete']}"
+																icon="ui-icon-alert" />
+														</p:commandLink>
+
+														<f:facet name="header">
+															<p:commandButton value="#{msg['common.add']}" icon="fa fa-plus"
+																action="#{offerBean.chooseAction()}" id="chooseActionId"
+																disabled="#{!offerBean.editable}"
+																immediate="true" styleClass="btn btn-default">
+																<p:ajax event="dialogReturn" update="dtAction"
+																	listener="#{offerBean.onDialogActionReturn}" />
+															</p:commandButton>
+														</f:facet>
+													</p:column>
+												</p:dataTable>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</p:tab>
+						<p:tab title="#{msg['offer.more_info']}">
+							<div class="container-fluid">
+								<div class="row formFieldMg">
+									<div class="col-xs-12 col-md-3">
+										<p:outputLabel value="#{msg['offer.special_cal_method']}"
+											style="margin-right: 6px;"
+											></p:outputLabel>
+									</div>
+									<div class="col-xs-12 col-md-6">
+										<h:selectOneMenu value="#{offerBean.offer.specialCalMethod}"
+											style="margin-left: -6px;" required="true"
+											styleClass="form-control">
+											<f:selectItem itemValue="0" itemLabel="Normal" />
+											<f:selectItem itemValue="1" itemLabel="Rest of billing cycle" />
+										</h:selectOneMenu>
+									</div>
+								</div>
+								<div class="row">
+									<p:panel id="update_downgerade">
+										<p:panel rendered="#{offerBean.offer.offerType ne 1}">
+											<div class="row">
+												<div class="col-xs-12 col-md-3">
+													<p:outputLabel value="#{msg['offer.update_to']}"
+														styleClass=""></p:outputLabel>
+												</div>
+												<div class="col-xs-12 col-md-6">
+													<table class="table-choosing">
+														<tr>
+															<td>
+																<p:inputText value="#{offerBean.offerUpgrate.nodeName}"
+																	styleClass="form-control" readonly="true" />
+															</td>
+															<td class="td-btn-fix">
+																<p:commandLink immediate="true"
+																	disabled="#{!offerBean.editable}"
+																	actionListener="#{offerBean.chooseNormOffer()}"
+																	styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+																	<i class="fa fa-pencil"></i>
+																	<p:ajax event="dialogReturn" update="update_downgerade"
+																		listener="#{offerBean.onDialogMainOfferUpgrateReturn}" />
+																</p:commandLink>
+																<p:commandLink immediate="true"
+																	disabled="#{!offerBean.editable}" update="update_downgerade"
+																	actionListener="#{offerBean.deleteUpgrateOffer()}"
+																	styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+																	<i class="fa fa-times"></i>
+																</p:commandLink>
+															</td>
+														</tr>
+													</table>													
+												</div>												
+											</div>
+
+											<div class="row">
+												<div class="col-xs-12 col-md-3">
+													<p:outputLabel value="#{msg['offer.downgrade_to']}"
+														styleClass="" />
+												</div>
+												<div class="col-xs-12 col-md-6">
+													<table class="table-choosing">
+														<tr>
+															<td>
+																<p:inputText value="#{offerBean.offerDowngrade.nodeName}"
+																	readonly="true" styleClass="form-control" />
+															</td>
+															<td class="td-btn-fix">
+																<p:commandLink immediate="true"
+																	disabled="#{!offerBean.editable}"
+																	actionListener="#{offerBean.chooseNormOffer()}"
+																	styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+																	<i class="fa fa-pencil"></i>
+																	<p:ajax event="dialogReturn" update="update_downgerade"
+																		listener="#{offerBean.onDialogMainOfferDowngrateReturn}" />
+																</p:commandLink>
+																<p:commandLink immediate="true" 
+																	disabled="#{!offerBean.editable}" update="update_downgerade"
+																	actionListener="#{offerBean.deleteDowngrateOffer()}"
+																	styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+																	<i class="fa fa-times"></i>
+																</p:commandLink>
+															</td>
+														</tr>
+													</table>													
+												</div>
+											</div>
+										</p:panel>
+									</p:panel>
+									<div class="row">
+										<div class="col-xs-12 col-md-3">
+											<p:outputLabel >
+
+
+											</p:outputLabel>
+
+											<div >
+												<p:selectBooleanCheckbox value="false" binding="#{checkbox}"
+													widgetVar="redirectChk"
+													itemLabel="#{msg['offer.redirect_setting']}">
+													<p:ajax event="change"
+														onstart="onOffRedirectSetting(!$(PF('redirectChk').jqId).find('input').is(':checked'));" />
+												</p:selectBooleanCheckbox>
+											</div>
+										</div>
+										<div class="col-xs-12 col-sm-9">
+											<p:dataTable id="dtRedirectAddress"
+												value="#{offerBean.redirectAddresses}" var="rowItem">
+												<p:column headerText="#{msg['offer.redirect_type']}"
+													styleClass="text-center">
+													<h:outputText
+														value="#{offerBean.getNameRedirectType(rowItem.redirectType)}" />
+												</p:column>
+												<p:column headerText="#{msg['offer.url']}"
+													styleClass="text-center">
+													<h:inputText value="#{rowItem.redirectAddress}"
+														maxlength="100" readonly="#{!checkbox.value}" />
+												</p:column>
+											</p:dataTable>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-xs-12">
+									<p:panel id="table_offer_main">
+										<p:panel rendered="#{offerBean.offer.offerType eq 1}">
+											<div class="row">
+													<div class="col-xs-12 col-md-3" style="padding-top: 30px;">
+														<p:outputLabel value="#{msg['offer.package']}" />
+													</div>
+													<div class="col-xs-12 col-sm-9" style="padding-top: 20px;">
+														<table class="table-choosing">
+															<tr>
+																<td>
+																	<p:inputText styleClass="form-control"
+																		value="#{offerBean.offerPackage.offerPkgName}"
+																		readonly="true" />
+																</td>
+																<td class="td-btn-fix">
+																	<p:commandLink immediate="true"
+																		disabled="#{!offerBean.editable}"
+																		actionListener="#{offerBean.choosePackage()}"
+																		styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+																		<i class="fa fa-pencil"></i>
+																		<p:ajax event="dialogReturn" update="table_offer_main"
+																			listener="#{offerBean.onDialogPackageMainReturn}" />
+																	</p:commandLink>
+		
+																	<p:commandLink immediate="true"
+																		disabled="#{!offerBean.editable}"
+																		actionListener="#{offerBean.deletePackage()}"
+																		update="table_offer_main"
+																		styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+																		<i class="fa fa-times"></i>
+																	</p:commandLink>
+																</td>
+															</tr>
+														</table>
+													</div>
+											</div>
+
+											<div class="row">
+												<div class="col-xs-12">
+													<p:dataTable id="dtNormOffer" var="rowItem"
+														paginator="true" rows="10"
+														value="#{offerBean.normOfferOfPackage}"
+														paginatorPosition="bottom" rowIndexVar="rowIndex"
+														rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"
+														paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+														rowsPerPageTemplate="5,10,15,20,50,100">
+
+														<f:facet name="header">
+															<div class="form-group">
+																<p:outputLabel
+																	value="#{msg['offer.norm_table_title_normoffer']}" />
+															</div>
+														</f:facet>
+
+														<p:column headerText="#" style="width:5%"
+															styleClass="text-center">
+															<h:outputText value="#{rowIndex + 1}" />
+														</p:column>
+														<p:column headerText="#{msg['offerpackage.offer_name']}"
+															styleClass="text-left">
+															<p:commandLink value="#{rowItem.offerName}"
+																actionListener="#{offerBean.changeNormOffer(rowItem)}">
+																<p:ajax event="dialogReturn" update="dtNormOffer"
+																	listener="#{offerBean.onDialogNormOfferReturn}" />
+															</p:commandLink>
+														</p:column>
+														<p:column headerText="#{msg['common.desc']}"
+															styleClass="text-right">
+															<h:outputText value="#{rowItem.description}" />
+														</p:column>
+														<p:column headerText="#{msg['offer.addon']}"
+															styleClass="text-center">
+															<p:selectBooleanCheckbox
+																value="#{rowItem.offerPackageMap.addOn}" />
+														</p:column>
+														<p:column headerText="#{msg['offer.exchangeable']}"
+															styleClass="text-center">
+															<p:selectBooleanCheckbox
+																value="#{rowItem.offerPackageMap.exchangeable}" />
+														</p:column>
+														<p:column headerText="#{msg['common.action']}"
+															styleClass="actionColumnSmall">
+															<p:commandLink update="dtNormOffer"
+																actionListener="#{offerBean.removeNormOfferOfPackage(rowItem)}"
+																styleClass="btn btn-sm btn-action-del colorRed">
+																<i class="fa fa-times icon-only mr-0"></i>
+																<p:confirm header="#{msg['common.delete']}"
+																	message="#{msg['common.confirmDelete']}"
+																	icon="ui-icon-alert" />
+															</p:commandLink>
+
+															<f:facet name="header">
+																<p:commandButton value="#{msg['common.addNew']}"
+																	process="@this" icon="fa fa-plus"
+																	disabled="#{offerBean.offer.offerPackageId == null}"
+																	actionListener="#{offerBean.chooseNormOffer()}"
+																	styleClass="btn btn-default">
+																	<p:ajax event="dialogReturn" update="dtNormOffer"
+																		listener="#{offerBean.onDialogNormOfferReturn}" />
+																</p:commandButton>
+															</f:facet>
+														</p:column>
+
+													</p:dataTable>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-xs-12">
+													<p:commandButton
+														disabled="#{offerBean.offer.offerPackageId == null}"
+														value="#{msg['offer.update_offer_package']}"
+														actionListener="#{offerBean.updateNormOfferPackage()}"
+														styleClass="btn btn-default pull-right">
+													</p:commandButton>
+												</div>
+											</div>
+										</p:panel>
+									</p:panel>
+									</div>
+									</div>
+									
+									<div class="row">
+										<div class="col-xs-12">
+									<p:panel id="table_norm_orther" style="padding-top:10px;">
+										<p:panel rendered="#{offerBean.offer.offerType ne 1}">
+											<div class="row">
+												<div class="col-xs-12">
+													<p:dataTable id="dtPackageOffer" var="rowItem"
+														paginator="true" rows="10"
+														rowStyleClass="#{index % 2 == 1? 'rowColorBlue': null}"
+														value="#{offerBean.normOfferpkgOfferMaps}"
+														paginatorPosition="bottom" rowIndexVar="index"
+														paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+														rowsPerPageTemplate="5,10,15,20,50,100">
+
+														<f:facet name="header">
+															<div class="form-group">
+																<p:outputLabel
+																	value="#{msg['offer.norm_table_title_packages']}"
+																	 />
+															</div>
+														</f:facet>
+
+														<p:column headerText="#" style="width:5%"
+															styleClass="text-center">
+															<h:outputText value="#{index + 1}" />
+														</p:column>
+														<p:column headerText="#{msg['offer.offerpackage']}"
+															styleClass="text-left">
+															<p:commandLink value="#{rowItem.offerPkgName}"
+																action="#{offerBean.changePackage(rowItem)}">
+																<p:ajax event="dialogReturn" update="dtPackageOffer"
+																	listener="#{offerBean.onDialogPackageNormReturn}" />
+															</p:commandLink>
+														</p:column>
+														<p:column headerText="#{msg['offer.main_offer']}"
+															styleClass="text-left">
+															<h:outputText value="#{rowItem.offerName}" />
+														</p:column>
+														<p:column headerText="#{msg['offer.addon']}"
+															styleClass="text-center">
+															<p:selectBooleanCheckbox
+																value="#{rowItem.offerPackageMap.addOn}"
+																styleClass="text-center" />
+														</p:column>
+														<p:column headerText="#{msg['offer.exchangeable']}"
+															styleClass="text-center">
+															<p:selectBooleanCheckbox
+																value="#{rowItem.offerPackageMap.exchangeable}" />
+														</p:column>
+														<p:column headerText="#{msg['common.action']}"
+															styleClass="actionColumnSmall">
+															<p:commandLink update="dtPackageOffer"
+																actionListener="#{offerBean.removePackageOfOffer(rowItem)}"
+																styleClass="btn btn-sm btn-action-del colorRed">
+																<i class="fa fa-times icon-only mr-0"></i>
+																<p:confirm header="#{msg['common.delete']}"
+																	message="#{msg['common.confirmDelete']}"
+																	icon="ui-icon-alert" />
+															</p:commandLink>
+
+															<f:facet name="header">
+																<p:commandButton value="#{msg['common.add']}" icon="fa fa-plus"
+																	immediate="true" action="#{offerBean.choosePackage()}"
+																	disabled="#{!offerBean.editable or !offerBean.addNewable()}"
+																	styleClass="btn btn-default">
+																	<p:ajax event="dialogReturn" update="dtPackageOffer"
+																		listener="#{offerBean.onDialogPackageNormReturn}" />
+																</p:commandButton>
+															</f:facet>
+														</p:column>
+													</p:dataTable>
+												</div>
+											</div>
+										</p:panel>
+									</p:panel>
+									</div>
+									</div>
+								</div>
+							</div>
+						</p:tab>
+						<p:tab title="#{msg['offer.parameter_list']}"
+							rendered="#{!offerBean.addNewable()}">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-xs-12 text-right">
+												<p:commandButton disabled="#{!offerBean.editable}"
+													value="#{msg['offer.update_parameter_list']}"
+													action="#{offerBean.updateParameterList()}"
+													styleClass="btn btn-default">
+												</p:commandButton>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-xs-12">
+												<div class="formGroup">
+													<p:dataTable paginator="true" rows="10"
+														value="#{offerBean.prameterModels}" var="rowItem"
+														paginatorPosition="bottom"
+														rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"
+														rowIndexVar="rowIndex"
+														paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+														rowsPerPageTemplate="5,10,15,20,50,100">
+														<p:column headerText="#" style="width:5%">
+															<h:outputText value="#{rowIndex + 1}" />
+														</p:column>
+
+														<p:column headerText="#{msg['offer.parameters']}">
+															<h:outputText value="#{rowItem.parameter.parameterName}" />
+														</p:column>
+
+														<p:column headerText="#{msg['common.value']}">
+															<p:inputText value="#{rowItem.offerParameterMap.value}" />
+														</p:column>
+
+														<p:column headerText="#{msg['common.desc']}">
+															<h:outputText value="#{rowItem.parameter.remark}" />
+														</p:column>
+
+														<!-- 														<p:column headerText="#{msg['common.action']}" -->
+														<!-- 															styleClass="text-center" style="width: 20%;"> -->
+
+														<!-- 															<p:commandLink> -->
+														<!-- 																<h:outputText value="#{msg['common.jump']}"></h:outputText> -->
+														<!-- 															</p:commandLink> -->
+														<!-- 														</p:column> -->
+													</p:dataTable>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</p:tab>
+					</p:tabView>
+				</div>
+			</div>			
+			<div class="row">
+				<div class="col-xs-12 text-right">
+					<p:commandButton value="#{msg['offer.conver_to_normal']}"
+						rendered="#{offerBean.isCompiled()}"
+						disabled="#{!offerBean.editable}"
+						oncomplete="PF('dlg_convert_to_normal_offer').show();"
+						update="convert_to_normal_form:dlg_convert_to_normal_offer"
+						styleClass="btn btn-default">
+					</p:commandButton>					
+					<p:commandButton
+						disabled="#{!offerBean.editable or !offerBean.addNewable()}"
+						value="#{offerBean.offer.offerId eq 0 ? msg['common.save'] : msg['common.apply']}"
+						update="treeCommon contentPanel" icon="fa fa-save"
+						actionListener="#{offerBean.saveOfferWithMap()}"
+						styleClass="btn btn-default" />
+				</div>
+			</div>
+		</div>
+
+	</h:form>
+
+	<h:form id="convert_to_normal_form">
+		<p:dialog id="dlg_convert_to_normal_offer"
+			style="position: fixed; top: 50%; left: 50%;"
+			rendered="#{offerBean.offerToConvert.offerId != 0}"
+			widgetVar="dlg_convert_to_normal_offer" width="400px" height="200px"
+			header="Convert to normal offer" closable="true" modal="true"
+			resizable="false" closeOnEscape="true">
+			<div class="container-fluid">
+				<div class="row formFieldMg">
+					<div class="col-xs-6">
+						<div class="formGroup">
+							<p:outputLabel value="#{msg['offf.new_name']}" for="offername"
+								></p:outputLabel>
+							<p:inputText styleClass="form-control" maxlength="100"
+								id="offername" value="#{offerBean.offerToConvert.offerName}"
+								required="true" />
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<p:outputLabel value="#{msg['off_new_external_id']}"
+							for="offerexternalid" ></p:outputLabel>
+						<p:inputText styleClass="form-control" maxlength="200"
+							id="offerexternalid"
+							value="#{offerBean.offerToConvert.offerExternalId}"
+							required="true" />
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-6">
+						<div class="formGroup">
+							<p:outputLabel value="#{msg['common.category']}"
+								for="category_id" ></p:outputLabel>
+							<h:selectOneMenu id="category_id" effect="fold"
+								value="#{offerBean.offerToConvert.categoryId}"
+								styleClass="form-control" required="true">
+								<f:selectItems value="#{offerBean.categoriesForConvert}"
+									var="item" itemLabel="#{item.categoryName}"
+									itemValue="#{item.categoryId}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="col-xs-6">
+						<div class="formGroup">
+							<p:outputLabel value="#{msg['offer_new_description']}"
+								></p:outputLabel>
+							<p:inputText styleClass="form-control" maxlength="255"
+								value="#{offerBean.offerToConvert.description}" />
+						</div>
+					</div>
+				</div>
+
+				<div class="row" style="margin-top: 50px; text-align: right">
+					<div class="col-xs-3">
+						<p:commandButton value="#{msg['common.apply']}" icon="fa fa-save"
+							update="treeCommon:treeCommonOffer form_offer_detail"
+							actionListener="#{offerBean.convertToNormalOffer()}" />
+					</div>
+					<div class="col-xs-3">
+						<p:commandButton value="#{msg['common.close']}" immediate="true" icon="fa fa-close"
+							onclick="PF('dlg_convert_to_normal_offer').hide();" />
+					</div>
+				</div>
+			</div>
+		</p:dialog>
+	</h:form>
+
+	<h:form id="offer_generic"
+		rendered="#{offerBean.formType == 'offer_detail_generic'}">
+		<div class="container-fluid">
+			<div class="row formFieldMg">
+				<div class="col-xs-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel for="offerName" value="#{msg['common.name']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText id="offerName" escape="false"
+								value="#{offerBean.offerGroup.offerName}" required="true"
+								maxlength="100" styleClass="form-control"></p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.externalId']}"
+								for="offerExternalId" ></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{offerBean.offerGroup.offerExternalId}"
+								escape="false" id="offerExternalId" required="true"
+								maxlength="100" styleClass="form-control"></p:inputText>
+						</div>
+					</div>
+
+<!-- 					<div class="row"> -->
+<!-- 						<div class="col-xs-12"></div> -->
+<!-- 					</div> -->
+				</div>
+				<div class="col-xs-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel for="offerCategoryId"
+								value="#{msg['common.category']}" />
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu id="offerCategoryId"
+								value="#{offerBean.offerGroup.categoryId}"
+								styleClass="form-control select">
+								<f:selectItems value="#{offerBean.lstCategory}" var="cat"
+									itemValue="#{cat.categoryId}" itemLabel="#{cat.categoryName}">
+								</f:selectItems>
+							</h:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.offer_temp']}"
+								rendered="#{!offerBean.addNewable()}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{offerBean.offerTemp.nodeName}"
+								rendered="#{!offerBean.addNewable()}" readonly="true"
+								escape="false" styleClass="form-control"></p:inputText>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row formFieldMg">
+				<div class="col-xs-12">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:dataTable id="dtVersion" var="rowitem" paginator="true"
+								rows="10" value="#{offerBean.offerVersions}"
+								paginatorPosition="bottom" rowIndexVar="rowIndex"
+								rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="5,10,15,20,50,100">
+
+								<f:facet name="header">
+									<p:outputLabel value="#{msg['version_of_offer']}" />
+								</f:facet>
+
+								<p:column headerText="#" style="width:5%">
+									<h:outputText value="#{rowIndex + 1}" />
+								</p:column>
+
+								<p:column headerText="#{msg['common.ID']}">
+									<h:outputText value="#{rowitem.offerId}" />
+								</p:column>
+								<p:column headerText="#{msg['offer.version']}">
+									<h:outputText value="#{rowitem.versionInfo}" />
+								</p:column>
+
+								<p:column headerText="#{msg['common.state']}">
+									<h:outputText value="#{offerBean.getSateName(rowitem.state)}" />
+								</p:column>
+
+								<p:column headerText="#{msg['common.desc']}">
+									<h:outputText value="#{rowitem.description}" />
+								</p:column>
+
+								<p:column styleClass="actionColumn">
+									<p:commandLink rendered="#{!offerBean.showRecover(rowitem)}"
+										disabled="#{!offerBean.editable or !offerBean.addNewable()}"
+										resetValues="true"
+										update="contentTitle categoryCommonTop contentPanel"
+										actionListener="#{offerBean.editOfferVersion(rowitem)}"
+										styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+										<i class="fa fa-pencil icon-only mr-0"></i>
+									</p:commandLink>
+									<p:commandLink update="dtVersion"
+										rendered="#{!offerBean.showRecover(rowitem)}"
+										disabled="#{!offerBean.editable or !offerBean.addNewable()}"
+										actionListener="#{offerBean.cloneOfferVersion(rowitem)}"
+										styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+										<i class="fa fa-clone icon-only mr-0"></i>
+										<p:ajax event="dialogReturn"
+											update="treeCommon categoryCommonTop contentPanel"
+											listener="#{offerBean.onCloneDialogReturn}" />
+									</p:commandLink>
+									<p:commandLink update="dtVersion treeCommon:treeCommonOffer"
+										rendered="#{offerBean.showRecover(rowitem)}"
+										disabled="#{!offerBean.editable}"
+										actionListener="#{offerBean.recover(rowitem)}"
+										styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+										<i class="fa fa-reply icon-only mr-0"></i>
+										<p:confirm header="#{msg['offer.recovery']}"
+											message="#{msg['offer.recovery_msg']}" icon="ui-icon-alert" />
+									</p:commandLink>
+
+									<p:commandLink update="treeCommon dtVersion"
+										disabled="#{!offerBean.editable or !offerBean.addNewable()}"
+										actionListener="#{offerBean.removeOfferTable(rowitem)}"
+										styleClass="btn btn-sm btn-action-del colorRed">
+										<i class="fa fa-times icon-only mr-0"></i>
+										<p:confirm header="#{msg['common.delete']}"
+											closeOnEscape="true"
+											message="#{msg['offer.cfdl.deleteversion']}"
+											icon="ui-icon-alert" />
+									</p:commandLink>
+
+									<f:facet name="header">
+										<p:outputLabel value="#{msg['common.action']}"
+											rendered="#{!offerBean.editable or !offerBean.addNewable()}" />
+										<p:commandButton value="#{msg['offer.buton.addnewversion']}"
+											resetValues="true" icon="fa fa-plus"
+											update="contentTitle categoryCommonTop contentPanel"
+											rendered="#{offerBean.editable and offerBean.addNewable()}"
+											actionListener="#{offerBean.addNewVersion()}"
+											styleClass="btn btn-default text-truncate">
+										</p:commandButton>
+									</f:facet>
+								</p:column>
+							</p:dataTable>
+						</div>
+
+						<div class="col-xs-12 text-right">
+							<p:commandButton value="#{msg['common.save']}"
+								update="treeCommon contentPanel" icon="fa fa-save"
+								disabled="#{!offerBean.editable or !offerBean.addNewable() or offerBean.offerVersions.size() == 0}"
+								actionListener="#{offerBean.changeAllVersion()}"
+								styleClass="btn btn-default">
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</h:form>
+
+</ui:composition>
+</html>

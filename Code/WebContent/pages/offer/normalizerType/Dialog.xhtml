@@ -1,0 +1,808 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<p:dialog header="#{msg['normalizer.addFilter']}" modal="true"
+	id="dialogAddFilter"
+	showEffect="explode" widgetVar="dlgAddFilter"
+	styleClass="dlg-center-fix" resizable="false" >
+	<div class="container-fluid">
+		<div class="row">
+		<div class="col-xs-12">
+			<div class="row formFieldMg">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['normalizer.FILTER_CONDITIONS']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText id="filterConditionInput" styleClass="form-control"
+								value="#{normalizerBean.filterConditions}" disabled="true"></p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:commandButton value="#{msg['normalizer.addCondition']}" icon="fa fa-plus"
+								actionListener="#{normalizerBean.addChildFilterCondition()}"
+								update="tblFilterCondition filterConditionInput" disabled="#{normalizerBean.listNestedObject.size() lt 1}"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:dataTable id="tblFilterCondition" var="item"
+								value="#{normalizerBean.listFilterConditionTable}"
+								rowIndexVar="rowIndex"
+								rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"
+								scrollable="true" scrollHeight="200">
+								<p:column headerText="#" styleClass="widthSTTcolumn">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column headerText="#{msg['normalizer.filterFieldName']}">
+									<h:selectOneMenu value="#{item.filterFieldName}"
+										styleClass="form-control">
+										<f:selectItems value="#{normalizerBean.listNestedObject}" />
+										<p:ajax event="change"
+											listener="#{normalizerBean.createFilterConditionsField()}"
+											update="tblFilterCondition filterConditionsFieldTmpForSelect"
+											oncomplete="clickBtnHiddenUpdatePreField()" />
+									</h:selectOneMenu>
+									<p:inputText id="filterConditionsFieldTmpForSelect"
+										styleClass="form-control hidden"
+										value="#{normalizerBean.filterConditions}" disabled="true"></p:inputText>
+								</p:column>
+
+								<p:column headerText="" styleClass="widthSTTcolumn text-center">
+									<h:outputText value="=" />
+								</p:column>
+
+								<p:column headerText="#{msg['normalizer.filterValue']}">
+									<p:inputText value="#{item.filterValue}" maxlength="50" 
+										styleClass="form-control">
+										<p:ajax event="change"
+											listener="#{normalizerBean.createFilterConditionsField()}"
+											update="tblFilterCondition filterConditionsFieldTmpForInput"
+											oncomplete="clickBtnHiddenUpdatePreField()" />
+									</p:inputText>
+									<p:inputText id="filterConditionsFieldTmpForInput"
+										styleClass="form-control hidden"
+										value="#{normalizerBean.filterConditions}" disabled="true"></p:inputText>
+								</p:column>
+
+								<p:column headerText="#{msg['common.action']}"
+									style="text-align:center; width: 60px;">
+									<p:commandLink disabled="#{!normalizerBean.isEdit}" update="tblFilterCondition"
+										actionListener="#{normalizerBean.removeChildFilterCondition(item)}"
+										oncomplete="clickBtnHiddenUpdatePreField()"
+										styleClass="btn btn-sm btn-action-del colorRed">
+										<i class="fa fa-times icon-only mr-0"></i>
+										<p:confirm header="#{msg['common.delete']}"
+											message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['normalizer.PRE_FUNCTIONS']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText id="preFunctionField" styleClass="form-control"
+								value="#{normalizerBean.preFunctions}" disabled="true"></p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:commandButton value="#{msg['normalizer.addFunction']}"
+								actionListener="#{normalizerBean.addChildPreFunction()}"
+								update="preFunctionTable preFunctionField" icon="fa fa-plus"/>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:dataTable id="preFunctionTable"
+								var="item" value="#{normalizerBean.listPreFunctionTable}"
+								rowIndexVar="rowIndex"
+								rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"
+								scrollable="true" scrollHeight="200">
+								<p:column headerText="#" styleClass="widthSTTcolumn">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+
+								<p:column headerText="#{msg['normalizer.functionName']}">
+									<h:selectOneMenu styleClass="form-control"
+										value="#{item.functionID}">
+										<f:selectItems value="#{normalizerBean.listPreFunctions}" />
+										<p:ajax event="change"
+											listener="#{normalizerBean.createPreFunctionField()}"
+											update="preFunctionTable"
+											oncomplete="clickBtnHiddenUpdatePreField()" />
+									</h:selectOneMenu>
+									<!-- <p:inputText id="preFunctionFieldTmpForSelect"
+										styleClass="form-control hidden"
+										value="#{normalizerBean.preFunctions}"></p:inputText> -->
+								</p:column>
+
+								<p:column headerText="#{msg['normalizer.parameterList']}"
+									styleClass="nopadding-important">
+									<div class="col-xs-12 no-padding no-margin">
+											<!-- <p:inputText id="preFunctionFieldTmp"
+												styleClass="form-control hidden"
+												value="#{normalizerBean.preFunctions}"></p:inputText> -->
+												
+											<p:inputNumber minValue="-999999999" decimalPlaces="0" thousandSeparator="" 
+												styleClass="inputNumFunctionParam#{normalizerBean.getNumberParam(item.functionID)}"
+												value="#{item.paramString1}"
+												rendered="#{normalizerBean.getNumberParam(item.functionID) >= 1}">
+												<p:ajax event="change"
+													listener="#{normalizerBean.createPreFunctionField()}"
+													oncomplete="clickBtnHiddenUpdatePreField()" />
+											</p:inputNumber>										
+											<p:inputNumber minValue="-999999999" decimalPlaces="0" thousandSeparator=""
+												styleClass="inputNumFunctionParam#{normalizerBean.getNumberParam(item.functionID)}"
+												value="#{item.paramString2}"
+												rendered="#{normalizerBean.getNumberParam(item.functionID) >= 2}">
+												<p:ajax event="change"
+													listener="#{normalizerBean.createPreFunctionField()}"
+													oncomplete="clickBtnHiddenUpdatePreField()" />
+											</p:inputNumber>										
+											<p:inputNumber minValue="-999999999" decimalPlaces="0" thousandSeparator=""
+												styleClass="inputNumFunctionParam#{normalizerBean.getNumberParam(item.functionID)}"
+												value="#{item.paramString3}"
+												rendered="#{normalizerBean.getNumberParam(item.functionID) >= 3}">
+												<p:ajax event="change"
+													listener="#{normalizerBean.createPreFunctionField()}"
+													oncomplete="clickBtnHiddenUpdatePreField()" />
+											</p:inputNumber>
+											<p:inputNumber minValue="-999999999" decimalPlaces="0" thousandSeparator=""
+												styleClass="inputNumFunctionParam#{normalizerBean.getNumberParam(item.functionID)}"
+												value="#{item.paramString4}"
+												rendered="#{normalizerBean.getNumberParam(item.functionID) >= 4}">
+												<p:ajax event="change"
+													listener="#{normalizerBean.createPreFunctionField()}"
+													oncomplete="clickBtnHiddenUpdatePreField()" />
+											</p:inputNumber>
+											<p:inputNumber minValue="-999999999" decimalPlaces="0" thousandSeparator=""
+												styleClass="inputNumFunctionParam#{normalizerBean.getNumberParam(item.functionID)}"
+												value="#{item.paramString5}"
+												rendered="#{normalizerBean.getNumberParam(item.functionID) >= 5}">
+												<p:ajax event="change"
+													listener="#{normalizerBean.createPreFunctionField()}"
+													oncomplete="clickBtnHiddenUpdatePreField()" />
+											</p:inputNumber>
+									</div>
+								</p:column>
+
+								<p:column headerText="#{msg['common.action']}"
+									style="text-align:center; width: 60px;">
+									<p:commandLink disabled="#{!normalizerBean.isEdit}" update="preFunctionTable"
+										actionListener="#{normalizerBean.removeChildPreFunction(item)}"
+										styleClass="btn btn-sm btn-action-del colorRed"
+										oncomplete="clickBtnHiddenUpdatePreField()">
+										<i class="fa fa-times icon-only mr-0"></i>
+										<p:confirm header="#{msg['common.delete']}"
+											message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+							<p:commandButton styleClass="btnUpdateHidden hidden"
+								update="preFunctionField filterConditionInput" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12" style="margin-top: 10px;">
+			<p:commandButton value="#{msg['normalizer.close']}" icon="fa fa-times"  styleClass="pull-right"
+								onclick="PF('dlgAddFilter').close()" />
+			<p:commandButton value="#{msg['common.apply']}" styleClass="pull-right"
+					actionListener="#{normalizerBean.applyAllFilter}" icon="fa fa-save"
+					update="inputTextField01 inputFieldID2_1 inputFieldID2_0 tblInputField1 tblInputField2_1 tblInputField2"/>
+		</div>
+		</div>
+	</div>
+</p:dialog>
+<p:dialog header="#{msg['title.select']}" modal="true" styleClass="dlgTreePath dlg-center-fix dlg-center-fix-small"
+	showEffect="explode" widgetVar="dlgTreePathObject" resizable="false"
+	id="dlgTreePathObjectId">
+	<div class="container-fluid" style="width:590px;">
+	<div class="row">
+		<div class="col-xs-12">
+			<p:inputText id="txtTreeSearchNormObj" maxlength="100" styleClass="form-control txtTreeSearchCustom" placeholder="#{msg['title.searchNode']}" onkeyup="searchTreeOnDialog();"></p:inputText>
+		</div>
+	</div>
+	<div class="widget-body content-tree" style="height: 350px; overflow: auto">
+		<p:tree id="treeNormalizerObj" value="#{normalizerBean.root}" var="nodeData" styleClass="customTree"
+			cache="false" dynamic="true" selectionMode="single">
+			<p:ajax event="expand" listener="#{normalizerBean.onNodeExpand}"/>
+			<p:ajax event="select" listener="#{normalizerBean.onNodeSelect}"/>
+
+			<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}">
+				<h:outputText value="#{nodeData.nodeName}" title="#{nodeData}"/>
+			</p:treeNode>
+		</p:tree>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 text-right">
+			<p:commandButton value="#{msg['common.select']}" id="selectObj" icon="fa fa-check"
+				styleClass="btn btn-default btn-click-dialogTree" actionListener="#{normalizerBean.onDialogSelect}" 
+				update="inputTextField01 inputFieldID2_1 inputFieldID2_0 tblInputField1 tblInputField2_1 tblInputField2 TableNormValueParamForQuantity TableNormValueParamForBalance TableNormValueParamForAcmBalance TableNormValueParamForNumberParam TableNormValueParamForNumber TableNormValueParamForZone">
+			</p:commandButton>
+			<p:commandButton value="#{msg['common.close']}" id="cancelObj"
+				styleClass="btn btn-default btn-close-dialogTree" icon="fa fa-times"
+				onclick="PF('dlgTreePath').close()" update="contentPanel" />
+		</div>
+	</div>
+	</div>
+</p:dialog>
+
+<p:dialog header="#{msg['title.select']}" modal="true" styleClass="dlgTreePath dlg-center-fix dlg-center-fix-small"
+	showEffect="explode" widgetVar="dlgTreePath" resizable="false"
+	id="dlgTreePathId">
+	<div class="container-fluid" style="width:590px;">
+	<div>
+		<p:inputText id="txtTreeSearchNorm" maxlength="100" styleClass="form-control txtTreeSearchCustom" placeholder="#{msg['title.searchNode']}" onkeyup="searchTreeOnDialog();"></p:inputText>
+	</div>
+	<div class="widget-body content-tree" style="height: 370px; !important; overflow: auto;">
+		<p:tree id="treeNormalizer" value="#{normalizerBean.root}" var="nodeData" styleClass="customTree"
+			cache="false" dynamic="false" selectionMode="single">
+			<p:ajax event="expand" listener="#{normalizerBean.onNodeExpand}"/>
+			<p:ajax event="select" listener="#{normalizerBean.onNodeSelect}"/>
+
+			<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}">
+				<h:outputText value="#{nodeData.nodeName}" title="#{nodeData}"
+					styleClass="vocs-txt-400" />
+			</p:treeNode>
+		</p:tree>
+	</div>
+	<div class="row">
+		<div class="col-xs-12 text-right">
+			<p:commandButton value="#{msg['common.select']}" id="select" icon="fa fa-check"
+				styleClass="btn btn-default btn-click-dialogTree" actionListener="#{normalizerBean.onDialogSelect}" 
+				update="inputTextField01 inputFieldID2_1 inputFieldID2_0 tblInputField1 tblInputField2_1 tblInputField2 TableNormValueParamForQuantity TableNormValueParamForBalance TableNormValueParamForAcmBalance TableNormValueParamForNumberParam TableNormValueParamForNumber TableNormValueParamForZone">
+			</p:commandButton>
+			<p:commandButton value="#{msg['common.close']}" id="cancel" icon="fa fa-times"
+				styleClass="btn btn-default btn-close-dialogTree"
+				onclick="PF('dlgTreePath').close()" update="contentPanel" />
+		</div>
+	</div>
+	</div>
+</p:dialog>
+<!-- *****************************************NormValueDialog****************************************** -->
+<p:dialog id="dlgValueManager" header="#{msg['normalizer.valueDefine']}" modal="true" resizable="false"
+	showEffect="explode" widgetVar="dlgValueManager" styleClass="dlg-center-fix">
+		<div class="container-fluid">
+			<div class="col-xs-12">
+				<div class="row formFieldMg">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:commandButton id="btnAddnewValueManager" value="#{msg['common.addNew']} #{msg['value']}"
+								rendered="#{normalizerBean.selectedNormType != 1 and normalizerBean.selectedNormType != 3 and normalizerBean.selectedNormType != 9}"
+								styleClass="mgRight10" icon="fa fa-plus" actionListener="#{normalizerBean.addChildForTableNormValue()}" update="tableValueManager"></p:commandButton>
+							<p:commandButton value="#{msg['normalizer.save']}"
+								styleClass="mgRight10" icon="fa fa-save" actionListener="#{normalizerBean.saveNormValueTMP()}" update="pnlNormContent tableValueManager"></p:commandButton>
+							<!-- <p:commandButton value="#{msg['normalizer.close']}" actionListener="#{normalizerBean.closeNormValueTMP()}"
+								styleClass="mgRight10" update="pnlNormContent tableValueManager" oncomplete="$('.ui-dialog-titlebar-close').click();"></p:commandButton> -->
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:dataTable paginator="true" rows="20" id="tableValueManager"
+								value="#{normalizerBean.listNormValueTmp}" var="item"
+								editable="true" editMode="cell" paginatorPosition="bottom"
+								rowIndexVar="rowIndex"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="10,20,50,100"
+								rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+								<p:column headerText="#{msg['value.index']}">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{item.normValueIndex}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:inputText value="#{item.normValueIndex}" type="number" min="1" step="1" 
+											styleClass="form-control" maxlength="50"
+											disabled="true">
+												<p:ajax event="change" update="tableValueManager" />
+											</p:inputText>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+								<p:column headerText="#{msg['value']} #{msg['common.ID']}">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{item.valueId}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:inputNumber value="#{item.valueId}" minValue="0" emptyValue="0" thousandSeparator="" decimalPlaces="0" styleClass="inputNumCustom" 
+											disabled="#{normalizerBean.selectedNormType == 1 || normalizerBean.selectedNormType == 3 || normalizerBean.selectedNormType == 9}">
+												<p:ajax event="change" update="tableValueManager" />
+											</p:inputNumber>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+								<p:column headerText="#{msg['normalizer.valueName']}">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{item.valueName}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:inputText value="#{item.valueName}" styleClass="form-control"  maxlength="50"
+											disabled="#{normalizerBean.selectedNormType == 1 || normalizerBean.selectedNormType == 3 || normalizerBean.selectedNormType == 9}">
+												<p:ajax event="change" update="tableValueManager" />
+											</p:inputText>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+								<p:column headerText="#{msg['common.desc']}">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{item.description}" />
+										</f:facet>
+										<f:facet name="input">
+											<p:inputText value="#{item.description}" styleClass="form-control"  maxlength="255">
+												<p:ajax event="change" />
+											</p:inputText>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+								<p:column headerText="#{msg['common.color']}">
+									<p:cellEditor>
+										<f:facet name="output">
+											<div class="col-xs-12 colorPanel" style="background: #{item.colorBG}">
+												<span style="color: #{item.color};">Text</span>
+											</div>
+										</f:facet>
+										<f:facet name="input">
+											<p:inputText styleClass="form-control">
+												<p:ajax event="click" listener="#{normalizerBean.addDataForNormValueTmp(item)}" oncomplete="PF('dlgColorPicker').show()" />
+											</p:inputText>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+
+								<p:column headerText="#{msg['common.action']}"
+									style="text-align:center;">
+									<p:commandLink disabled="#{!normalizerBean.isEdit}"
+										rendered="#{normalizerBean.selectedNormType != 1 and normalizerBean.selectedNormType != 3 and normalizerBean.selectedNormType != 9}"
+										update="tableValueManager"
+										actionListener="#{normalizerBean.removeChildForTableNormValue(item)}"
+										styleClass="btn btn-sm btn-action-del colorRed">
+										<i class="fa fa-times icon-only mr-0"></i>
+										<p:confirm header="#{msg['common.delete']}"
+											message="#{msg['common.confirmDelete']}"
+											icon="ui-icon-alert" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</p:dialog>
+<!-- *****************************************NormValueDialog****************************************** -->
+
+<p:dialog header="#{msg['normalizer.colorPicker']}" styleClass="dlgColorPicker" modal="true"
+	showEffect="explode" widgetVar="dlgColorPicker"
+	style="height: 400px; width:430px !important;">
+		<div class="container-fluid">
+			<div class="col-xs-12 text-center">
+				<div class="col-xs-2 colorPanel" style="background: #DCEFF5;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#DCEFF5')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #C9EAF5;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#C9EAF5')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #B0E5F7;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#B0E5F7')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #A0E3FA;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#A0E3FA')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #87DDFA;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#87DDFA')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #73D8FA;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#73D8FA')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 text-center">
+				<div class="col-xs-2 colorPanel" style="background: #73F3FA;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#73F3FA')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #56E8F0;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#56E8F0')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #42E5ED;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#42E5ED')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #29DAE3;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#29DAE3')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #15CDD6;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#15CDD6')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #06B1BA;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#06B1BA')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 text-center">
+				<div class="col-xs-2 colorPanel" style="background: #9DFAE3;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#9DFAE3')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #86F7DB;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#86F7DB')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #6DF2D1;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#6DF2D1')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #55E6C1;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#55E6C1')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #3DDBB4;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#3DDBB4')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #25CFA4;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#25CFA4')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 text-center">
+				<div class="col-xs-2 colorPanel" style="background: #8FF7B4;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#8FF7B4')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #6CEB98;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#6CEB98')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #51DB81;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#51DB81')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #2BC461;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#2BC461')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #1AB851;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#1AB851')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #06A13C;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#06A13C')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 text-center">
+				<div class="col-xs-2 colorPanel" style="background: #D1F084;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#D1F084')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #BEE067;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#BEE067')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #ABD149;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#ABD149')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #97BF30;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#97BF30')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #87B020;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#87B020')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #70960E;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#70960E')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+			</div>
+			
+			<div class="col-xs-12 text-center">
+				<div class="col-xs-2 colorPanel" style="background: #EDF2B1;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#EDF2B1')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #E1E890;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#E1E890')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #D3DB72;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#D3DB72')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #C0C953;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#C0C953')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #AAB535;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#AAB535')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #939E1B;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#939E1B')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 text-center">
+				<div class="col-xs-2 colorPanel" style="background: #F5E6A6;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#F5E6A6')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #E6D383;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#E6D383')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #D6C160;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#D6C160')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #C4AD45;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#C4AD45')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #B39A2D;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#B39A2D')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #9E8518;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#9E8518')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+			</div>
+			
+			<div class="col-xs-12 text-center">
+				<div class="col-xs-2 colorPanel" style="background: #D98771;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#D98771')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #C26E57;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#C26E57')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #AD563E;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#AD563E')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #9C432A;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#9C432A')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #852F18;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#852F18')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #75240E;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#FFFFFF','#75240E')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #FFFFFF;">Text</span>
+					</p:commandLink>
+				</div>
+			</div>
+			<div class="col-xs-12 text-center">
+				<div class="col-xs-2 colorPanel" style="background: #F5ABF2;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#F5ABF2')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #E88BE5;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#E88BE5')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #DB72D8;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#DB72D8')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #C44DC0;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#C44DC0')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #B033AC;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#B033AC')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+				<div class="col-xs-2 colorPanel" style="background: #961A92;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" actionListener="#{normalizerBean.chooseColor('#231F20','#961A92')}" update="tableValueManager" oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+						<span style="color: #231F20;">Text</span>
+					</p:commandLink>
+				</div>
+			</div>
+		</div>		
+</p:dialog>
+<!-- *****************************************NormParamTimeDialog****************************************** -->
+<p:dialog id="dlgAddNewTimeParam" header="#{msg['normalizer.addNewParams']}" modal="true" resizable="false"
+	showEffect="explode" widgetVar="dlgAddNewTimeParam"	styleClass="dlg-center-fix">
+		<div class="container-fluid">
+			<div class="col-xs-12">
+				<div class="row formFieldMg">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:commandButton value="#{msg['normalizer.addNewParams']}"
+								styleClass="mgRight10" actionListener="#{normalizerBean.addChildForListTableNVPstring()}" update="TableNormValueParamForTime TableNormValueParamForTimeTemp"></p:commandButton>
+<!-- 							<p:commandButton value="#{msg['common.apply']}" -->
+<!-- 								styleClass="mgRight10" actionListener="#{normalizerBean.saveNormalizer()}" update="TableNormValueParamForTime TableNormValueParamForTimeTemp"></p:commandButton> -->
+							<p:commandButton value="#{msg['normalizer.close']}"
+								styleClass="mgRight10" update="pnlNormContent" onclick="PF('dlgAddNewTimeParam').close()"></p:commandButton>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:dataTable
+								id="TableNormValueParamForTime"
+								var="item"
+								editable="true" editMode="cell"
+								value="#{normalizerBean.listTableNormValueParamForString}"
+								paginator="true" rows="20" paginatorPosition="bottom"
+								rowIndexVar="rowIndex"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="10,20,50,100"
+								rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+								<p:column headerText="#" styleClass="widthSTTcolumn">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+				
+								<p:column headerText="#{msg['normalizer.valueName']}">
+									<p:cellEditor>
+										<f:facet name="output">
+											<h:outputText value="#{item.normValue.valueName}" />
+										</f:facet>
+										<f:facet name="input">
+											<h:selectOneMenu styleClass="form-control" value="#{item.selectedNormValue}">
+												<f:selectItems value="#{normalizerBean.listSelectNormValue}" />
+												<p:ajax event="change" listener="#{normalizerBean.onChangeNormValueInTableNVP(item)}"/>
+											</h:selectOneMenu>
+										</f:facet>
+									</p:cellEditor>
+								</p:column>
+								
+								<p:column headerText="#{msg['normalizer.day']}">
+									<h:selectOneMenu styleClass="form-control" value="#{item.selectedDay}">
+										<f:selectItems value="#{normalizerBean.listDay}" />
+										<p:ajax event="change" listener="#{normalizerBean.onChangeNormValueInTableNVP(item)}"/>
+									</h:selectOneMenu>
+								</p:column>
+								
+								<p:column headerText="#{msg['normalizer.hour']}">
+									<h:selectOneMenu styleClass="form-control" value="#{item.selectedHour}">
+										<f:selectItems value="#{normalizerBean.listHour}" />
+										<p:ajax event="change" listener="#{normalizerBean.onChangeNormValueInTableNVP(item)}"/>
+									</h:selectOneMenu>
+								</p:column>
+								
+								<p:column headerText="#{msg['normalizer.min']}">
+									<h:selectOneMenu styleClass="form-control" value="#{item.selectedMinute}">
+										<f:selectItems value="#{normalizerBean.listMinute}" />
+										<p:ajax event="change" listener="#{normalizerBean.onChangeNormValueInTableNVP(item)}"/>
+									</h:selectOneMenu>
+								</p:column>
+								
+								<p:column headerText="#{msg['normalizer.sec']}">
+									<h:selectOneMenu styleClass="form-control" value="#{item.selectedSecond}">
+										<f:selectItems value="#{normalizerBean.listSecond}" />
+										<p:ajax event="change" listener="#{normalizerBean.onChangeNormValueInTableNVP(item)}"/>
+									</h:selectOneMenu>
+								</p:column>
+				
+								<p:column headerText="#{msg['common.action']}" styleClass="actionColumn">
+									
+									<p:commandLink disabled="#{!normalizerBean.isEdit}"
+										actionListener="#{normalizerBean.addTimeParam(item)}"
+										styleClass="btn btn-sm btn-action-edit colorStrongGreen"
+										update="TableNormValueParamForTime">
+										<i class="fa fa-plus-circle icon-only mr-0"></i>
+									</p:commandLink>										
+									<p:commandLink disabled="#{!normalizerBean.isEdit}"
+										actionListener="#{normalizerBean.moveUpTimeParam(item)}"
+										styleClass="btn btn-sm btn-action-edit colorStrongGreen"
+										update="TableNormValueParamForTime">
+										<i class="fa fa-arrow-circle-up icon-only mr-0"></i>
+									</p:commandLink>
+									<p:commandLink disabled="#{!normalizerBean.isEdit}"
+										actionListener="#{normalizerBean.moveDownTimeParam(item)}"
+										styleClass="btn btn-sm btn-action-edit colorStrongGreen"
+										update="TableNormValueParamForTime">
+										<i class="fa fa-arrow-circle-down icon-only mr-0"></i>											
+									</p:commandLink>										
+									<p:commandLink disabled="#{!normalizerBean.isEdit}"
+										actionListener="#{normalizerBean.removeChildForListTableNVPstring(item)}"
+										styleClass="btn btn-sm btn-action-del colorRed"
+										update="TableNormValueParamForTime">
+										<i class="fa fa-times icon-only mr-0"></i>
+										<p:confirm header="#{msg['common.delete']}"
+											message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="#{request.contextPath}/resources/js/tree_ocs.js"></script>
+</p:dialog>
+<!-- *****************************************NormParamTimeDialog****************************************** -->
+
+</html>

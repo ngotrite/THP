@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<ui:composition>
+	<h:form id="form-geohome-by-cat" class="container-fluid"
+		rendered="#{geoBean.formType eq 'list-geohome-by-category'}">
+
+		<div class="row" style="padding-bottom: 10px;">
+
+<!-- 			<p:commandButton value="clear" update="@form" -->
+<!-- 				styleClass="geoHomeClearFilter hidden" -->
+<!-- 				oncomplete="PF('tblGeoHomeWidgetVar').clearFilters()" /> -->
+
+			<div class="col-xs-12 col-md-12">
+				<p:dataTable var="item" value="#{geoBean.listGeoHomeByCategory}" id="DTGeoHome"
+					rowKey="#{item.geoHomeZoneId}" widgetVar="tblGeoHomeWidgetVar"
+					emptyMessage="#{msg['common.noData']}" paginator="true" rows="20"
+					paginatorPosition="bottom" rowIndexVar="rowIndex"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="10,20,50,100"
+					rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+
+					<f:facet name="header">
+						<p:outputLabel value="#{msg['geo.list']}" style="font-weight:bold" />
+					</f:facet>
+
+					<p:ajax event="filter" ignoreAutoUpdate="true" />
+
+					<p:column headerText="#" style="width:3%">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.name']}"
+						sortBy="#{item.geoHomeZoneName}"
+						filterBy="#{item.geoHomeZoneName}" filterMatchMode="contains">
+						<h:outputText value="#{item.geoHomeZoneName}" styleClass="preformatted"/>
+					</p:column>
+
+					<p:column headerText="#{msg['common.desc']}"
+						sortBy="#{item.remark}" filterBy="#{item.remark}"
+						filterMatchMode="contains">
+						<h:outputText value="#{item.remark}" styleClass="preformatted" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.action']}"
+						styleClass="actionColumn">
+						<p:commandLink
+							update=":treeCommon categoryCommonTop contentPanel contentTitle"
+							actionListener="#{geoBean.commandEditGeoHome(item)}" resetValues="true"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-pencil icon-only mr-0"></i>
+						</p:commandLink>
+						<!-- 							<p:commandLink update="treeCommon categoryCommonTop contentPanel" -->
+						<!-- 								actionListener="#{geoBean.commandCloneGeoHome(item)}" -->
+						<!-- 								styleClass="btn btn-sm btn-action-edit colorStrongGreen"> -->
+						<!-- 								<i class="fa fa-clone icon-only mr-0"></i> -->
+						<!-- 							</p:commandLink> -->
+						<p:commandLink update=":treeCommon categoryCommonTop contentPanel"
+							actionListener="#{geoBean.commandDeleteGeoHome(item)}"
+							styleClass="btn btn-sm btn-action-del colorRed">
+							<i class="fa fa-times icon-only mr-0"></i>
+							<p:confirm header="#{msg['common.delete']}"
+								message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+						</p:commandLink>
+
+						<f:facet name="header">
+							<p:commandButton value="#{msg['common.addNew']}" resetValues="true"
+								actionListener="#{geoBean.commandAddNewGeoHome()}" icon="fa fa-plus"
+								update="treeCommon categoryCommonTop contentPanel contentTitle"
+								styleClass="col-xs-12" />
+						</f:facet>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+
+	</h:form>
+</ui:composition>
+</html>

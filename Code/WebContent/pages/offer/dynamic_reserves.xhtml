@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jstl/core">
+<h:form id="form-dynamicreserves-list"
+	rendered="#{dynamicReservesBean.formType eq 'form-dynamicreserves-list'}">
+	<div class="container-fluid">
+		<!-- 				<p:commandButton value="#{msg['common.addNew']}" -->
+		<!-- 					title="#{msg['common.addNew']}" -->
+		<!-- 					update="treeCommon contentTitle categoryCommonTop contentPanel contentTitle" -->
+		<!-- 					actionListener="#{dynamicReservesBean.addNewDynamicReserve()}" -->
+		<!-- 					styleClass="btn btn-default"> -->
+		<!-- 				</p:commandButton> -->
+		<p:commandButton value="clear" update="@form"
+			styleClass="DRClearFilter hidden"
+			oncomplete="PF('tblDRWidgetVar').clearFilters()" />
+
+		<div class="row formFieldMg">
+			<div class="col-xs-12">
+				<p:dataTable id="dtDynamicReserves" var="rowitem" paginator="true"
+					rows="10" value="#{dynamicReservesBean.lstDynamicReserve}"
+					paginatorPosition="bottom" widgetVar="tblDRWidgetVar"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15,20,50,100" rowIndexVar="rowIndex"
+					rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+
+					<f:facet name="header">
+						<p:outputLabel value="#{msg['dynamicreserve.titleOfCategory']}"
+							style="font-weight:bold" />
+					</f:facet>
+
+					<p:column headerText="#" styleClass="widthSTTcolumn">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.name']}"
+						sortBy="#{rowitem.dynamicReserveName}"
+						filterBy="#{rowitem.dynamicReserveName}"
+						filterMatchMode="contains">
+						<h:outputText value="#{rowitem.dynamicReserveName}"
+							styleClass="preformatted" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.desc']}"
+						sortBy="#{rowitem.remark}"
+						filterBy="#{rowitem.dynamicReserveName}"
+						filterMatchMode="contains">
+						<h:outputText value="#{rowitem.remark}" styleClass="preformatted" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.action']}"
+						styleClass="actionColumn">
+
+						<p:commandLink title="#{msg['common.edit']}"
+							actionListener="#{dynamicReservesBean.editDynamicReserve(rowitem)}"
+							update="treeCommon categoryCommonTop contentPanel contentTitle"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-pencil icon-only mr-0"></i>
+						</p:commandLink>
+						<p:commandLink title="#{msg['common.clone']}"
+							actionListener="#{dynamicReservesBean.commandCloneTable(rowitem)}"
+							update="treeCommon categoryCommonTop contentPanel contentTitle"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-clone icon-only mr-0"></i>
+							<p:ajax event="dialogReturn"
+								listener="#{dynamicReservesBean.onDialogCloneReturn}"
+								update="treeCommon categoryCommonTop contentPanel" />
+						</p:commandLink>
+						<p:commandLink update="dtDynamicReserves treeCommon"
+							title="#{msg['common.delete']}"
+							actionListener="#{dynamicReservesBean.removeDynamicReserve(rowitem)}"
+							styleClass="btn btn-sm btn-action-del colorRed">
+							<i class="fa fa-times icon-only mr-0"></i>
+							<p:confirm header="#{msg['common.delete']}"
+								message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+						</p:commandLink>
+						<f:facet name="header">
+							<p:commandButton value="#{msg['common.addNew']}"
+								title="#{msg['common.addNew']}" icon="fa fa-plus"
+								update="treeCommon contentTitle categoryCommonTop contentPanel contentTitle"
+								actionListener="#{dynamicReservesBean.addNewDynamicReserve()}"
+								styleClass="btn btn-default" />
+						</f:facet>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+	</div>
+</h:form>
+
+<h:form id="form-dynamicreservesdetail"
+	rendered="#{dynamicReservesBean.formType eq 'form-dynamicreserves-detail'}">
+	<div class="container-fluid">
+		<div class="row formFieldMg">
+			<div class="hidden">
+				<p:commandButton value="#{msg['dynamicreserve.addRT']}"
+					title="#{msg['dynamicreserve.addRT']}"
+					actionListener="#{dynamicReservesBean.commandCloneContextMenu}"
+					styleClass="btn btn-default btnCloneDRfromContext">
+					<p:ajax event="dialogReturn"
+						update="treeCommon categoryCommonTop contentPanel"
+						listener="#{dynamicReservesBean.onDialogCloneReturn}" />
+				</p:commandButton>
+			</div>
+
+			<div class="col-xs-12 col-sm-6">
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['common.ID']}" />
+						<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+					</div>
+					<div class="col-xs-12">
+
+						<p:inputText readonly="true"
+							value="#{dynamicReservesBean.dynamicReserve.dynamicReserveId}"
+							styleClass="form-control" />
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['ratetable.name']}" />
+						<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+					</div>
+					<div class="col-xs-12">
+
+						<p:inputText
+							value="#{dynamicReservesBean.dynamicReserve.dynamicReserveName}"
+							styleClass="form-control" required="true" maxlength="100"
+							requiredMessage="#{msg['dynamicreserve.requiredName']}" />
+					</div>
+				</div>
+
+
+			</div>
+
+			<div class="col-xs-12 col-sm-6">
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['action.category']}" for="CatType" />
+					</div>
+					<div class="col-xs-12">
+						<h:selectOneMenu id="CatType" rendered="true"
+							value="#{dynamicReservesBean.dynamicReserve.categoryId}"
+							styleClass="form-control col-xs-12" required="true"
+							requiredMessage="#{msg['dynamicreserve.requiredCategory']}">
+							<f:selectItems
+								value="#{dynamicReservesBean.categoriesOfDynamicReserve}"
+								var="category" itemValue="#{category.categoryId}"
+								itemLabel="#{category.categoryName}"></f:selectItems>
+						</h:selectOneMenu>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['common.desc']}" />
+					</div>
+					<div class="col-xs-12">
+
+						<p:inputText value="#{dynamicReservesBean.dynamicReserve.remark}"
+							styleClass="form-control" maxlength="255" />
+					</div>
+				</div>
+
+
+			</div>
+
+
+
+			<div class="col-xs-12" style="margin-bottom: 15px;">
+				<div class="col-sm-10">
+					<p:commandButton styleClass="btnShowCate hidden"
+						actionListener="#{dynamicReservesBean.redirectChangeCate()}"
+						update="treeCommon categoryCommonTop contentPanel">
+						<p:ajax event="dialogReturn"
+							listener="#{dynamicReservesBean.onDialogReturnCategory}"
+							update="treeCommon categoryCommonTop contentPanel" />
+					</p:commandButton>
+				</div>
+				<div class="col-sm-2">
+					<!-- 						<p:commandButton value="#{msg['dynamicreserve.addRT']}" -->
+					<!-- 							process="@this" title="#{msg['dynamicreserve.addRT']}" -->
+					<!-- 							actionListener="#{dynamicReservesBean.commandAddNewRatetable()}" -->
+					<!-- 							styleClass="btn btn-default btn-rv-addRT"> -->
+					<!-- 							<p:ajax event="dialogReturn" update="dtRT" -->
+					<!-- 								listener="#{dynamicReservesBean.onDialogRTReturn}" /> -->
+					<!-- 						</p:commandButton> -->
+					<!-- 						<p:commandButton -->
+					<!-- 							rendered="#{dynamicReservesBean.editting || dynamicReservesBean.dynamicReserve.dynamicReserveId == 0}" -->
+					<!-- 							value="#{msg['common.apply']}" title="#{msg['common.apply']}" -->
+					<!-- 							update="dtRT treeCommon form-dynamicreservesdetail contentTitle categoryCommonTop contentPanel" -->
+					<!-- 							actionListener="#{dynamicReservesBean.saveDR()}" -->
+					<!-- 							styleClass="btn btn-default"> -->
+					<!-- 							<p:confirm header="#{msg['common.apply']}" -->
+					<!-- 								message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" /> -->
+					<!-- 						</p:commandButton> -->
+				</div>
+
+			</div>
+
+
+			<div class="col-xs-12" style="margin-bottom: 15px;">
+				<div class="col-sm-8"></div>
+				<div class="col-sm-4"></div>
+			</div>
+
+			<div class="col-xs-12 col-sm-12">
+				<p:dataTable id="dtRT" var="rowitem" paginator="true" rows="10"
+					value="#{dynamicReservesBean.lstRateTable}"
+					paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15,20,50,100" rowIndexVar="rowIndex"
+					rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+
+					<f:facet name="header">
+						<p:outputLabel value="#{msg['ratetable.titleOfDR']}"
+							style="font-weight:bold" />
+					</f:facet>
+
+					<p:column headerText="#" styleClass="widthSTTcolumn">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column headerText="#{msg['ratetable.title']}">
+						<p:commandLink
+							actionListener="#{dynamicReservesBean.chooseRT(rowitem)}">
+							<h:outputText value="#{rowitem.rateTableName}" />
+							<p:ajax event="dialogReturn" update="dtRT"
+								listener="#{dynamicReservesBean.onDialogRTReturn}" />
+						</p:commandLink>
+					</p:column>
+
+					<p:column headerText="#{msg['common.desc']}">
+						<h:outputText value="#{rowitem.remark}" />
+					</p:column>
+
+					<p:column styleClass="actionColumnExtra">
+
+						<p:commandLink
+							actionListener="#{dynamicReservesBean.addRTAt(rowitem)}"
+							disabled="#{!dynamicReservesBean.editting}" update="dtRT"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-plus icon-only mr-0"></i>
+							<p:ajax event="dialogReturn" update="dtRT"
+								listener="#{dynamicReservesBean.onDialogRTReturn}" />
+						</p:commandLink>
+
+						<p:commandLink title="#{msg['common.edit']}"
+							disabled="#{!dynamicReservesBean.editting}"
+							update="contentTitle categoryCommonTop contentPanel"
+							actionListener="#{dynamicReservesBean.editRateTable(rowitem)}"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-pencil icon-only mr-0"></i>
+						</p:commandLink>
+						<!-- 							<p:commandLink -->
+						<!-- 								update="contentTitle categoryCommonTop contentPanel" -->
+						<!-- 								actionListener="#{dynamicReservesBean.cloneRateTable(rowitem)}" -->
+						<!-- 								styleClass="btn btn-sm btn-action-edit colorStrongGreen"> -->
+						<!-- 								<i class="fa fa-clone icon-only mr-0"></i> -->
+						<!-- 							</p:commandLink> -->
+
+						<p:commandLink update="dtRT" title="#{msg['common.moveUp']}"
+							disabled="#{dynamicReservesBean.lstRateTable.indexOf(rowitem) eq 0 or !dynamicReservesBean.editting}"
+							actionListener="#{dynamicReservesBean.commandUpOnMap(rowitem)}"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-arrow-circle-up icon-only mr-0"></i>
+						</p:commandLink>
+						<p:commandLink update="dtRT" title="#{msg['common.moveDown']}"
+							disabled="#{dynamicReservesBean.lstRateTable.indexOf(rowitem) eq dynamicReservesBean.lstRateTable.size() -1 or !dynamicReservesBean.editting}"
+							actionListener="#{dynamicReservesBean.commandDownOnMap(rowitem)}"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-arrow-circle-down icon-only mr-0"></i>
+						</p:commandLink>
+						<p:commandLink update="dtRT" title="#{msg['common.delete']}"
+							disabled="#{!dynamicReservesBean.editting}"
+							actionListener="#{dynamicReservesBean.removeRateTable(rowitem)}"
+							styleClass="btn btn-sm btn-action-del colorRed">
+							<i class="fa fa-times icon-only mr-0"></i>
+							<p:confirm header="#{msg['common.delete']}"
+								message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+						</p:commandLink>
+						<f:facet name="header">
+							<!-- 							<p:outputLabel value="#{msg['common.action']}" -->
+							<!-- 								rendered="#{!dynamicReservesBean.editting}" /> -->
+							<p:commandButton value="#{msg['dynamicreserve.addRT']}"
+								disabled="#{!dynamicReservesBean.editting}" process="@this"
+								title="#{msg['dynamicreserve.addRT']}" icon="fa fa-plus"
+								actionListener="#{dynamicReservesBean.commandAddNewRatetable()}"
+								styleClass="btn btn-default btn-rv-addRT">
+								<p:ajax event="dialogReturn" update="dtRT"
+									listener="#{dynamicReservesBean.onDialogRTReturn}" />
+							</p:commandButton>
+						</f:facet>
+					</p:column>
+				</p:dataTable>
+			</div>
+			<!-- 			<div class="col-xs-12 col-sm-10"> -->
+			<!-- 				<p:outputLabel ></p:outputLabel> -->
+			<!-- 			</div>  -->
+			<div class="col-xs-12 text-right">
+				<p:commandButton disabled="#{!dynamicReservesBean.editting}"
+					value="#{msg['common.apply']}" title="#{msg['common.apply']}"
+					icon="fa fa-save"
+					update="dtRT treeCommon form-dynamicreservesdetail contentTitle categoryCommonTop contentPanel"
+					actionListener="#{dynamicReservesBean.saveDR()}">
+					<p:confirm header="#{msg['common.apply']}"
+						message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+				</p:commandButton>
+			</div>
+		</div>
+	</div>
+
+</h:form>
+</html>

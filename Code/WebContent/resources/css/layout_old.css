@@ -1,0 +1,761 @@
+/*
+Copyright 2014 Viettel Telecom. All rights reserved.
+VIETTEL PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+*/
+/*
+    Created on : Nov 4, 2014, 1:34:59 PM
+    Author     : linhvt6
+*/
+
+.cbs_table{
+    min-height: 350px;
+}
+
+.cbs_input_text {
+    width: 300px;
+}
+
+.cbs_table_x2{
+    vertical-align: top;
+    width: 50%;
+}
+
+/* *****************************************************************************
+    PREPROCESSING
+*/
+.vocs-pre-map-end, .vocs-pre-event-output{
+    white-space: normal;
+    background: #34495e !important;
+    color: #fff;
+    /*    border:1px solid #7d99ca; -webkit-border-radius: 3px; -moz-border-radius: 3px;border-radius: 3px;font-size:12px;font-family:arial, helvetica, sans-serif; padding: 10px 10px 10px 10px; text-decoration:none; display:inline-block;text-shadow: -1px -1px 0 rgba(0,0,0,0.3);font-weight:bold; color: #FFFFFF;
+        background-color: #a5b8da; background-image: -webkit-gradient(linear, left top, left bottom, from(#a5b8da), to(#7089b3));
+        background-image: -webkit-linear-gradient(top, #a5b8da, #7089b3);
+        background-image: -moz-linear-gradient(top, #a5b8da, #7089b3);
+        background-image: -ms-linear-gradient(top, #a5b8da, #7089b3);
+        background-image: -o-linear-gradient(top, #a5b8da, #7089b3);
+        background-image: linear-gradient(to bottom, #a5b8da, #7089b3);filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#a5b8da, endColorstr=#7089b3);*/
+}
+.vocs-pre-map-start, .vocs-pre-event-input, .vocs-pre-event-input-tmp{
+    white-space: normal;
+    background: #16a085 !important;
+    color: #fff;
+
+}
+.vocs-pre-event-input-tmp{
+    white-space: normal;
+    background: #B0C023 !important;
+    color: #fff;
+}
+.vocs-pre-exit-unallowable {
+    white-space: normal;
+    background: #D35400 !important;
+    color: #fff;
+}
+.vocs-pre-exit-allowable {
+    white-space: normal;
+    background: #3498DB !important;
+    color: #fff;
+}
+.vocs-pre-tmp {
+    white-space: normal;
+    background: #B0C023 !important;
+    color: #fff;
+}
+/*.vocs-pre-map-start {
+    background: #FFAA97 !important;
+}
+.vocs-pre-map-end {
+    background: #FCDE96 !important;
+}*/
+.vocs-pre-event-output, .vocs-pre-event-input, .vocs-pre-event-input-tmp, .vocs-pre-exit-unallowable, .vocs-pre-exit-allowable, .vocs-pre-tmp, .vocs-pre-map-start, .vocs-pre-map-end{
+    overflow: hidden;
+    font-weight: normal !important;
+    border: 1px solid #eeeeee;
+}
+.vocs-pre-event-output,.vocs-pre-event-input, .vocs-pre-event-input-tmp,
+.vocs-pre-map-start, .vocs-pre-map-end,
+.vocs-pre-exit-unallowable, .vocs-pre-exit-allowable, .vocs-pre-tmp{
+    width: 160px;
+    overflow: hidden;
+}
+.vocs-pre-event-output,.vocs-pre-event-input, .vocs-pre-event-input-tmp,
+.vocs-pre-map-start, .vocs-pre-map-end,
+.vocs-pre-exit-unallowable, .vocs-pre-exit-allowable, .vocs-pre-tmp,
+.empty_arrow, .vocs-pre-arrow-verticle, .vocs-pre-arrow-horizontal{
+    height: 40px;
+    overflow: hidden;
+}
+
+.empty_arrow, .vocs-pre-arrow-verticle, .vocs-pre-arrow-horizontal{
+    width: 40px;
+}
+.vocs-pre-event-input, .vocs-pre-event-input-tmp{
+    height: 60px;    
+}
+
+.vocs-pre-table{
+    height: 450px; overflow: scroll; width: 600px; border: none;
+}
+.vocs-pre-row{
+    vertical-align: top;
+}
+
+/*********************************************************
+STYLE FLAT UI
+*/
+.vocs-pre-event-output,.vocs-pre-event-input, .vocs-pre-event-input-tmp,
+.vocs-pre-map-start, .vocs-pre-map-end,
+.vocs-pre-exit-unallowable, .vocs-pre-exit-allowable, .vocs-pre-tmp{
+    border-radius: 3px;
+}
+/*********************************************************
+STYLE FLOW STANDARD
+*/
+/*
+.vocs-pre-map-start, .vocs-pre-map-end{
+    -moz-border-radius: 100px / 20px;
+    -webkit-border-radius: 100px / 20px;
+    border-radius: 100px / 20px;
+}
+.vocs-pre-event-output,.vocs-pre-event-input, .vocs-pre-event-input-tmp{
+    border-radius: 20px;
+    -webkit-transform: skew(0deg);
+    transform: skew(0deg);
+}
+.vocs-pre-exit-unallowable, .vocs-pre-exit-allowable, .vocs-pre-tmp{
+    height: 73px;
+    width: 100px;
+    padding: 5px;
+    margin-left: 50px;
+    transform: rotate(20deg) skew(135deg);
+    -ms-transform: rotate(20deg) skew(135deg);  IE 9
+    -webkit-transform: rotate(20deg) skew(135deg);
+    -o-transform: rotate(20deg) skew(135deg);  Opera
+    -moz-transform: rotate(20deg) skew(135deg);  Firefox
+}
+.vocs-pre-exit-unallowable .ui-button-text, .vocs-pre-exit-allowable, .vocs-pre-tmp .ui-button-text{
+    transform:  skew(-135deg) rotate(-20deg);
+    -ms-transform:  skew(-135deg) rotate(-20deg);  IE 9
+    -webkit-transform:  skew(-135deg) rotate(-20deg);
+    -o-transform:  skew(-135deg) rotate(-20deg);  Opera
+    -moz-transform:  skew(-135deg) rotate(-20deg);  Firefox
+    margin: -18px;
+}*/
+
+.vocs-pre-arrow-horizontal{
+    background: transparent url("../../resources/img/pre/arrow_true.gif") no-repeat;
+    text-align: center;
+}
+.vocs-pre-arrow-verticle{
+    background: transparent url("../../resources/img/pre/arrow_false.gif") no-repeat;
+    text-align: center;
+}
+.empty_node{
+}
+.empty_arrow{
+}
+.empty_arrow, .vocs-pre-arrow-verticle, .vocs-pre-arrow-horizontal{
+    margin: auto;
+}
+.vocs-button{
+    padding: 8px;
+    border-radius: 3px;
+    margin: 2px;
+}
+.vocs-tab-pre{
+    background: transparent url("../../resources/img/pre/bg.gif");
+    /*height: 468px;*/
+    width: 100%;
+    /*overflow: auto ;*/
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 5px;
+    border: 1px solid #aaa;
+}
+.vocs-pre-event-input, .vocs-pre-event-input-tmp{
+    /*background: #ccc !important;*/
+}
+.vocs-pre-event-input, .vocs-pre-event-input-tmp span{
+    color:#fff;    
+}
+.vocs-tabpanel-tab-text{
+    overflow: hidden;
+
+}
+span.vocs-tab-pre-verticle-arrow{
+    margin: auto 0;
+}
+.vocs-pre-table-row{
+    /*border-bottom: 1px solid #aaa;*/
+    /*height: 170px;*/
+    /*width: 100%;*/
+    /*padding-top: 5px;*/
+}
+.vocs-pre-row-fset{
+    background: transparent !important;
+    margin-bottom: 20px;
+    border: none !important;
+    border-bottom: 2px solid #819DBA !important;
+    border-radius: 0 !important;
+    width: 100%;
+}
+.vocs-pre-row-col-mid{
+    vertical-align: middle;
+    padding-top: 0;
+}
+.vocs-pre-col-fit{
+    width: 0.1%;
+}
+fieldset#panelRuleMap > div :first-of-type{
+    width: 900px;
+    overflow-x: scroll;
+}
+.vocs-dialog-90{
+    width: 90%;
+    /*height: 90%;*/
+}
+.vocs-table-x2,.vocs-table-x2_1,.vocs-table-x2_2{
+    vertical-align: top;
+    width: 50%;
+}
+.vocs-table-x2_1{
+    padding-top: 1px;
+}
+.vocs-table-x2_2{
+    padding-top: 12px;
+}
+.vocs-tab-pre-verticle-arrow{
+    vertical-align: top;
+}
+
+/*******************************************************************************
+OVERLOAD DEFAULT STYLE/ TTPM STYLE */
+/*.ui-tree .ui-widget .ui-widget-content .ui-corner-all .vocs-tree-50pc*/
+.ui-tabs-left > .ui-tabs-nav{
+    height: 100%;
+    min-height: 400px;
+    padding: 50px 0;
+}
+.ui-tabs-left > .ui-tabs-nav{
+    width: 33%;
+    padding: 100px 0;
+}
+.ui-tabs-left > .ui-tabs-panels{
+    width: 55%;
+}
+.ui-widget{
+    font-family: Arial, Helvetica, sans-serif;
+}
+.ui-dialog {
+    font-size: 14px !important;
+    border-radius: 2px;
+}
+.ui-selectonemenu-panel .ui-selectonemenu-list-item{
+    font-size: 14px;
+    max-width: 400px;
+}
+.ui-selectonemenu-panel .ui-selectonemenu-list{
+    overflow-x: auto;
+}
+.ui-widget-header{
+    background: #c3dbeb ;
+}
+.ui-dialog .ui-dialog-titlebar{
+    position: relative;
+    padding: 6px 4px 6px 16px;
+    border: 0px;
+}
+.ui-dialog .ui-dialog-title{
+    float: left;
+    margin: 0;
+    height: 30px;
+}
+.ui-datatable thead th, .ui-datatable tfoot td{
+    text-align: left;
+    text-transform: capitalize;
+}
+.ui-tooltip-1{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+}
+.ui-fieldset, .ui-fieldset .ui-fieldset-legend{
+    padding: 10px 0;
+}
+fieldset > .ui-fieldset, .ui-fieldset .ui-fieldset-legend{
+    padding: 5px 5px;
+    border: none;
+    font-weight: bold;
+    text-transform: capitalize;
+    margin: 0 10px -8px;
+}
+button.ui-button{
+    min-width: 70px;
+}
+.button.ui-button span{color: #fff;}
+label.ui-outputlabel{
+    text-transform: capitalize;
+}
+.vocs-tree {
+    border: 0;
+    border-radius: 3px;
+    border-right: none;
+}
+.vocs-tree-50pc {
+    border: 1px solid #85B2CB;
+    border-radius: 3px;
+    border-right: none;
+}
+fieldset.ui-widget-content{
+    border: 1px solid #aaa;
+    border-radius: 3px;
+}
+/*******************************************************************************
+VOCS */
+
+.vocs-10{
+    width: 10px;
+}
+.vocs-15{
+    width: 15px;
+}
+.vocs-20{
+    width: 20px;
+}
+.vocs-30{
+    width: 30px;
+}
+.vocs-40{
+    width: 40px;
+}
+.vocs-50{
+    width: 50px;
+}
+.vocs-60{
+    width: 60px;
+}
+.vocs-70{
+    width: 70px;
+}
+.vocs-80{
+    width: 80px;
+}
+.vocs-800{
+    width: 800px;
+}
+.vocs-90{
+    width: 90px;
+}
+.vocs-100{
+    width: 100px;
+}
+.vocs-105{
+    width: 105px;
+}
+.vocs-106{
+    width: 106px;
+}
+.vocs-107{
+    width: 107px;
+}
+.vocs-108{
+    width: 108px;
+}
+.vocs-109{
+    width: 109px;
+}
+.vocs-110{
+    width: 110px;
+}
+.vocs-120{
+    width: 120px;
+}
+.vocs-130{
+    width: 130px;
+}
+.vocs-131{
+    width: 131px;
+}
+.vocs-140{
+    width: 140px;
+}
+.vocs-150{
+    width: 150px;
+}
+.vocs-158{
+    width: 158px;
+}
+.vocs-160{
+    width: 160px;
+}
+.vocs-170{
+    width: 170px;
+}
+.vocs-180{
+    width: 180px;
+}
+.vocs-190{
+    width: 190px;
+}
+.vocs-200{
+    width: 200px;
+}
+.vocs-210{
+    width: 210px;
+}
+.vocs-220{
+    width: 220px;
+}
+.vocs-230{
+    width: 230px;
+}.vocs-240{
+    width: 240px;
+}
+.vocs-250{
+    width: 250px;
+}
+.vocs-260{
+    width: 260px;
+}
+.vocs-270{
+    width: 270px;
+}
+.vocs-280{
+    width: 280px;
+}
+.vocs-290{
+    width: 290px;
+}
+.vocs-300{
+    width: 300px;
+}
+.vocs-310{
+    width: 310px;
+}
+.vocs-320{
+    width: 320px;
+}
+.vocs-330{
+    width: 330px;
+}
+.vocs-340{
+    width: 340px;
+}
+.vocs-350{
+    width: 350px;
+}
+.vocs-360{
+    width: 360px;
+}
+.vocs-370{
+    width: 370px;
+}
+.vocs-380{
+    width: 380px;
+}
+.vocs-390{
+    width: 390px;
+}
+.vocs-400{
+    width: 400px;
+}.vocs-410{
+    width: 410px;
+}
+.vocs-420{
+    width: 420px;
+}
+.vocs-430{
+    width: 430px;
+}
+.vocs-440{
+    width: 440px;
+}
+.vocs-450{
+    width: 450px;
+}
+.vocs-460{
+    width: 460px;
+}
+.vocs-470{
+    width: 470px;
+}.vocs-480{
+    width: 480px;
+}
+.vocs-490{
+    width: 490px;
+}
+.vocs-500{
+    width: 500px;
+}
+.vocs-magin-fieldset{
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+}
+.vocs-magin-dataTable{
+    margin: 2px;
+}
+.vocs-minheight{
+    min-height: 5px;
+    min-width:  5px;
+}
+
+fieldset.vocs-fieldset-top, fieldset.vocs-fieldset-top-0{
+    border: none;
+    border-radius: 0;
+    border-top: 1px solid #85B2CB;
+}
+fieldset.vocs-fieldset-top-0{
+    margin: 0 -10px 0;
+}
+.vocs-calendar-input-200 input{
+    width: 200px;
+}
+.vocs-calendar-input-300 input{
+    width: 300px;
+}
+.vocs-calendar-input-350 input{
+    width: 350px;
+}
+.vocs-20, vocs-40,.vocs-60, .vocs-90, .vocs-120, .vocs-150 {
+    vertical-align: top;
+    /*padding-top: 4px;*/
+}
+.vocs-180, .vocs-210, .vocs-250, .vocs-300, .vocs-500,
+.vocs-400, .vocs-130, .vocs-160,
+.vocs-66pc,.vocs-33pc,.vocs-50pc,.vocs-25pc,vocs-75pc{
+    vertical-align: top;
+}
+
+.vocs-50pc{
+    width: 50%;
+}
+.vocs-66pc {
+    width: 66%;
+}
+.vocs-33pc {
+    width: 33%;
+}
+.vocs-25pc{
+    width: 25%;
+}
+.vocs-75pc{
+    width: 75%;
+}
+
+.vocs-top {
+    vertical-align: top;
+}
+.vocs-dialog-button-panel{
+    text-align: center;
+}
+/******************************************************************************/
+.vocs-checkbox-disable{
+    display: none;
+}
+/******************************************************************************/
+.vocs-txt-400, .vocs-txt{
+    display: inline-block;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
+.vocs-txt-400{
+    max-width: 400px;
+}
+.vocs-txt{
+	width: 100%;
+}
+
+.vocs-tree-50pc, .vocs-tree{
+    height: 480px;
+    overflow-y: scroll;
+    width: 100%;
+    overflow-x: hidden;
+}
+/*
+::-webkit-scrollbar {
+    width: 10px;
+    -webkit-box-shadow: inset 0 0 2px #1054A8;
+}
+
+::-webkit-scrollbar-button {
+    border-radius: 0px;
+    height: 0;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #85B2CB;
+    -webkit-box-shadow: inset 0 0 2px #1054A8;
+}*/
+/******************************************/
+.vocs-icon-zone{
+    background: url("../../resources/img/icons/zone.png") !important;background-size: 75%;
+}
+.vocs-icon-trigger{
+    background: url("../../resources/img/icons/trigger.png") !important;background-size: 75%;
+}
+.vocs-icon-prod-trigger{
+    background: url("../../resources/img/icons/prodtrigger.png") !important;background-size: 75%;
+}
+.vocs-icon-zonemap{
+    background: url("../../resources/img/icons/zonemap.png") !important;background-size: 75%;
+}
+.vocs-icon-prod-spec-main1{
+    background: url("../../resources/img/icons/pkgprod2.png") !important; background-size: 75%;
+}
+.vocs-icon-prod-benefit{
+    background: url("../../resources/img/icons/benefit.png") !important;    background-size: 75%;
+}
+.vocs-icon-prod-spec-cloneprodspec{
+    background: url("../../resources/img/icons/CloneProdSpec.png") !important;    background-size: 75%;
+}
+.vocs-icon-prod-spec-cloneevent{
+    background: url("../../resources/img/icons/CloneEvent.png") !important;    background-size: 75%;
+}
+.vocs-icon-prod-spec-main{
+    background: url("../../resources/img/icons/main2.png") !important;    background-size: 75%;
+}
+.vocs-icon-prod-spec-sub{
+    background: url("../../resources/img/icons/subbrand2.png")!important ;    background-size: 75%;
+}
+.vocs-icon-prod-spec-system{
+    background: url("../../resources/img/icons/system.png") !important;    background-size: 75%;
+}
+.vocs-icon-rating{
+    background: url("../../resources/img/icons/rating.png") !important;    background-size: 75%;
+}
+.vocs-icon-eventtype{
+    background: url("../../resources/img/icons/event_type.png") !important;    background-size: 75%;
+}
+.vocs-icon-event{
+    background: url("../../resources/img/icons/event.png") !important;    background-size: 75%;
+}
+.vocs-icon-rateplan-single{
+    background: url("../../resources/img/icons/single2.png") !important  ;    background-size: 75%;
+}
+.vocs-icon-rateplan-mapping{
+    background: url("../../resources/img/icons/mapping2.png") !important;    background-size: 75%;
+}
+.vocs-icon-rateplandetail{
+    background: url("../../resources/img/icons/mapping_detail.png") !important;    background-size: 75%;
+}
+.vocs-icon-price{
+    background: url("../../resources/img/icons/coin.png") !important;    background-size: 75%;
+}
+.vocs-icon-check{
+    background: url("../../resources/img/icons/check.png") !important;    background-size: 75%;
+}
+.vocs-icon-profilepep {
+    background: url("../../resources/img/icons/profilepep.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+.vocs-icon-pccrule{
+    background: url("../../resources/img/icons/prodtrigger.png") !important;background-size: 75%;
+}
+.vocs-icon-policy-meter {
+    background: url("../../resources/img/icons/policy_meter.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+
+.vocs-icon-profile {
+    background: url("../../resources/img/icons/profile.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+.vocs-icon-profileset {
+    background: url("../../resources/img/icons/profile.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+.vocs-icon-limit {
+    background: url("../../resources/img/icons/limit.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+
+.vocs-icon-event-parent{
+    background: url("../../resources/img/icons/event_parent.png") !important;    background-size: 75%;
+
+}
+.vocs-icon-event-child{
+    background: url("../../resources/img/icons/event_child.png") !important;    background-size: 75%;
+}
+.vocs-icon-rateplansingle {
+    background: url("../../resources/img/icons/rate_plan_single.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+.vocs-icon-rateplanmapping {
+    background: url("../../resources/img/icons/rate_plan_mapping.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+.vocs-icon-rateplandetail {
+    background: url("../../resources/img/icons/rate_plan_detail.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+.vocs-icon-meterplan {
+    background: url("../../resources/img/icons/meter_plan.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+.vocs-icon-meter {
+    background: url("../../resources/img/icons/meter.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+
+.vocs-icon-policy {
+    background: url("../../resources/img/icons/prodpolicy.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+.vocs-icon-prod-policy {
+    background: url("../../resources/img/icons/policy_meter.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+/******************************************/
+.ui-radiobutton-icon{
+    margin: -4px -3px;
+}
+.ui-radiobutton {
+    margin: 3px 0 0 8px;
+}
+.ui-radiobutton .ui-radiobutton-box{
+    width: 9px;
+    height: 9px;
+    margin: -3px;
+}
+.ui-chkbox .ui-chkbox-box{
+    height: 8px !important;
+    width: 8px !important;
+    margin: 6px 6px 0 6px;
+}
+.ui-chkbox-icon.ui-icon {
+    overflow: visible;
+    left:15%;
+    margin: -6px 0 0 -3px;
+}
+
+.ui-menu .ui-menuitem-link{
+    /*width: 100%;*/
+}
+.ui-dialog .ui-dialog-content{
+    padding: 4px 3px;
+}
+a.ui-state-default.ui-state-active{
+    background: #c3dbeb;
+}
+fieldset.ui-widget-content > .ui-fieldset-content {
+    padding-left: 12px;
+}
+.vocs-rank-price-1,
+.vocs-rank-price-2,
+.vocs-rank-price-3{
+    text-align: center;
+}
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button{
+    font-family: Arial, Helvetica, sans-serif;
+}
+span.vcbs-btn-txt{
+    text-decoration: none;
+}
+.vocs-pre-arrow-verticle-text{
+    background: #fff;
+}
+
+.ui-mainmenu-selected{
+    background: #F7B186 !important;
+}
+
+/*bachtx3*/
+.acction_rule{
+    margin-left: 50px;
+    padding: 8px;
+}
+.selectbox_rule{
+    /*padding: 10px;*/
+}
+.vocs-tab-pre .ui-state-default{
+    color: #fff !important;
+}

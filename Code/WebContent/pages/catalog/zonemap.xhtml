@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="../tree_common.xhtml">
+	<ui:define name="subcontent">
+
+		<h:form id="form-zonemap-list" class="container-fluid"
+			rendered="#{zoneMapBean.formType eq 'list-zonemap-by-category'}">
+			<div class="row" style="padding-bottom: 10px;">
+
+				<p:commandButton value="clear" update="@form"
+					styleClass="zoneMapClearFilter hidden"
+					oncomplete="PF('tblZoneMapWidgetVar').clearFilters()" />
+				<div class="col-xs-12 col-md-12">
+					<p:dataTable var="item"
+						value="#{zoneMapBean.listZoneMapByCategory}"
+						widgetVar="tblZoneMapWidgetVar" rowKey="#{item.zoneMapId}"
+						emptyMessage="#{msg['common.noData']}" paginator="true" rows="20"
+						paginatorPosition="bottom"
+						rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="10,20,50,100">
+
+						<f:facet name="header">
+							<p:outputLabel value="#{msg['zonemap.list']}"
+								style="font-weight:bold" />
+						</f:facet>
+
+						<p:ajax event="filter" ignoreAutoUpdate="true" />
+						<p:column headerText="#{msg['common.ID']}"
+							sortBy="#{item.zoneMapId}" filterBy="#{item.zoneMapId}"
+							filterMatchMode="contains">
+							<h:outputText value="#{item.zoneMapId}" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.name']}"
+							sortBy="#{item.zoneMapName}" filterBy="#{item.zoneMapName}"
+							filterMatchMode="contains">
+							<h:outputText value="#{item.zoneMapName}"
+								styleClass="preformatted" />
+
+						</p:column>
+
+						<p:column headerText="#{msg['common.desc']}"
+							sortBy="#{item.remark}" filterBy="#{item.remark}"
+							filterMatchMode="contains">
+							<h:outputText value="#{item.remark}" styleClass="preformatted" />
+
+						</p:column>
+
+						<p:column headerText="#{msg['common.action']}"
+							styleClass="actionColumn">
+
+							<p:commandLink
+								update=":treeCommon categoryCommonTop contentPanel contentTitle"
+								actionListener="#{zoneMapBean.commandEditZoneMap(item)}"
+								resetValues="true"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-pencil icon-only mr-0"></i>
+							</p:commandLink>
+							<!-- 							<p:commandLink update="treeCommon categoryCommonTop contentPanel" -->
+							<!-- 								actionListener="#{zoneMapBean.commandCloneZoneMap(item)}" -->
+							<!-- 								styleClass="btn btn-sm btn-action-edit colorStrongGreen"> -->
+							<!-- 								<i class="fa fa-clone icon-only mr-0"></i> -->
+							<!-- 							</p:commandLink> -->
+							<p:commandLink
+								actionListener="#{zoneMapBean.commandDeleteZoneMap(item)}"
+								update="treeCommon categoryCommonTop contentPanel"
+								styleClass="btn btn-sm btn-action-del colorRed">
+								<i class="fa fa-times icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandLink>
+							<f:facet name="header">
+								<p:commandButton value="#{msg['common.addNew']}"
+									resetValues="true" icon="fa fa-plus"
+									actionListener="#{zoneMapBean.commandAddNewZoneMap()}"
+									update="treeCommon categoryCommonTop contentPanel contentTitle" />
+							</f:facet>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+		</h:form>
+
+
+
+
+		<h:form id="form-zonemap-detail" class="container-fluid"
+			enctype="multipart/form-data"
+			rendered="#{zoneMapBean.formType eq 'zonemap-detail'}">
+			<div class="row formFieldMg">
+				<div class="col-xs-12 col-sm-6">
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['zonemap.zoneMapId']}" />
+							<p:outputLabel value=" *" style="color:red" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{zoneMapBean.zoneMap.zoneMapId}"
+								styleClass="form-control" readonly="true" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['zonemap.zoneMapName']}"
+								for="txtZoneMapName" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{zoneMapBean.zoneMap.zoneMapName}"
+								styleClass="form-control" maxlength="100" required="true"
+								id="txtZoneMapName" />
+						</div>
+					</div>
+
+
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.category']}" for="slCat"/>
+						</div>
+
+						<div class="col-xs-12">
+							<h:selectOneMenu styleClass="form-control col-xs-12" id="slCat" required="true"
+								value="#{zoneMapBean.zoneMap.categoryId}">
+								<f:selectItems value="#{zoneMapBean.getCategoriesOfZoneMap()}"
+									var="item" itemValue="#{item.categoryId}"
+									itemLabel="#{item.categoryName}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12 ">
+							<p:outputLabel value="#{msg['zonemap.remark']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="255"
+								value="#{zoneMapBean.zoneMap.remark}" />
+						</div>
+					</div>
+
+				</div>
+				
+				<div class="col-xs-12 col-md-12">
+					<p:dataTable var="item" id="DTZone"
+						rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"
+						value="#{zoneMapBean.listZoneByZoneMap}" rowKey="#{item.zoneId}"
+						emptyMessage="#{msg['common.noData']}" paginator="true" rows="20"
+						paginatorPosition="bottom" rowIndexVar="rowIndex"
+						widgetVar="tblZoneWidgetVar"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="10,20,50,100">
+						<p:ajax event="filter" ignoreAutoUpdate="true" />
+
+						<f:facet name="header">
+							<p:outputLabel value="#{msg['zone.list']}"
+								style="font-weight:bold" />
+						</f:facet>
+
+						<p:column sortBy="#{item.zoneId}" filterBy="#{item.zoneId}"
+							filterMatchMode="contains" headerText="#{msg['common.ID']}">
+
+							<h:outputText value="#{item.zoneId}" />
+						</p:column>
+
+
+						<p:column sortBy="#{item.zoneName}" filterBy="#{item.zoneName}"
+							filterMatchMode="contains" headerText="#{msg['zone.zoneName']}">
+							<h:outputText value="#{item.zoneName}" styleClass="preformatted" />
+						</p:column>
+
+						<p:column sortBy="#{item.zoneCode}" filterBy="#{item.zoneCode}"
+							filterMatchMode="contains" headerText="#{msg['zone.zoneCode']}">
+
+							<h:outputText value="#{item.zoneCode}" styleClass="preformatted" />
+
+						</p:column>
+
+						<p:column sortBy="#{item.remark}" filterBy="#{item.remark}"
+							filterMatchMode="contains" headerText="#{msg['zonemap.remark']}">
+							<h:outputText value="#{item.remark}" styleClass="preformatted" />
+
+						</p:column>
+
+
+
+
+						<p:column headerText="#{msg['common.action']}" exportable="false"
+							styleClass="text-center actionColumn">
+							<p:commandLink disabled="#{zoneMapBean.apply}"
+								actionListener="#{zoneMapBean.commandEditZone(item)}"
+								resetValues="true" process="@this"
+								update="treeCommon categoryCommonTop contentPanel contentTitle"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-pencil icon-only mr-0"></i>
+							</p:commandLink>
+							<p:commandLink disabled="#{zoneMapBean.apply}"
+								actionListener="#{zoneMapBean.commandDeleteZone(item)}"
+								update="treeCommon categoryCommonTop contentPanel"
+								styleClass="btn btn-sm btn-action-del colorRed">
+								<i class="fa fa-times icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandLink>
+							<f:facet name="header">
+								<p:commandButton value="#{msg['common.addNew']}"
+									resetValues="true" process="@this" icon="fa fa-plus"
+									disabled="#{zoneMapBean.zoneMap.zoneMapId == 0 || zoneMapBean.apply}"
+									actionListener="#{zoneMapBean.commandAddNewZone}"
+									update="treeCommon categoryCommonTop contentPanel contentTitle" />
+							</f:facet>
+						</p:column>
+					</p:dataTable>
+				</div>
+				<div class="col-xs-12 col-md-12">
+					<div class="col-xs-12 col-md-10">
+						<p:outputLabel styleClass="line32"></p:outputLabel>
+					</div>
+					
+					<div class="col-xs-12 text-right" align="right">
+						<p:commandButton value="clear" update="@form"
+							styleClass="zoneClearFilter hidden"
+							oncomplete="PF('tblZoneWidgetVar').clearFilters()" />
+						<p:commandButton value="#{msg['common.apply']}"
+							action="#{zoneMapBean.saveZoneMap()}"
+							disabled="#{zoneMapBean.apply}" icon="fa fa-save"
+							update="treeCommon categoryCommonTop contentPanel"
+							styleClass="btn btn-default">
+							<p:confirm header="#{msg['common.apply']}"
+								message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+						</p:commandButton>
+						<p:commandButton value="#{msg['common.cancel']}"
+							action="#{zoneMapBean.cancelZoneMap()}" rendered="false"
+							update="form-zonemap-detail" styleClass="btn btn-default">
+						</p:commandButton>
+
+					</div>
+
+				</div>
+			</div>
+		</h:form>
+
+
+		<ui:include src="/pages/catalog/zone.xhtml" />
+	</ui:define>
+</ui:composition>
+</html>

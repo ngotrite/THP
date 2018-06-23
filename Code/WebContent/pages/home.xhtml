@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:cbs="http://java.sun.com/jsf/composite/tags">
+    <ui:composition template="../templates/vcbsContentTemplate.xhtml" >
+        <ui:define name="title">VIETTEL ONLINE CHARGING SYSTEM</ui:define>
+        <ui:define name="featureName">Welcome to Viettel vOCS</ui:define>
+        <ui:define name="content">
+                
+<!--                 <div class="row-block-about row">
+                    <div class="about-vtcore">
+                        <label>About VTCore</label>
+                        <article class="col-xs-12 col-sm-4 col-md-4 col-lg-4">                            
+                            <p style="text-align:justify;">#{lang['about.vtcore']}</p>
+                        </article>
+                    </div>
+                    
+                    <article class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
+                        <img src="resources/img/viettel/map.jpg" style="width: 100%;" height="auto"/>
+                    </article>
+                </div>-->
+
+                <div class="row-block-home row" style="border:none;">
+<!--                    <article class="col-xs-12 col-sm-6 col-md-4 col-lg-6">
+                        <img src="resources/img/viettel/ocs.jpg" style="width: 100%;" height="auto"/>
+                    </article>-->
+                    <article class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                            <header>
+                                <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                <h2>Pre - Processing</h2>
+
+                            </header>
+                            
+                            <h:panelGrid columns="1" cellpadding="5px">
+                            <h:panelGroup>                           
+                                <img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" />
+                                <span class="vt-button"><a href="Telecom.jsf" >Telecom</a></span></h:panelGroup>
+                            <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="Event.jsf">Event</a></span></h:panelGroup>  
+                            <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="ReservePolicy.jsf" >Reserve rule</a></span></h:panelGroup>
+                            <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="ActionOneOff.jsf" >Action one off</a></span></h:panelGroup>
+                            <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="PreProcessing.jsf" >Rule</a></span></h:panelGroup>
+                            </h:panelGrid>
+                        </div>        
+                    </article>
+
+                    <article class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                            <header>
+                                <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                <h2>Manage Price</h2>
+
+                            </header>
+                            
+                            <h:panelGrid columns="1" cellpadding="5px">
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="PackageProduct.jsf">Package Product</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="ServiceSpec.jsf">Service Spec</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="Recurring.jsf">Recurring</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="ManagePrice.jsf">Manage Price</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="BasicScript.jsf">Basic Script</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="TestPackages.jsf">Test Packages</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="TreeRatePlanTemplate.jsf">Tree Rate Plan Template</a></span></h:panelGroup>
+                            </h:panelGrid>
+                        </div>        
+                    </article>
+                   
+                   <article class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                            <header>
+                                <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                <h2>CDR Management</h2>
+
+                            </header>
+                            
+                            <h:panelGrid columns="1" cellpadding="5px">
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="CdrService.jsf">CDR Service</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="CdrProp.jsf">CDR Prop</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="CdrTemplate.jsf">CDR Template</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="CdrStdConfig.jsf">CDR Normalizer</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="CdrProcessConfig.jsf">CDR Process Config</a></span></h:panelGroup>
+                            </h:panelGrid>
+                        </div>        
+                    </article>
+
+                    <article class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                            <header>
+                                <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                <h2>Commons</h2>
+
+                            </header>
+                            
+                            <h:panelGrid columns="1" cellpadding="5px">
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="AccountBalanceType.jsf">Account ballance type</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="AccumulationType.jsf">Accumulation type</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="Cycle.jsf">Cycle</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="Zone.jsf">Zone</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="Currency.jsf">Currency</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="SystemConfig.jsf">System Config</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="SmsNotifyTemplateCfg.jsf">SMS Notify Template</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="CsipUssdReponse.jsf">Csip Ussd Response</a></span></h:panelGroup>
+                                <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="ChargingItem.jsf">Charging Item</a></span></h:panelGroup>
+                            </h:panelGrid>
+                        </div>        
+                    </article>
+
+                    <article class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                            <header>
+                                <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                <h2>Policy</h2>
+
+                            </header>
+                            <h:panelGrid columns="1" cellpadding="5px">
+                            <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="ProfilePep.jsf">Profile Pep</a></span></h:panelGroup>
+                            <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="PccRule.jsf">PCC Rule</a></span></h:panelGroup>
+                            <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="QoS.jsf">QoS</a></span></h:panelGroup>
+                            <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="MonitorKey.jsf">Monitor Key</a></span></h:panelGroup>
+                            <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="PolicyPropertyCfg.jsf">Policy Property</a></span></h:panelGroup>
+                            <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="PolicyMeter.jsf">Meter</a></span></h:panelGroup>
+                            </h:panelGrid>
+                        </div>        
+                    </article>
+                    <!-- ////////////////////////// -->
+                    
+                    <article class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                            <header>
+                                <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                <h2>Limit</h2>
+
+                            </header>
+                            <h:panelGrid columns="1" cellpadding="5px">
+                            <h:panelGroup><span class="vt-button"><a href="LimitCategoryCfg.jsf">Limit Category</a></span></h:panelGroup>
+                            <h:panelGroup><span class="vt-button"><a href="LimitDirectionCfg.jsf">Limit Direction</a></span></h:panelGroup>
+                            <h:panelGroup><span class="vt-button"><a href="LimitUnitCfg.jsf">Limit Unit</a></span></h:panelGroup>
+                            <h:panelGroup><span class="vt-button"><a href="AccQuotaType.jsf">Acc Quota Type</a></span></h:panelGroup>
+                            <h:panelGroup><span class="vt-button"><a href="AcmQuotaType.jsf">Acm Quota Type</a></span></h:panelGroup>
+                            </h:panelGrid>
+                        </div>        
+                    </article>
+                    <article class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                            <header>
+                                <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                <h2>Diameter</h2>
+
+                            </header>
+                            <h:panelGrid columns="1" cellpadding="5px">
+                            <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="Avp.jsf">Avp</a></span></h:panelGroup>
+                            <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="AvpDataType.jsf">AvpDataType</a></span></h:panelGroup>
+                            <h:panelGroup><img src="#{request.contextPath}/resources/themes/smartadmin/img/icon_next.png" alt="vCBS" width="14" height="14" /><span class="vt-button"><a href="GGSNAcceptCfg.jsf">GGSN Accept</a></span></h:panelGroup>                            
+                            </h:panelGrid>
+                        </div>        
+                    </article>                    
+                </div>
+                
+        </ui:define>
+    </ui:composition>
+</html>
+

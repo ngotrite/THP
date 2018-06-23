@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui">
+<h:head />
+<ui:composition>
+	<h:form id="form-unittype-detail" class="container-fluid"
+		rendered="#{unitBean.formType eq 'unittype-detail'}">
+
+		<div class="row formFieldMg">
+			<div class="col-xs-12 col-sm-6">
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['unit.id']}" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText value="#{unitBean.unitType.unitTypeId}" maxlength="9"
+							readonly="#{unitBean.editting or true}" styleClass="form-control">
+							<pe:keyFilter regEx="/[0-9]/i" />
+						</p:inputText>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['unit.unitName']}" for="txtUnitName" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText styleClass="form-control" required="true"
+							id="txtUnitName" value="#{unitBean.unitType.name}"
+							maxlength="100" />
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['unit.displayRate']}"
+							for="txtDisplayRate" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText maxlength="9" styleClass="form-control"
+							required="true" id="txtDisplayRate"
+							value="#{unitBean.unitType.displayRate}">
+							<pe:keyFilter regEx="/[0-9]/i" />
+						</p:inputText>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['unit.abbreviation']}" for="txtAbbreviation"/>
+					</div>
+					<div class="col-xs-12">
+						<p:inputText value="#{unitBean.unitType.abbreviation}" maxlength="100"
+							styleClass="form-control" id="txtAbbreviation"/>
+					</div>
+				</div>
+
+			</div>
+			<div class="col-xs-12 col-sm-6">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['common.category']}" for="CatType"/>
+					</div>
+
+					<div class="col-xs-12">
+						<h:selectOneMenu styleClass="form-control col-xs-12" id="CatType" required="true"
+							value="#{unitBean.unitType.categoryId}">
+							<f:selectItems value="#{unitBean.getCategoriesOfUnitType()}"
+								var="category" itemValue="#{category.categoryId}"
+								itemLabel="#{category.categoryName}"></f:selectItems>
+						</h:selectOneMenu>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['unit.prec']}" for="txtUnitPrecision" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText styleClass="form-control" maxlength="9"
+							required="true" id="txtUnitPrecision"
+							value="#{unitBean.unitType.unitPrecision}">
+							<pe:keyFilter regEx="/[0-9]/i" />
+						</p:inputText>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['unit.baseRate']}" for="txtBaseRate" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText styleClass="form-control" maxlength="9"
+							required="true" id="txtBaseRate"
+							value="#{unitBean.unitType.baseRate}">
+							<pe:keyFilter regEx="/[0-9]/i" />
+						</p:inputText>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['unit.desc']}"></p:outputLabel>
+					</div>
+					<div class="col-xs-12">
+						<p:inputText value="#{unitBean.unitType.remark}" maxlength="255"
+							styleClass="form-control" />
+					</div>
+				</div>
+
+
+			</div>
+
+			<div class="col-xs-12 col-sm-12">
+				<!-- 				<div class="row"> -->
+				<!-- 					<div class="col-xs-12 col-md-12"> -->
+				<!-- 						<p:outputLabel value="#{msg['unit.desc']}"></p:outputLabel> -->
+				<!-- 					</div> -->
+				<!-- 					<div class="col-xs-12 col-md-12"> -->
+				<!-- 						<p:inputText value="#{unitBean.unitType.remark}" maxlength="255" -->
+				<!-- 							styleClass="form-control" /> -->
+				<!-- 					</div> -->
+				<!-- 				</div> -->
+				<div class="row">
+					<div class="pull-right" style="padding-right: 12px" align="right">
+						<p:commandButton value="#{msg['common.apply']}" type="submit"
+							icon="fa fa-save" actionListener="#{unitBean.saveUnitType()}"
+							disabled="#{unitBean.apply}"
+							update="treeCommon categoryCommonTop contentPanel"
+							styleClass="btn btn-default">
+							<p:confirm header="#{msg['common.apply']}"
+								message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+						</p:commandButton>
+
+					</div>
+				</div>
+			</div>
+
+
+
+			<!-- 			<div class="col-xs-6"> -->
+			<!-- 				<div class="row"> -->
+			<!-- 					<div class="pull-left" style="padding-left: 7px"> -->
+
+			<!-- 						<p:commandButton value="#{msg['common.cancel']}" -->
+			<!-- 							action="#{unitBean.cancelUnitType()}" -->
+			<!-- 							update="treeCommon categoryCommonTop contentPanel" styleClass="btn btn-default"> -->
+			<!-- 						</p:commandButton> -->
+
+			<!-- 					</div> -->
+			<!-- 				</div> -->
+			<!-- 			</div> -->
+		</div>
+	</h:form>
+
+</ui:composition>
+</html>

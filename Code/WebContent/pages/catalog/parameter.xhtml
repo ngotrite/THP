@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="../tree_common.xhtml">
+	<ui:define name="subcontent">
+		<h:form id="form-parameter-detail" class="container-fluid"
+			rendered="#{parameterBean.formType eq 'detail-parameter' || !parameterBean.editting}">
+			<div class="row formFieldMg">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.ID']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{parameterBean.txtParameterId}"
+								id="parameter_id" maxlength="9"
+								readonly="#{parameterBean.editting}" styleClass="form-control">
+								<pe:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.name']}" for="parameter_name"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control preformatted"
+								maxlength="100" required="true" id="parameter_name"
+								value="#{parameterBean.txtParameterName}"></p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['parameter.defaultValue']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control"
+								value="#{parameterBean.parameterUI.parameterValue}"
+								maxlength="16">
+								<pe:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+
+						</div>
+					</div>
+
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.category']}" for="category"/>
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu id="category" effect="fold" required="true"
+								value="#{parameterBean.parameterUI.categoryId}"
+								styleClass="form-control" editable="true">
+								<f:selectItems value="#{parameterBean.categoriesOfPara}"
+									var="cat" itemValue="#{cat.categoryId}"
+									itemLabel="#{cat.categoryName}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.ownerLevel']}"
+								></p:outputLabel>
+							<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu id="ownerLevel" effect="fold"
+								value="#{parameterBean.parameterUI.ownerLevel}"
+								styleClass="form-control" editable="true">
+								<f:selectItems value="#{parameterBean.loadListLevel()}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:selectBooleanCheckbox style="margin-top: 2%;" id="forTemp"
+								value="#{parameterBean.parameterUI.forTemplate}" itemLabel="#{msg['parameter.forTemplate']}" />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-12">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.desc']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="255"
+								value="#{parameterBean.parameterUI.remark}"></p:inputText>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-10">
+					<p:outputLabel ></p:outputLabel>
+				</div>
+				<div class="col-xs-12 text-right">
+					<p:commandButton value="#{msg['common.apply']}" icon="fa fa-save"
+						disabled="#{parameterBean.apply}"
+						update="treeCommon categoryCommonTop contentPanel"
+						actionListener="#{parameterBean.commandSaveOrUpdate()}">
+						<p:confirm header="#{msg['common.apply']}"
+							message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+					</p:commandButton>
+				</div>
+				<!-- 				<div class="col-xs-12 col-sm-2"> -->
+				<!-- 					<p:commandButton value="#{msg['common.cancel']}" -->
+				<!-- 						styleClass="col-xs-12" -->
+				<!-- 						update="treeCommon categoryCommonTop contentPanel" -->
+				<!-- 						actionListener="#{parameterBean.commandCancel()}" /> -->
+				<!-- 				</div> -->
+			</div>
+			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+				<p:commandButton value="Yes" type="button"
+					styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+				<p:commandButton value="No" type="button"
+					styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+			</p:confirmDialog>
+		</h:form>
+
+		<h:form id="form-parameter-by-cat" class="container-fluid"
+			rendered="#{parameterBean.formType eq 'list-parameter-by-category'}">
+			<div class="row" style="padding-bottom: 10px;">
+				<div class="col-xs-12 col-md-12">
+					<p:dataTable var="item"
+						value="#{parameterBean.listParameterByCategory}"
+						rowKey="#{item.parameterId}"
+						emptyMessage="#{msg['common.noData']}" paginator="true" rows="20"
+						paginatorPosition="bottom" rowIndexVar="rowIndex"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="10,20,50,100">
+						<p:ajax event="filter" ignoreAutoUpdate="false" />
+
+						<f:facet name="header">
+							<p:outputLabel value="#{msg['parameter']}"
+								style="font-weight:bold" />
+						</f:facet>
+
+						<p:column headerText="#" style="width:7%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.name']}">
+							<h:outputText value="#{item.parameterName}"
+								styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.desc']}">
+							<h:outputText value="#{item.remark}" styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.action']}"
+							styleClass="actionColumn">
+							<p:commandLink
+								update="treeCommon categoryCommonTop contentPanel contentTitle"
+								actionListener="#{parameterBean.commandEditTable(item)}"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-pencil icon-only mr-0"></i>
+							</p:commandLink>
+							<p:commandLink update="treeCommon categoryCommonTop contentPanel contentTitle"
+								actionListener="#{parameterBean.commandCloneTable(item)}"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-clone icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.clone']}"
+									message="#{msg['common.confirmClone']}" icon="ui-icon-alert" />
+							</p:commandLink>
+							<p:commandLink update="treeCommon categoryCommonTop contentPanel"
+								actionListener="#{parameterBean.commandRemoveTable(item)}"
+								styleClass="btn btn-sm btn-action-del colorRed">
+								<i class="fa fa-times icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandLink>
+							<f:facet name="header">
+								<p:commandButton value="#{msg['common.addNew']}" icon="fa fa-plus"
+									actionListener="#{parameterBean.commandAddNew()}"
+									rendered="#{parameterBean.editting}"
+									update="treeCommon categoryCommonTop contentPanel contentTitle"
+									styleClass="btn btn-primary" />
+							</f:facet>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+	version="2.2">
+
+	<application>
+		<locale-config>
+			<default-locale>en</default-locale>
+			<supported-locale>vi</supported-locale>
+		</locale-config>
+		<resource-bundle>
+			<base-name>resources.lang</base-name>
+			<var>msg</var>
+		</resource-bundle>
+		<message-bundle>
+		  	resources.MyMessages
+		</message-bundle>
+		<action-listener>
+			org.primefaces.application.DialogActionListener
+		</action-listener>
+		<navigation-handler>
+			org.primefaces.application.DialogNavigationHandler
+		</navigation-handler>
+		<view-handler>
+			org.primefaces.application.DialogViewHandler
+		</view-handler>
+		<!-- <view-handler>
+			com.viettel.ocs.context.CsrfViewHandler
+		</view-handler> -->
+	</application>
+		
+	<factory>
+        <exception-handler-factory>
+            com.viettel.ocs.context.CustomExceptionHandlerFactory
+        </exception-handler-factory>
+	</factory>
+	
+ 	<protected-views>
+		<url-pattern>/Error.xhtml</url-pattern>
+		<url-pattern>/errorRole.xhtml</url-pattern>
+		<url-pattern>/home.xhtml</url-pattern>
+		
+	    <url-pattern>/pages/tree_common.xhtml</url-pattern>
+	    <url-pattern>/pages/tree_offer.xhtml</url-pattern>	    	    
+	    <url-pattern>/pages/catalog/avpdatatype.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/avpdefine.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/baltype.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/billingcycle.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/cdr_gen_fileName.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/cdr_process_config.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/cdr_properties.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/cdr_service.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/cdr_template.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/cell.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/css_ussd_response.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/geohomebycat.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/geohomedetail.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/geohomezone.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/geonetzone.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/mapacmbalbal.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/mapsharebalbal.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/parameter.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/reserveInfo.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/services.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/sms_notify_template.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/stateset.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/statistic_item.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/triggerdestination.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/triggermsg.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/triggerocs.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/unittype.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/unittypebycat.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/unittypedetail.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/zone.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/zonemap.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/cdr_std_config.xhtml</url-pattern>
+	    <url-pattern>/pages/catalog/cdr_stdio.xhtml</url-pattern>
+	    
+	    <url-pattern>/pages/offer/action_type.xhtml</url-pattern>
+	    <url-pattern>/pages/offer/action.xhtml</url-pattern>
+	    <url-pattern>/pages/offer/block.xhtml</url-pattern>
+	    <url-pattern>/pages/offer/decision_table.xhtml</url-pattern>
+	    <url-pattern>/pages/offer/dynamic_reserves.xhtml</url-pattern>
+	    <url-pattern>/pages/offer/event.xhtml</url-pattern>
+	    <url-pattern>/pages/offer/normalizer.xhtml</url-pattern>
+	    <url-pattern>/pages/offer/normalizerByCat.xhtml</url-pattern>
+	    <url-pattern>/pages/offer/normalizerDetail.xhtml</url-pattern>
+	    <url-pattern>/pages/offer/offer_detail.xhtml</url-pattern>
+	    <url-pattern>/pages/offer/offer_list.xhtml</url-pattern>
+	    <url-pattern>/pages/offer/offer_package.xhtml</url-pattern>
+	    <url-pattern>/pages/offer/offer.xhtml</url-pattern>
+	    <url-pattern>/pages/offer/pc_type.xhtml</url-pattern>
+	    <url-pattern>/pages/offer/priceComponents.xhtml</url-pattern>
+	    <url-pattern>/pages/offer/priceComponentSoft.xhtml</url-pattern>
+	    <url-pattern>/pages/offer/ratetable.xhtml</url-pattern>
+	    	    
+	    <url-pattern>/pages/policy/monitor_key.xhtml</url-pattern>
+	    <url-pattern>/pages/policy/pcc_rule.xhtml</url-pattern>
+	    <url-pattern>/pages/policy/policy_profile.xhtml</url-pattern>
+	    <url-pattern>/pages/policy/qos.xhtml</url-pattern>
+	    
+	    <url-pattern>/pages/sys/backup_restore.xhtml</url-pattern>
+	    <url-pattern>/pages/sys/dashboard.xhtml</url-pattern>
+	    <url-pattern>/pages/sys/domain.xhtml</url-pattern>
+	    <url-pattern>/pages/sys/group.xhtml</url-pattern>
+	    <url-pattern>/pages/sys/log_action_audit.xhtml</url-pattern>
+	    <url-pattern>/pages/sys/menu.xhtml</url-pattern>
+	    <url-pattern>/pages/sys/role.xhtml</url-pattern>
+	    <url-pattern>/pages/sys/system_config.xhtml</url-pattern>
+	    <url-pattern>/pages/sys/tree_menu.xhtml</url-pattern>
+	    <url-pattern>/pages/sys/user_management.xhtml</url-pattern>
+	    <url-pattern>/pages/sys/user.xhtml</url-pattern>
+	</protected-views>
+</faces-config>

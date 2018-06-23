@@ -1,0 +1,108 @@
+/******************************************/
+.vocs-icon-zone{
+    background: url("../../resources/img/icons/zone.png") !important;background-size: 75%;
+}
+.vocs-icon-trigger{
+    background: url("../../resources/img/icons/trigger.png") !important;background-size: 75%;
+}
+.vocs-icon-prod-trigger{
+    background: url("../../resources/img/icons/prodtrigger.png") !important;background-size: 75%;
+}
+.vocs-icon-zonemap{
+    background: url("../../resources/img/icons/zonemap.png") !important;background-size: 75%;
+}
+.vocs-icon-prod-spec-main1{
+    background: url("../../resources/img/icons/pkgprod2.png") !important; background-size: 75%;
+}
+.vocs-icon-prod-benefit{
+    background: url("../../resources/img/icons/benefit.png") !important;    background-size: 75%;
+}
+.vocs-icon-prod-spec-cloneprodspec{
+    background: url("../../resources/img/icons/CloneProdSpec.png") !important;    background-size: 75%;
+}
+.vocs-icon-prod-spec-cloneevent{
+    background: url("../../resources/img/icons/CloneEvent.png") !important;    background-size: 75%;
+}
+.vocs-icon-prod-spec-main{
+    background: url("../../resources/img/icons/main2.png") !important;    background-size: 75%;
+}
+.vocs-icon-prod-spec-sub{
+    background: url("../../resources/img/icons/subbrand2.png")!important ;    background-size: 75%;
+}
+.vocs-icon-prod-spec-system{
+    background: url("../../resources/img/icons/system.png") !important;    background-size: 75%;
+}
+.vocs-icon-rating{
+    background: url("../../resources/img/icons/rating.png") !important;    background-size: 75%;
+}
+.vocs-icon-eventtype{
+    background: url("../../resources/img/icons/event_type.png") !important;    background-size: 75%;
+}
+.vocs-icon-event{
+    background: url("../../resources/img/icons/event.png") !important;    background-size: 75%;
+}
+.vocs-icon-rateplan-single{
+    background: url("../../resources/img/icons/single2.png") !important  ;    background-size: 75%;
+}
+.vocs-icon-rateplan-mapping{
+    background: url("../../resources/img/icons/mapping2.png") !important;    background-size: 75%;
+}
+.vocs-icon-rateplandetail{
+    background: url("../../resources/img/icons/mapping_detail.png") !important;    background-size: 75%;
+}
+.vocs-icon-price{
+    background: url("../../resources/img/icons/coin.png") !important;    background-size: 75%;
+}
+.vocs-icon-check{
+    background: url("../../resources/img/icons/check.png") !important;    background-size: 75%;
+}
+.vocs-icon-profilepep {
+    background: url("../../resources/img/icons/profilepep.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+.vocs-icon-pccrule{
+    background: url("../../resources/img/icons/prodtrigger.png") !important;background-size: 75%;
+}
+.vocs-icon-policy-meter {
+    background: url("../../resources/img/icons/policy_meter.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+
+.vocs-icon-profile {
+    background: url("../../resources/img/icons/profile.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+.vocs-icon-profileset {
+    background: url("../../resources/img/icons/profile.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+.vocs-icon-limit {
+    background: url("../../resources/img/icons/limit.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+
+.vocs-icon-event-parent{
+    background: url("../../resources/img/icons/event_parent.png") !important;    background-size: 75%;
+
+}
+.vocs-icon-event-child{
+    background: url("../../resources/img/icons/event_child.png") !important;    background-size: 75%;
+}
+.vocs-icon-rateplansingle {
+    background: url("../../resources/img/icons/rate_plan_single.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+.vocs-icon-rateplanmapping {
+    background: url("../../resources/img/icons/rate_plan_mapping.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+.vocs-icon-rateplandetail {
+    background: url("../../resources/img/icons/rate_plan_detail.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+.vocs-icon-meterplan {
+    background: url("../../resources/img/icons/meter_plan.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+.vocs-icon-meter {
+    background: url("../../resources/img/icons/meter.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+
+.vocs-icon-policy {
+    background: url("../../resources/img/icons/prodpolicy.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+.vocs-icon-prod-policy {
+    background: url("../../resources/img/icons/policy_meter.png") repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+}
+/******************************************/

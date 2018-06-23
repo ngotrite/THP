@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="../tree_common.xhtml">
+	<ui:define name="subcontent">
+		<h:form id="formSysConfig" class="container-fluid"
+			rendered="#{systemConfigBean.formType eq 'form-detail'}">
+			<div class="row formFieldMg">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.key']}" for="key" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText id="key" value="#{systemConfigBean.sysConf.key}"
+								maxlength="100" required="true" styleClass="form-control" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.value']}" for="value" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText id="value" required="true"
+								value="#{systemConfigBean.sysConf.value}" maxlength="100"
+								styleClass="form-control" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.extra']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{systemConfigBean.sysConf.extra}"
+								styleClass="form-control" maxlength="100" />
+						</div>
+					</div>
+
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.ID']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{systemConfigBean.sysConf.ID}"
+								styleClass="form-control" readonly="true" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.category']}" for="CatType" />
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu id="CatType" styleClass="form-control select"
+								value="#{systemConfigBean.sysConf.categoryId}" required="true">
+								<f:selectItems value="#{systemConfigBean.listCategory}"
+									var="cat" itemValue="#{cat.categoryId}"
+									itemLabel="#{cat.categoryName}">
+								</f:selectItems>
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.desc']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{systemConfigBean.sysConf.description}"
+								maxlength="255" styleClass="form-control" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12 text-right">
+							<p:commandButton id="btnSave" value="#{msg['common.save']}"
+								actionListener="#{systemConfigBean.btnSave}" icon="fa fa-save"
+								disabled="#{systemConfigBean.editing}"
+								update="formSysConfig treeCommon" styleClass="btn btn-default">
+								<p:confirm header="#{msg['common.apply']}"
+									message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+		<h:form id="formSysConfigList" class="container-fluid"
+			rendered="#{systemConfigBean.formType eq 'form-list'}">
+			<div class="container-fluid">
+				<div class="row formFieldMg">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:dataTable id="tableSystemConfig" var="item"
+								value="#{systemConfigBean.listSystemConfig}" rowKey="#{item.id}"
+								rowIndexVar="rowIndex" emptyMessage="#{msg['common.noData']}"
+								paginator="true" rows="20" paginatorPosition="bottom"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="10,20,50,100">
+
+								<f:facet name="header">
+									<h:outputLabel value="#{msg['sys.list']}"></h:outputLabel>
+								</f:facet>
+
+								<p:column headerText="#" styleClass="widthSTTcolumn">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+								<p:column headerText="#{msg['common.ID']}">
+									<h:outputText value="#{item.id}" />
+								</p:column>
+								<p:column headerText="#{msg['common.key']}">
+									<h:outputText value="#{item.key}" styleClass="preformatted" />
+								</p:column>
+								<p:column headerText="#{msg['common.value']}">
+									<h:outputText value="#{item.value}" styleClass="preformatted" />
+								</p:column>
+								<p:column headerText="#{msg['common.desc']}">
+									<h:outputText value="#{item.description}" />
+								</p:column>
+
+								<p:column headerText="#{msg['common.action']}"
+									styleClass="actionColumn">
+									<p:commandLink
+										actionListener="#{systemConfigBean.onRowEdit(item)}"
+										update="formSysConfig categoryCommonTop contentPanel contentTitle"
+										styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+										<i class="fa fa-pencil icon-only mr-0"></i>
+									</p:commandLink>
+									<p:commandLink
+										actionListener="#{systemConfigBean.onRowDelete(item)}"
+										update="tableSystemConfig treeCommon"
+										styleClass="btn btn-sm btn-action-del colorRed">
+										<i class="fa fa-times icon-only mr-0"></i>
+										<p:confirm header="#{msg['common.delete']}"
+											message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+									</p:commandLink>
+
+									<f:facet name="header">
+										<p:commandButton id="btnNew" value="#{msg['common.addNew']}"
+											actionListener="#{systemConfigBean.btnNew}" icon="fa fa-plus"
+											update="categoryCommonTop contentPanel contentTitle"
+											styleClass="btn btn-primary" immediate="true"
+											resetValues="true">
+										</p:commandButton>
+									</f:facet>
+								</p:column>
+							</p:dataTable>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

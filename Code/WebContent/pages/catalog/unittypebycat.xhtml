@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<ui:composition>
+	<h:form id="form-unittype-by-cat" class="container-fluid"
+		rendered="#{unitBean.formType eq 'list-unittype-by-category'}">
+		<div class="row" style="padding-bottom: 10px;">
+			<p:commandButton value="clear" 
+				styleClass="unitClearFilter hidden"
+				oncomplete="PF('tblUnitWidgetVar').clearFilters()" />
+
+			<div class="col-xs-12 col-md-12">
+				<p:dataTable var="item" value="#{unitBean.listUnitTypeByCategory}"
+					id="DTUnitType" widgetVar="tblUnitWidgetVar" 
+					emptyMessage="#{msg['common.noData']}" paginator="true" rows="20"
+					paginatorPosition="bottom" rowIndexVar="rowIndex"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="10,20,50,100">
+
+					<f:facet name="header">
+						<p:outputLabel value="#{msg['unittype']}" style="font-weight:bold" />
+					</f:facet>
+
+					<p:ajax event="filter" ignoreAutoUpdate="true" />
+
+					<p:column headerText="#" style="width:3%">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.name']}" sortBy="#{item.name}"
+						filterBy="#{item.name}" filterMatchMode="contains">
+						<h:outputText value="#{item.name}" styleClass="preformatted" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.desc']}"
+						sortBy="#{item.remark}" filterBy="#{item.remark}"
+						filterMatchMode="contains">
+						<h:outputText value="#{item.remark}" styleClass="preformatted" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.action']}"
+						style="text-align:center;">
+						<p:commandLink
+							update=":treeCommon categoryCommonTop contentPanel contentTitle"
+							actionListener="#{unitBean.commandEditUnitType(item)}"
+							resetValues="true"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-pencil icon-only mr-0"></i>
+						</p:commandLink>
+
+<!-- 						<p:commandLink update="treeCommon categoryCommonTop contentPanel" -->
+<!-- 							actionListener="#{unitBean.commandUp(item)}" -->
+<!-- 							styleClass="btn btn-sm btn-action-edit colorStrongGreen"> -->
+<!-- 							<i class="fa fa-arrow-circle-up icon-only mr-0"></i> -->
+<!-- 						</p:commandLink> -->
+<!-- 						<p:commandLink update="treeCommon categoryCommonTop contentPanel" -->
+<!-- 							actionListener="#{unitBean.commandDown(item)}" -->
+<!-- 							styleClass="btn btn-sm btn-action-edit colorStrongGreen"> -->
+<!-- 							<i class="fa fa-arrow-circle-down icon-only mr-0"></i> -->
+<!-- 						</p:commandLink> -->
+
+						<p:commandLink update="treeCommon categoryCommonTop contentPanel"
+							actionListener="#{unitBean.commandDeleteUnitType(item)}"
+							styleClass="btn btn-sm btn-action-del colorRed">
+							<i class="fa fa-times icon-only mr-0"></i>
+							<p:confirm header="#{msg['common.delete']}"
+								message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+						</p:commandLink>
+						<f:facet name="header">
+							<p:commandButton value="#{msg['common.addNew']}"
+								resetValues="true" icon="fa fa-plus"
+								actionListener="#{unitBean.commandAddNewUnitType()}"
+								update="treeCommon categoryCommonTop contentPanel"
+								styleClass="btn btn-primary" />
+						</f:facet>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+	</h:form>
+</ui:composition>
+</html>

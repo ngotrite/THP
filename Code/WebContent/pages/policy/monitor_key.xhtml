@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="/pages/layout_empty.xhtml">
+	<ui:define name="subcontent">
+		<div class="row formFieldMg">
+
+			<div class="col-xs-12 col-sm-7 nopadding">
+				<h:form id="form-monitor_key-list"
+					class="container-fluid nopadding-right">
+					<article class="col-xs-12">
+					<div class="jarviswidget jarviswidget-color-yellow" id="wid-id-0"
+						style="margin-right: -10px;" data-widget-editbutton="false"
+						data-widget-colorbutton="false" data-widget-deletebutton="false">
+						<header> <span class="widget-icon"> <i
+							class="fa fa-table"></i>
+						</span>
+						<h2>#{msg['policy.monitor_keys_list']}</h2>
+						</header>
+						<p:dataTable id="dtRows" value="#{monitorKeyBean.listMKey}"
+							var="rowitem" paginator="true" rows="10"
+							paginatorPosition="bottom" widgetVar="wgMKey"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="5,10,15,20,50,100" rowIndexVar="index"
+							rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+
+							<p:column headerText="#" styleClass="text-truncate"
+								style="width:13%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+								<h:outputText value="#{index + 1}" title="#{index + 1}" />
+							</p:column>
+							<p:column headerText="#{msg['policy.monitor_keys']}"
+								sortBy="#{rowitem.monitorKey}" filterBy="#{rowitem.monitorKey}"
+								filterMatchMode="contains" styleClass="text-truncate"
+								style="text-align: center;width:25%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"
+								id="colRowValue2">
+								<h:outputText value="#{rowitem.monitorKey}"
+									title="#{rowitem.monitorKey}" styleClass="preformatted" />
+							</p:column>
+							<p:column headerText="#{msg['policy.desc']}"
+								styleClass="text-truncate" sortBy="#{rowitem.remark}"
+								filterBy="#{rowitem.remark}" filterMatchMode="contains"
+								style="text-align: left;width:55%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"
+								id="colRowValue8">
+								<h:outputText value="#{rowitem.remark}"
+									title="#{rowitem.remark}" />
+							</p:column>
+							<p:column headerText="#{msg['common.action']}"
+								styleClass="actionColumnSmall">
+
+								<p:commandLink 
+									styleClass="btn btn-sm btn-action-edit colorStrongGreen"
+									actionListener="#{monitorKeyBean.editMK(rowitem)}"
+									update="form-monitor_key-detail">
+									<i class="fa fa-pencil icon-only mr-0"></i>
+								</p:commandLink>
+
+								<p:commandLink styleClass="btn btn-sm btn-action-del colorRed"
+									actionListener="#{monitorKeyBean.deleteMK(rowitem)}"
+									update="form-monitor_key-list:dtRows form-monitor_key-detail">
+									<i class="fa fa-times icon-only mr-0"></i>
+									<p:confirm header="#{msg['common.delete']}"
+										message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+								</p:commandLink>
+							</p:column>
+						</p:dataTable>
+					</div>
+					</article>
+				</h:form>
+			</div>
+
+
+			<div class="col-xs-12 col-sm-5 nopadding">
+				<h:form id="form-monitor_key-detail"
+					class="container-fluid nopadding-left">
+					<article class="col-xs-12">
+					<div class="jarviswidget jarviswidget-color-yellow" id="wid-id-0"
+						style="margin-right: -10px;" data-widget-editbutton="false"
+						data-widget-colorbutton="false" data-widget-deletebutton="false">
+						<header> <span class="widget-icon"> <i
+							class="fa fa-table"></i>
+						</span>
+						<h2>#{msg['policy.monitor_keys_form']}</h2>
+						</header>
+						<p:panel id="pnEdit" style="padding-top: 0px;">
+							<div class="formFieldMg">
+
+								<div class="row">
+									<div class="col-xs-12 ">
+										<p:outputLabel value="#{msg['policy.monitor_keys']}"
+											 for="MonitorKey" />
+										<p:inputText value="#{monitorKeyBean.monitorKeys.monitorKey}"
+											id="MonitorKey" maxlength="9" styleClass="form-control"
+											required="true"
+											converterMessage="#{msg['policy.errorFormat']}">
+											<pe:keyFilter regEx="/[0-9]/i" />
+										</p:inputText>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<p:outputLabel value="#{msg['policy.monitor_remark']}"
+											 />
+										<p:inputText value="#{monitorKeyBean.monitorKeys.remark}"
+											maxlength="255" styleClass="form-control" />
+									</div>
+								</div>
+								<div class="col-xs-12" style="text-align: right;">
+									<div class="row">
+										<p:commandButton id="btnNew" value="#{msg['common.addNew']}"
+											actionListener="#{monitorKeyBean.btnNew()}"
+											disabled="#{monitorKeyBean.editting}" icon="fa fa-plus"
+											update="form-monitor_key-detail" process="@this"
+											styleClass="btn btn-primary">
+										</p:commandButton>
+										<p:commandButton id="btnSave" value="#{msg['common.save']}"
+											actionListener="#{monitorKeyBean.btnSave}"
+											disabled="#{!monitorKeyBean.editting}" icon="fa fa-save"
+											update="form-monitor_key-detail form-monitor_key-list:dtRows"
+											styleClass="btn btn-default">
+										</p:commandButton>
+										<p:commandButton id="btnCancel" icon="fa fa-refresh"
+											value="#{msg['common.cancel']}"
+											actionListener="#{monitorKeyBean.btnCancel}"
+											disabled="#{!monitorKeyBean.editting}"
+											update="form-monitor_key-detail" styleClass="btn btn-default"
+											immediate="true" resetValues="true">
+										</p:commandButton>
+									</div>
+
+								</div>
+							</div>
+						</p:panel>
+					</div>
+					</article>
+				</h:form>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>
+
+</html>
+

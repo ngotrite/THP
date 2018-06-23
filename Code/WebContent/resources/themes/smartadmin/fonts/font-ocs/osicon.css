@@ -1,0 +1,146 @@
+@font-face {
+  font-family: 'ocsicon';
+  src:  url('fonts/ocsicon.eot?mv7zzd');
+  src:  url('fonts/ocsicon.eot?mv7zzd#iefix') format('embedded-opentype'),
+    url('fonts/ocsicon.ttf?mv7zzd') format('truetype'),
+    url('fonts/ocsicon.woff?mv7zzd') format('woff'),
+    url('fonts/ocsicon.svg?mv7zzd#ocsicon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="ocs-"], [class*=" ocs-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'ocsicon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ocs-acm-balance:before {
+  content: "\e900";
+}
+.ocs-action:before {
+  content: "\e901";
+}
+.ocs-action-type:before {
+  content: "\e902";
+}
+.ocs-balance:before {
+  content: "\e903";
+}
+.ocs-billing-cycle:before {
+  content: "\e904";
+}
+.ocs-block:before {
+  content: "\e905";
+}
+.ocs-category:before {
+  content: "\e906";
+}
+.ocs-cdr:before {
+  content: "\e907";
+}
+.ocs-decision-table:before {
+  content: "\e908";
+}
+.ocs-event:before {
+  content: "\e909";
+}
+.ocs-formula:before {
+  content: "\e90a";
+}
+.ocs-geo-home-zone:before {
+  content: "\e90b";
+}
+.ocs-icon:before {
+  content: "\e90c";
+}
+.ocs-loop:before {
+  content: "\e90d";
+}
+.ocs-map:before {
+  content: "\e90e";
+}
+.ocs-normalizer:before {
+  content: "\e90f";
+}
+.ocs-offer:before {
+  content: "\e910";
+}
+.ocs-offer-compiled:before {
+  content: "\e911";
+}
+.ocs-offer-compileds:before {
+  content: "\e912";
+}
+.ocs-offer-group:before {
+  content: "\e913";
+}
+.ocs-offer-main:before {
+  content: "\e914";
+}
+.ocs-offer-onetime:before {
+  content: "\e915";
+}
+.ocs-offer-subscription:before {
+  content: "\e916";
+}
+.ocs-offer-template:before {
+  content: "\e917";
+}
+.ocs-parameter:before {
+  content: "\e918";
+}
+.ocs-price-component:before {
+  content: "\e919";
+}
+.ocs-rate-table:before {
+  content: "\e91a";
+}
+.ocs-reserve-info:before {
+  content: "\e91b";
+}
+.ocs-service:before {
+  content: "\e91c";
+}
+.ocs-state:before {
+  content: "\e91d";
+}
+.ocs-state-group:before {
+  content: "\e91e";
+}
+.ocs-trigger:before {
+  content: "\e91f";
+}
+.ocs-unittype:before {
+  content: "\e920";
+}
+.ocs-zone-data:before {
+  content: "\e921";
+}
+.ocs-16{
+	font-size: 16px;
+}
+.ocs-32{
+	font-size: 32px;
+}
+.ocs-48{
+	font-size: 48px;
+}
+.ocs-64{
+	font-size: 64px;
+}
+.ocs-96{
+	font-size: 96px;
+}
+.ocs-128{
+	font-size: 128px;
+}

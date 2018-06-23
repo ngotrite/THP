@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="../tree_common.xhtml">
+	<ui:define name="subcontent">
+		<h:form id="form-triggerdes-by-cat" class="container-fluid"
+			rendered="#{triggerDesBean.formType eq 'list-triggerdes-by-category'}">
+			<div class="row" style="padding-bottom: 10px;">
+				<div class="col-xs-12 col-md-12">
+					<p:dataTable var="item"
+						value="#{triggerDesBean.listTriggerDesByCategory}"
+						rowKey="#{item.destinationId}"
+						emptyMessage="#{msg['common.noData']}" paginator="true" rows="20"
+						paginatorPosition="bottom" rowIndexVar="rowIndex"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="10,20,50,100">
+
+						<f:facet name="header">
+							<p:outputLabel value="#{msg['triggerDes']}"
+								style="font-weight:bold" />
+						</f:facet>
+
+						<p:column headerText="#" style="width:7%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.name']}">
+							<h:outputText value="#{item.destName}" styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.desc']}">
+							<h:outputText value="#{item.destDescription}"
+								styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.action']}"
+							styleClass="actionColumn">
+							<p:commandLink
+								update="treeCommon categoryCommonTop contentPanel contentTitle"
+								resetValues="true"
+								actionListener="#{triggerDesBean.commandEditTriggerMsgTB(item)}"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-pencil icon-only mr-0"></i>
+							</p:commandLink>
+							<!-- 							<p:commandLink update="treeCommon categoryCommonTop contentPanel" -->
+							<!-- 								styleClass="btn btn-sm btn-action-edit colorStrongGreen"> -->
+							<!-- 								<i class="fa fa-clone icon-only mr-0"></i> -->
+							<!-- 							</p:commandLink> -->
+							<p:commandLink styleClass="btn btn-sm btn-action-del colorRed"
+								update="treeCommon categoryCommonTop contentPanel"
+								actionListener="#{triggerDesBean.commandRemoveTriggerMsgTB(item)}">
+								<i class="fa fa-times icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandLink>
+
+							<f:facet name="header">
+								<p:commandButton value="#{msg['common.addNew']}"
+									resetValues="true" icon="fa fa-plus"
+									actionListener="#{triggerDesBean.commandAddNewTriggerDes()}"
+									update="treeCommon categoryCommonTop contentPanel contentTitle" />
+							</f:facet>
+						</p:column>
+					</p:dataTable>
+				</div>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+					<p:commandButton value="Yes" type="button"
+						styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+			</div>
+		</h:form>
+
+		<h:form id="form-triggerdes-detail" class="container-fluid"
+			rendered="#{triggerDesBean.formType eq 'triggerdes-detail' || !triggerMsgBean.editting}">
+			<div class="row formFieldMg">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['triggerDes.destinationId']}"
+								 />
+							<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText
+								value="#{triggerDesBean.triggerDestinationUI.destinationId}"
+								styleClass="form-control" readonly="true"
+								requiredMessage="#{msg['common.required']}" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['triggerDes.destName']}"
+								
+								for="txtTriggerDestinationName" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{triggerDesBean.txtTriggerDestinationName}"
+								required="true" id="txtTriggerDestinationName" maxlength="100"
+								styleClass="form-control" />
+						</div>
+					</div>
+
+
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.category']}" for="slCatTriggerDes"/>
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu styleClass="form-control col-xs-12" id="slCatTriggerDes" required="true"
+								value="#{triggerDesBean.triggerDestinationUI.categoryId}"
+								editable="true">
+								<f:selectItems value="#{triggerDesBean.categoriesOfTD}"
+									var="cat" itemValue="#{cat.categoryId}"
+									itemLabel="#{cat.categoryName}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:selectBooleanCheckbox itemLabel="#{msg['action.enable']}"
+								value="#{triggerDesBean.triggerDestinationUI.status}" />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-12">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['triggerDes.destDescription']}"
+								 />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText
+								value="#{triggerDesBean.triggerDestinationUI.destDescription}"
+								maxlength="255" styleClass="form-control" />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-10">
+					<p:outputLabel ></p:outputLabel>
+				</div>
+				<div class="col-xs-12 text-right">
+					<p:commandButton value="#{msg['common.apply']}" icon="fa fa-save"
+						actionListener="#{triggerDesBean.commandApplyTriggerDes()}"
+						styleClass="btn btn-primary" disabled="#{triggerDesBean.apply}"
+						update="treeCommon categoryCommonTop contentPanel">
+						<p:confirm header="#{msg['common.apply']}"
+							message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+					</p:commandButton>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

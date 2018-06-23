@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="/pages/layout_empty.xhtml">
+	<ui:define name="subcontent">
+		<h:form id="form-cdr-std-config" class="container-fluid nopadding">
+			<div class="row formFieldMg">
+
+				<div class="col-xs-12 col-sm-7 nopadding-right">
+					<article class="col-xs-12">
+					<div class="jarviswidget jarviswidget-color-yellow" id="wid-id-0"
+						style="margin-right: -10px;" data-widget-editbutton="false"
+						data-widget-colorbutton="false" data-widget-deletebutton="false">
+						<header> <span class="widget-icon"> <i
+							class="fa fa-table"></i>
+						</span>
+						<h2>#{msg['cdrStdConfig.lstCdrStdConfig']}</h2>
+						</header>
+						<p:dataTable var="item"
+							value="#{cdrStdConfigBean.loadCdrStdConfig()}"
+							id="dtCdrStdConfig" rowKey="#{item.cdrStdConfigId}"
+							widgetVar="wvCdrStdConfig" emptyMessage="#{msg['common.noData']}"
+							paginator="true" rows="20" paginatorPosition="bottom"
+							rowIndexVar="rowIndex" resizableColumns="true"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="10,20,50,100"
+							rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+
+							<p:ajax event="filter" ignoreAutoUpdate="true" />
+
+							<p:column headerText="#" style="width:5%">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+							<p:column headerText="#{msg['cdrStdConfig.sqlCommand']}"
+								styleClass="text-truncate" sortBy="#{item.sqlCommand}"
+								filterBy="#{item.sqlCommand}" filterMatchMode="contains">
+								<h:outputText value="#{item.sqlCommand}" />
+							</p:column>
+							<p:column headerText="#{msg['cdrStdConfig.cdrServiceId']}"
+								styleClass="text-truncate" sortBy="#{item.cdrServiceId}"
+								filterBy="#{item.cdrServiceId}" filterMatchMode="contains">
+								<h:outputText value="#{item.cdrServiceId}"
+									styleClass="preformatted" />
+							</p:column>
+
+							<p:column headerText="#{msg['cdrStdConfig.cdrTemplatedId']}"
+								styleClass="text-truncate" sortBy="#{item.cdrTemplatedId}"
+								filterBy="#{item.cdrTemplatedId}" filterMatchMode="contains">
+								<h:outputText value="#{item.cdrTemplatedId}" />
+							</p:column>
+
+							<p:column headerText="#{msg['cdrStdConfig.maxSize']}"
+								styleClass="text-truncate" sortBy="#{item.maxSize}"
+								filterBy="#{item.maxSize}" filterMatchMode="contains">
+								<h:outputText value="#{item.maxSize}" />
+							</p:column>
+
+							<p:column headerText="#{msg['cdrStdConfig.priority']}"
+								styleClass="text-truncate" sortBy="#{item.priority}"
+								filterBy="#{item.priority}" filterMatchMode="contains">
+								<h:outputText value="#{item.priority}" />
+							</p:column>
+
+							<p:column headerText="#{msg['cdrStdConfig.cdrScript']}"
+								styleClass="text-truncate" sortBy="#{item.cdrScript}"
+								filterBy="#{item.cdrScript}" filterMatchMode="contains">
+								<h:outputText value="#{item.cdrScript}" />
+							</p:column>
+
+							<p:column headerText="#{msg['cdrStdConfig.sourceType']}"
+								styleClass="text-truncate" sortBy="#{item.sourceType}"
+								filterBy="#{item.sourceType}" filterMatchMode="contains">
+								<h:outputText value="#{item.sourceType}" />
+							</p:column>
+
+							<p:column headerText="#{msg['cdrStdConfig.cdrStdConfigName']}"
+								styleClass="text-truncate" sortBy="#{item.cdrStdConfigName}"
+								filterBy="#{item.cdrStdConfigName}" filterMatchMode="contains">
+								<h:outputText value="#{item.cdrStdConfigName}" />
+							</p:column>
+
+							<p:column headerText="#{msg['common.action']}"
+								style="text-align:center; width:20%">
+								<p:commandLink process="@this"
+									actionListener="#{cdrStdConfigBean.editCdrStdConfig(item)}"
+									resetValues="true" update="form-cdr-std-config"
+									styleClass="btn btn-sm btn-action-edit colorStrongGreen"
+									oncomplete="backtotop();">
+									<i class="fa fa-pencil icon-only mr-0"></i>
+								</p:commandLink>
+								<p:commandLink resetValues="true" process="@this"
+									update="@([id$=dtCdrStdConfig])"
+									actionListener="#{cdrStdConfigBean.deleteCdrStdConfig(item)}"
+									styleClass="btn btn-sm btn-action-del colorRed">
+									<i class="fa fa-times icon-only mr-0"></i>
+									<p:confirm header="#{msg['common.delete']}"
+										message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+								</p:commandLink>
+
+							</p:column>
+						</p:dataTable>
+					</div>
+					</article>
+				</div>
+
+				<div class="col-xs-12 col-sm-5 nopadding-left">
+					<article class="col-xs-12">
+					<div class="jarviswidget jarviswidget-color-yellow" id="wid-id-0"
+						style="margin-right: -10px;" data-widget-editbutton="false"
+						data-widget-colorbutton="false" data-widget-deletebutton="false">
+						<header> <span class="widget-icon"> <i
+							class="fa fa-table"></i>
+						</span>
+						<h2>#{msg['cdrStdConfig.detail']}</h2>
+						</header>
+						<p:panel id="pnEdit" style="padding-top: 0px;">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['common.ID']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:inputText
+										value="#{cdrStdConfigBean.cdrStdConfig.cdrStdConfigId}"
+										readonly="true" styleClass="form-control">
+									</p:inputText>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['cdrStdConfig.cdrStdConfigName']}"
+										for="txtCdrStdConfigName" />
+								</div>
+								<div class="col-xs-12">
+									<p:inputText
+										value="#{cdrStdConfigBean.cdrStdConfig.cdrStdConfigName}"
+										maxlength="250" styleClass="form-control" required="true"
+										id="txtCdrStdConfigName">
+									</p:inputText>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['cdrStdConfig.sqlCommand']}"
+										for="txtSqlCommand" />
+								</div>
+								<div class="col-xs-12">
+									<p:inputText
+										value="#{cdrStdConfigBean.cdrStdConfig.sqlCommand}"
+										styleClass="form-control" maxlength="250" required="true"
+										id="txtSqlCommand">
+									</p:inputText>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['cdrStdConfig.cdrServiceId']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:inputText
+										value="#{cdrStdConfigBean.cdrStdConfig.cdrServiceId}"
+										maxlength="6" styleClass="form-control">
+										<pe:keyFilter regEx="/[0-9]/i" />
+									</p:inputText>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['cdrStdConfig.cdrTemplatedId']}"
+										for="txtCdrTemplatedId" />
+								</div>
+								<div class="col-xs-12">
+									<p:inputText
+										value="#{cdrStdConfigBean.cdrStdConfig.cdrTemplatedId}"
+										maxlength="6" styleClass="form-control" id="txtCdrTemplatedId"
+										required="true">
+										<pe:keyFilter regEx="/[0-9]/i" />
+									</p:inputText>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['cdrStdConfig.maxSize']}"
+										for="txtmaxSize" />
+								</div>
+								<div class="col-xs-12">
+									<p:inputText value="#{cdrStdConfigBean.cdrStdConfig.maxSize}"
+										maxlength="6" styleClass="form-control" id="txtmaxSize"
+										required="true">
+										<pe:keyFilter regEx="/[0-9]/i" />
+									</p:inputText>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['cdrStdConfig.priority']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:inputText value="#{cdrStdConfigBean.cdrStdConfig.priority}"
+										maxlength="2" styleClass="form-control">
+										<pe:keyFilter regEx="/[0-9]/i" />
+									</p:inputText>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['cdrStdConfig.cdrScript']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:inputText value="#{cdrStdConfigBean.cdrStdConfig.cdrScript}"
+										maxlength="250" styleClass="form-control">
+									</p:inputText>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['cdrStdConfig.sourceType']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:inputText
+										value="#{cdrStdConfigBean.cdrStdConfig.sourceType}"
+										maxlength="2" styleClass="form-control">
+										<pe:keyFilter regEx="/[0-9]/i" />
+									</p:inputText>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-xs-12" style="text-align: right;">
+									<p:commandButton id="btnCancel" value="#{msg['common.cancel']}"
+										actionListener="#{cdrStdConfigBean.btnCancel}"
+										icon="fa fa-refresh" disabled="#{!cdrStdConfigBean.isEdit}"
+										update="form-cdr-std-config" styleClass="pull-right"
+										immediate="true" resetValues="true">
+									</p:commandButton>
+									<p:commandButton disabled="#{!cdrStdConfigBean.isEdit}"
+										icon="fa fa-save" value="#{msg['common.apply']}"
+										styleClass="pull-right" style="margin-right: 13px;"
+										resetValues="true"
+										actionListener="#{cdrStdConfigBean.applyCdrStdConfig()}"
+										update="form-cdr-std-config">
+										<p:confirm header="#{msg['common.apply']}"
+											message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+									</p:commandButton>
+									<p:commandButton disabled="#{cdrStdConfigBean.isEdit}"
+										resetValues="true" value="#{msg['common.addNew']}"
+										styleClass="pull-right" immediate="true"
+										style="margin-right: 13px;" icon="fa fa-plus"
+										update="form-cdr-std-config dtCdrStdConfig"
+										actionListener="#{cdrStdConfigBean.addNewCdrStdConfig()}" />
+								</div>
+							</div>
+						</p:panel>
+					</div>
+					</article>
+				</div>
+
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

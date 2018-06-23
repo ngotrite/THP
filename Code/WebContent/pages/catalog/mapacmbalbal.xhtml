@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="../tree_common.xhtml">
+	<ui:define name="subcontent">
+		<h:form id="form-mapacmbal-by-cat" class="container-fluid"
+			rendered="#{mapAcmBalBean.formType eq 'list-mapacmbal-by-category'}">
+			<div class="row" style="padding-bottom: 10px;">
+				<div class="row">
+					<div class="col-xs-12 col-md-12">
+						<div class="col-xs-12 col-md-2">
+							<p:commandButton value="#{msg['common.addNew']}"
+								actionListener="#{mapAcmBalBean.commandAddNewMapAcmBal()}"
+								update="treeCommon categoryCommonTop contentPanel"
+								styleClass="col-xs-12" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-md-12">
+					<p:dataTable var="item" value="#{mapAcmBalBean.mapAcmBals}"
+						rowKey="#{item.mapAcmBaltypeId}"
+						emptyMessage="#{msg['common.noData']}" paginator="true" rows="20"
+						paginatorPosition="bottom" rowIndexVar="rowIndex"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="10,20,50,100">
+						<p:column headerText="#" style="width:10%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.name']}" sortBy="#{item.name}"
+							filterBy="#{item.name}" filterMatchMode="contains">
+							<h:outputText value="#{item.name}" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.desc']}"
+							sortBy="#{item.remark}" filterBy="#{item.remark}"
+							filterMatchMode="contains">
+							<h:outputText value="#{item.remark}" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.action']}"
+							style="text-align:center;">
+
+
+							<p:commandLink
+								update=":treeCommon categoryCommonTop contentPanel"
+								actionListener="#{mapAcmBalBean.commandEditMapAcmBal(item)}"
+								styleClass="btn btn-sm btn-action-edit colorBlue">
+								<i class="fa fa-pencil icon-only mr-0"></i>
+							</p:commandLink>
+							<p:commandLink update="treeCommon categoryCommonTop contentPanel"
+								actionListener="#{mapAcmBalBean.commandCloneMapAcmBal(item)}"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-clone icon-only mr-0"></i>
+							</p:commandLink>
+							<p:commandLink
+								update=":treeCommon categoryCommonTop contentPanel"
+								actionListener="#{mapAcmBalBean.commandDeleteMapAcmBal(item)}"
+								styleClass="btn btn-sm btn-action-del colorRed">
+								<i class="fa fa-times icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+		</h:form>
+
+		<h:form id="form-mapacm_detail" class="container-fluid"
+			rendered="#{mapAcmBalBean.formType eq 'mapacmbal-detail'}">
+
+			<div class="row formFieldMg">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.name']}" />
+							<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{mapAcmBalBean.mapAcmBal.name}"
+								styleClass="form-control" maxlength="200"
+								requiredMessage="#{msg['common.required']}" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.desc']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{mapAcmBalBean.mapAcmBal.remark}"
+								styleClass="form-control" maxlength="500"
+								requiredMessage="#{msg['common.required']}" />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.category']}" />
+
+						</div>
+
+						<div class="col-xs-12">
+							<h:selectOneMenu styleClass="form-control col-xs-12"
+								value="#{mapAcmBalBean.mapAcmBal.categoryId}">
+								<f:selectItems var="category"
+									itemLabel="#{category.categoryName}"
+									itemValue="#{category.categoryId}"
+									value="#{mapAcmBalBean.categoriesOfMapAcmBal}">
+								</f:selectItems>
+							</h:selectOneMenu>
+						</div>
+					</div>
+<!-- 					<div class="row"> -->
+<!-- 						<div class="col-xs-12"> -->
+<!-- 							<p:outputLabel value="#{msg['mapsharebal.shareTypeId']}" /> -->
+
+<!-- 						</div> -->
+
+<!-- 						<div class="col-xs-12"> -->
+<!-- 							<h:selectOneMenu styleClass="form-control col-xs-12" -->
+<!-- 								value="#{mapAcmBalBean.mapAcmBal.shareTypeId}"> -->
+<!-- 								<f:selectItems var="shareType" -->
+<!-- 									itemLabel="#{shareType.shareTypeName}" -->
+<!-- 									itemValue="#{shareType.shareTypeId}" -->
+<!-- 									value="#{mapAcmBalBean.shareTypes}"> -->
+<!-- 								</f:selectItems> -->
+<!-- 							</h:selectOneMenu> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+
+				</div>
+
+
+			</div>
+
+
+
+			<div class="col-xs-12 nopadding">
+				<div class="box box-default box-solid box-panel-define">
+					<div class="box-header with-border">
+						<h3 class="box-title box-title-tree">To Balance</h3>
+						<p:commandButton value=">>" styleClass="btn-bal-fromBalance"
+							actionListener="#{mapAcmBalBean.showDialogBalType()}">
+							<p:ajax event="dialogReturn"
+								listener="#{mapAcmBalBean.onDialogReturnFrom}"
+								update="pnFromBalance" />
+						</p:commandButton>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool btn-slideup-define">
+								<i class="fa fa-angle-down"></i>
+							</button>
+						</div>
+					</div>
+					<p:panel id="pnFromBalance">
+						<div class="box-body">
+							<div class="row formFieldMg">
+								<div class="col-xs-12 col-sm-6">
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['baltype.balTypeId']}" />
+										</div>
+										<div class="col-xs-12">
+											<p:inputText
+												value="#{mapAcmBalBean.balTypeFromView.balTypeId}"
+												styleClass="form-control" readonly="true"
+												requiredMessage="#{msg['common.required']}" />
+										</div>
+									</div>
+
+
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['baltype.balTypeName']}" />
+											<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+										</div>
+										<div class="col-xs-12">
+											<p:inputText
+												value="#{mapAcmBalBean.balTypeFromView.balTypeName}"
+												styleClass="form-control" maxlength="200"
+												requiredMessage="#{msg['common.required']}" />
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['baltype.externalId']}" />
+										</div>
+										<div class="col-xs-12">
+											<p:inputText
+												value="#{mapAcmBalBean.balTypeFromView.externalId}"
+												styleClass="form-control" maxlength="200"
+												requiredMessage="#{msg['common.required']}" />
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['common.category']}" />
+
+										</div>
+
+										<div class="col-xs-12">
+											<p:inputText value="#{mapAcmBalBean.balTypeFromView.categoryId}"
+												styleClass="form-control" maxlength="200"
+												requiredMessage="#{msg['common.required']}" />
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['common.desc']}" />
+										</div>
+										<div class="col-xs-12">
+											<p:inputText
+												value="#{mapAcmBalBean.balTypeFromView.description}"
+												styleClass="form-control" maxlength="500"
+												requiredMessage="#{msg['common.required']}" />
+										</div>
+									</div>
+
+								</div>
+
+
+
+								<div class="col-xs-12 col-sm-6">
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['baltype.paymentType']}" />
+											<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+										</div>
+										<div class="col-xs-12">
+											<p:inputText
+												value="#{mapAcmBalBean.balTypeFromView.paymentType}"
+												styleClass="form-control" maxlength="200"
+												requiredMessage="#{msg['common.required']}" />
+										</div>
+									</div>
+
+									<div class="row">
+
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['baltype.ballevel']}" />
+											<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+										</div>
+
+										<div class="col-xs-12">
+											<p:inputText
+												value="#{mapAcmBalBean.balTypeFromView.balLevel}"
+												styleClass="form-control" maxlength="200"
+												requiredMessage="#{msg['common.required']}" />
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-xs-12">
+											<p:selectBooleanCheckbox itemLabel="#{msg['baltype.isAcm']}"
+												value="#{mapAcmBalBean.balTypeFromView.isAcm}">
+											</p:selectBooleanCheckbox>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['baltype.unitType']}" />
+											<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+										</div>
+										<div class="col-xs-12">
+											<p:inputText
+												value="#{mapAcmBalBean.balTypeFromView.unitTypeId}"
+												styleClass="form-control" maxlength="200"
+												requiredMessage="#{msg['common.required']}" />
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['baltype.prec']}" />
+										</div>
+										<div class="col-xs-12">
+											<p:inputText
+												value="#{mapAcmBalBean.balTypeFromView.balTypePercision}"
+												styleClass="form-control" maxlength="200"
+												requiredMessage="#{msg['common.required']}">
+												<pe:keyFilter regEx="/[0-9-]/i" />
+											</p:inputText>
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+						</div>
+					</p:panel>
+				</div>
+			</div>
+
+
+						<div class="col-xs-12 nopadding">
+				<div class="box box-default box-solid box-panel-define">
+					<div class="box-header with-border">
+						<h3 class="box-title box-title-tree">To Balance</h3>
+						<p:commandButton value=">>" styleClass="btn-bal-fromBalance"
+							actionListener="#{mapAcmBalBean.showDialogBalType()}">
+							<p:ajax event="dialogReturn"
+								listener="#{mapAcmBalBean.onDialogReturnTo}"
+								update="pnToBalance" />
+						</p:commandButton>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool btn-slideup-define">
+								<i class="fa fa-angle-down"></i>
+							</button>
+						</div>
+					</div>
+					<p:panel id="pnToBalance">
+						<div class="box-body">
+							<div class="row formFieldMg">
+								<div class="col-xs-12 col-sm-6">
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['baltype.balTypeId']}" />
+										</div>
+										<div class="col-xs-12">
+											<p:inputText
+												value="#{mapAcmBalBean.balTypeToView.balTypeId}"
+												styleClass="form-control" readonly="true"
+												requiredMessage="#{msg['common.required']}" />
+										</div>
+									</div>
+
+
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['baltype.balTypeName']}" />
+											<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+										</div>
+										<div class="col-xs-12">
+											<p:inputText
+												value="#{mapAcmBalBean.balTypeToView.balTypeName}"
+												styleClass="form-control" maxlength="200"
+												requiredMessage="#{msg['common.required']}" />
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['baltype.externalId']}" />
+										</div>
+										<div class="col-xs-12">
+											<p:inputText
+												value="#{mapAcmBalBean.balTypeToView.externalId}"
+												styleClass="form-control" maxlength="200"
+												requiredMessage="#{msg['common.required']}" />
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['common.category']}" />
+
+										</div>
+
+										<div class="col-xs-12">
+											<p:inputText value="#{mapAcmBalBean.balTypeToView.categoryId}"
+												styleClass="form-control" maxlength="200"
+												requiredMessage="#{msg['common.required']}" />
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['common.desc']}" />
+										</div>
+										<div class="col-xs-12">
+											<p:inputText
+												value="#{mapAcmBalBean.balTypeToView.description}"
+												styleClass="form-control" maxlength="500"
+												requiredMessage="#{msg['common.required']}" />
+										</div>
+									</div>
+
+								</div>
+
+
+
+								<div class="col-xs-12 col-sm-6">
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['baltype.paymentType']}" />
+											<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+										</div>
+										<div class="col-xs-12">
+											<p:inputText
+												value="#{mapAcmBalBean.balTypeToView.paymentType}"
+												styleClass="form-control" maxlength="200"
+												requiredMessage="#{msg['common.required']}" />
+										</div>
+									</div>
+
+									<div class="row">
+
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['baltype.ballevel']}" />
+											<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+										</div>
+
+										<div class="col-xs-12">
+											<p:inputText
+												value="#{mapAcmBalBean.balTypeToView.balLevel}"
+												styleClass="form-control" maxlength="200"
+												requiredMessage="#{msg['common.required']}" />
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-xs-12">
+											<p:selectBooleanCheckbox itemLabel="#{msg['baltype.isAcm']}"
+												value="#{mapAcmBalBean.balTypeToView.isAcm}">
+											</p:selectBooleanCheckbox>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['baltype.unitType']}" />
+											<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+										</div>
+										<div class="col-xs-12">
+											<p:inputText
+												value="#{mapAcmBalBean.balTypeToView.unitTypeId}"
+												styleClass="form-control" maxlength="200"
+												requiredMessage="#{msg['common.required']}" />
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-xs-12">
+											<p:outputLabel value="#{msg['baltype.prec']}" />
+										</div>
+										<div class="col-xs-12">
+											<p:inputText
+												value="#{mapAcmBalBean.balTypeToView.balTypePercision}"
+												styleClass="form-control" maxlength="200"
+												requiredMessage="#{msg['common.required']}">
+												<pe:keyFilter regEx="/[0-9-]/i" />
+											</p:inputText>
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+						</div>
+					</p:panel>
+				</div>
+			</div>
+
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

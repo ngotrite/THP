@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:form rendered="#{normalizerBean.formtype eq 'normByCat'}">
+	<div class="container-fluid">
+		<div class="row formFieldMg">
+			<div class="col-xs-12">
+				<p:commandButton value="clear" update="@form"
+					styleClass="normTableClearFilter hidden"
+					oncomplete="PF('tblNormWidgetVar').clearFilters()" />					
+				<div class="row">
+					<div class="col-xs-12">
+						<p:dataTable var="item" widgetVar="tblNormWidgetVar"
+							value="#{normalizerBean.listNormalizerByCate}"
+							rowKey="#{item.normalizerId}"
+							emptyMessage="#{msg['common.noData']}" paginator="true" rows="20"
+							paginatorPosition="bottom" rowIndexVar="rowIndex"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="10,20,50,100"
+							rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+							<p:ajax event="filter" ignoreAutoUpdate="false" />
+							<f:facet name="header">
+								<h:outputLabel
+									value="#{msg['title.listNormalizer']}"></h:outputLabel>
+							</f:facet>
+				
+							<p:column headerText="#" styleClass="widthSTTcolumn">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+
+							<p:column headerText="#{msg['common.name']}"
+								sortBy="#{item.normalizerName}"
+								filterBy="#{item.normalizerName}" filterMatchMode="contains">
+								<h:outputText value="#{item.normalizerName}" />
+							</p:column>
+
+							<p:column headerText="#{msg['common.desc']}"
+								sortBy="#{item.remark}" filterBy="#{item.remark}"
+								filterMatchMode="contains">
+								<h:outputText value="#{item.remark}" />
+							</p:column>
+
+							<p:column headerText="#{msg['common.action']}" styleClass="actionColumn">
+								<p:commandLink
+									update="treeCommon categoryCommonTop contentPanel contentTitle"
+									actionListener="#{normalizerBean.commandEditTable(item)}"
+									styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+									<i class="fa fa-pencil icon-only mr-0"></i>
+								</p:commandLink>
+								<p:commandLink
+									update="treeCommon categoryCommonTop contentPanel"
+									actionListener="#{normalizerBean.commandCloneNormByCategory(item)}"
+									styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+									<i class="fa fa-clone icon-only mr-0"></i>
+									<p:confirm header="#{msg['common.clone']}"
+										message="#{msg['common.confirmClone']}" icon="ui-icon-alert" />
+								</p:commandLink>
+								<p:commandLink
+									update="treeCommon categoryCommonTop contentPanel"
+									actionListener="#{normalizerBean.commandRemoveTable(item)}"
+									styleClass="btn btn-sm btn-action-del colorRed"
+									oncomplete="$('.normTableClearFilter').click()">
+									<i class="fa fa-times icon-only mr-0"></i>
+									<p:confirm header="#{msg['common.delete']}"
+										message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+								</p:commandLink>
+								
+								<f:facet name="header">
+									<p:commandButton value="#{msg['common.addNew']}"
+										actionListener="#{normalizerBean.commandAddNew()}"
+										rendered="#{!normalizerBean.isEdit}" icon="fa fa-plus"
+										update="treeCommon categoryCommonTop contentTitle contentPanel" />
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</h:form>
+
+<h:form rendered="#{normalizerBean.formtype eq 'normChangeCate'}">
+	<div class="container-fluid">
+		<div class="row formFieldMg">
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="col-xs-4">
+						<p:commandButton value="#{msg['normalizer.changeCate']}"
+							actionListener="#{normalizerBean.changeCategory()}"
+							update="treeCommon categoryCommonTop contentPanel" />
+					</div>
+					<div class="col-xs-8">
+						<h:selectOneMenu styleClass="form-control"
+							value="#{normalizerBean.selectedNormCate}">
+							<f:selectItems value="#{normalizerBean.listNormCate}" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</h:form>
+</html>

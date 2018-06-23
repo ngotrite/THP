@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="content-type" content="text/html; charset=utf8" />
+	<link rel="shortcut icon"
+		href="#{request.contextPath}/resources/favicon.png"
+		type="image/x-icon" />
+	<link href="#{request.contextPath}/resources/css/layout_vocs.css"
+		rel="stylesheet" type="text/css" />
+	<link href="#{request.contextPath}/resources/css/tree.css"
+		rel="stylesheet" type="text/css" />
+
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+	<!-- Basic Styles -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-widget.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-jqueryui.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-datepicker.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/js/rappid/css/leftmenu.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/demo.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/custom.css" />
+	<link rel="apple-touch-icon"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/sptouch-icon-iphone.png" />
+	<link rel="apple-touch-icon" sizes="76x76"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-ipad.png" />
+	<link rel="apple-touch-icon" sizes="120x120"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-iphone-retina.png" />
+	<link rel="apple-touch-icon" sizes="152x152"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-ipad-retina.png" />
+
+	<!-- huan -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-skins.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/demo.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/css/custom.css" />
+
+	<!-- hieupv -->
+	<!-- Font Awesome -->
+	<link rel="stylesheet"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/font-awesome/css/font-awesome.min.css" />
+	<!-- Ocsicon -->
+	<link rel="stylesheet"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/font-ocs/osicon.css" />
+
+	<!-- Content Template CSS -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/customContent.css" />
+
+	<!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+	<!-- Startup image for web apps -->
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/ipad-landscape.png"
+		media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/ipad-portrait.png"
+		media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/iphone.png"
+		media="screen and (max-device-width: 320px)" />
+	<title>#{msg['dependencies.title']}</title>
+</h:head>
+<h:form>
+	<f:view locale="#{userSession.language}" contentType="text/html" id="viewLocale">
+	<div class="formFieldMg">
+		<div class="row">
+			<div class="col-xs-2 ">
+				<p:outputLabel value="#{msg['dependencies.name']}" style="padding-left:5px;"/>
+			</div>
+			<div class="col-xs-10">
+				<p:inputText value="#{showDependenciesBean.name}" maxlength="100"
+					styleClass="form-control" readonly="true" />
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-2 ">
+				<p:outputLabel value="#{msg['dependencies.type']}" style="padding-left:5px;"/>
+			</div>			
+			<div class="col-xs-10 ">
+				<p:inputText value="#{showDependenciesBean.type}" maxlength="100"
+					styleClass="form-control" readonly="true" />
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-xs-12 col-md-6 text-bottom">
+				<p:outputLabel value="#{msg['dependencies.titleTreeParent']}"
+					style="font-weight:bold; padding-left:5px;" />
+			</div>
+		</div>
+		<div class="widget-body content-tree heightTree"
+			style="height: 180px; overflow: auto">
+			<p:tree id="treeParent" value="#{showDependenciesBean.rootParent}"
+				var="nodeData" cache="false" dynamic="false" selectionMode="single">
+				<p:ajax event="expand"
+					listener="#{showDependenciesBean.onNodeExpand}" />
+				<p:ajax event="select"
+					listener="#{showDependenciesBean.onNodeSelect}" />
+
+				<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}">
+					<h:outputText value="#{nodeData.nodeName}" title="#{nodeData}"/>
+				</p:treeNode>
+				<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)} custom-icon-16" type="OFF_ACTION">
+					<h:outputText value="#{nodeData.nodeName}" title="#{nodeData}"/>
+				</p:treeNode>
+			</p:tree>
+		</div>
+		<!-- <div class="row" style="paddingmargin-top: 5px;">
+			<div class="col-md-12">
+				<p:commandButton value="#{msg['dependencies.jumpToObject']}"
+					id="jumpToObject"
+					actionListener="#{showDependenciesBean.btnJumpToObject}"
+					styleClass="btn btn-default" />
+			</div>
+		</div> -->
+		<div class="row">
+			<div class="col-xs-12 col-md-6 text-bottom">
+				<p:outputLabel value="#{msg['dependencies.titleTreeChilden']}"
+					style="font-weight:bold; padding-left:5px;" />
+			</div>
+		</div>
+		<div class="widget-body content-tree heightTree"
+			style="height: 180px; overflow: auto">
+			<p:tree id="treeChilden" value="#{showDependenciesBean.rootChilden}"
+				var="nodeData" cache="false" dynamic="false" selectionMode="single">
+				<p:ajax event="expand"
+					listener="#{showDependenciesBean.onNodeExpandChilden}" />
+				<p:ajax event="select"
+					listener="#{showDependenciesBean.onNodeSelectChilden}" />
+				<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}">
+					<h:outputText value="#{nodeData.nodeName}" title="#{nodeData}"/>
+				</p:treeNode>
+				<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)} custom-icon-16" type="OFF_ACTION">
+					<h:outputText value="#{nodeData.nodeName}" title="#{nodeData}"/>
+				</p:treeNode>
+			</p:tree>
+		</div>
+	</div>
+	</f:view>
+</h:form>
+</html>

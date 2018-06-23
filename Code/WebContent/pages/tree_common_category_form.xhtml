@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:form id="form-cat" class="container-fluid">
+	<p:tabView id="tabViewCat" effect="fade" effectDuration="fast"
+		styleClass="fix-height-tab">
+		<p:tab id="tabCatList" title="#{msg['title.subCategory']}">
+			<p:dataTable id="ID_SubCatTable" var="item" rowIndexVar="rowIndex"
+				value="#{treeCommonBean.listSubCategory}"
+				rowKey="#{item.categoryId}" emptyMessage="#{msg['common.noData']}"
+				scrollable="true" scrollHeight="180"
+				rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+				<p:ajax event="filter" ignoreAutoUpdate="false" />
+				<p:column headerText="#" styleClass="widthSTTcolumn">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+				<p:column headerText="#{msg['common.ID']}"
+					styleClass="widthIDcolumn" sortBy="#{item.categoryId}">
+					<h:outputText value="#{item.categoryId}" />
+				</p:column>
+				<p:column headerText="#{msg['common.name']}"
+					sortBy="#{item.categoryName}" filterBy="#{item.categoryName}"
+					filterMatchMode="contains">
+					<h:outputText value="#{item.categoryName}" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.desc']}" sortBy="#{item.remark}"
+					filterBy="#{item.remark}" filterMatchMode="contains">
+					<h:outputText value="#{item.remark}" />
+				</p:column>
+				<p:column headerText="#{msg['common.action']}"
+					styleClass="actionColumn">
+					<p:commandLink
+						actionListener="#{treeCommonBean.btnCatShowDlg(item)}"
+						update="formDlgCategory" oncomplete="PF('dlgCategory').show()"
+						immediate="true"
+						styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+						<i class="fa fa-pencil icon-only mr-0"></i>
+					</p:commandLink>
+					<p:commandLink
+						actionListener="#{treeCommonBean.deleteCategory(item)}"
+						update="ID_SubCatTable treeCommon"
+						styleClass="btn btn-sm btn-action-del colorRed">
+						<i class="fa fa-times icon-only mr-0"></i>
+						<p:confirm header="#{msg['common.delete']}"
+							message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+					</p:commandLink>
+
+					<f:facet name="header">
+						<p:commandButton value="#{msg['common.addChild']}" icon="fa fa-plus"
+							actionListener="#{treeCommonBean.btnCatShowDlg(null)}"
+							update="formDlgCategory" oncomplete="PF('dlgCategory').show()"
+							immediate="true">
+						</p:commandButton>
+					</f:facet>
+				</p:column>
+			</p:dataTable>
+		</p:tab>
+
+		<p:tab id="tabCatForm"
+			title="#{msg['title.categoryInfo']}">
+			<div class="row formFieldMg">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['cat.ID']}" ></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{treeCommonBean.category.categoryId}"
+								readonly="true" styleClass="form-control" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel for="CatName" value="#{msg['cat.name']}"
+								 />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText id="CatName"
+								value="#{treeCommonBean.category.categoryName}" maxlength="50"
+								required="true" styleClass="form-control" />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row" style="display: none;">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['cat.type']}"  />
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu required="true"
+								value="#{treeCommonBean.selectedCatType}"
+								styleClass="form-control select">
+								<f:selectItems value="#{treeCommonBean.listCatType}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['cat.parent']}"  />
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu value="#{treeCommonBean.categoryParentId}"
+								styleClass="form-control select">
+								<f:selectItems value="#{treeCommonBean.listCatParent}" var="cat"
+									itemValue="#{cat.categoryId}" itemLabel="#{cat.categoryName}"></f:selectItems>
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['cat.remark']}"  />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{treeCommonBean.category.remark}"
+								maxlength="200" styleClass="form-control" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-offset-8 col-xs-4 text-right">
+							<p:commandButton id="btnSave" value="#{msg['common.save']}"
+								action="#{treeCommonBean.btnCatSave()}" icon="fa fa-save"
+								rendered="#{treeCommonBean.editing}"
+								update="treeCommon tabViewCat" styleClass="btn btn-default">
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</div>
+		</p:tab>
+	</p:tabView>
+</h:form>
+</html>

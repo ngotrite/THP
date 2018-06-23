@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<meta http-equiv="content-type" content="text/html; charset=utf8" />
+	<link rel="shortcut icon"
+		href="#{request.contextPath}/resources/favicon.png"
+		type="image/x-icon" />
+	<link href="#{request.contextPath}/resources/css/layout_vocs.css"
+		rel="stylesheet" type="text/css" />
+	<link href="#{request.contextPath}/resources/css/tree.css"
+		rel="stylesheet" type="text/css" />
+
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+	<!-- Basic Styles -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-widget.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-jqueryui.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-datepicker.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/js/rappid/css/leftmenu.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/demo.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/custom.css" />
+	<link rel="apple-touch-icon"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/sptouch-icon-iphone.png" />
+	<link rel="apple-touch-icon" sizes="76x76"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-ipad.png" />
+	<link rel="apple-touch-icon" sizes="120x120"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-iphone-retina.png" />
+	<link rel="apple-touch-icon" sizes="152x152"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-ipad-retina.png" />
+
+	<!-- huan -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-skins.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/demo.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/css/custom.css" />
+
+	<!-- hieupv -->
+	<!-- Font Awesome -->
+	<link rel="stylesheet"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/font-awesome/css/font-awesome.min.css" />
+	<!-- Ocsicon -->
+	<link rel="stylesheet"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/font-ocs/osicon.css" />
+
+	<!-- Content Template CSS -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/customContent.css" />
+
+	<!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+	<!-- Startup image for web apps -->
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/ipad-landscape.png"
+		media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/ipad-portrait.png"
+		media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/iphone.png"
+		media="screen and (max-device-width: 320px)" />
+	<title>Tree Dialog</title>
+</h:head>
+<body class="#{userSession.sysUser.theme}">
+<h:form>
+	<f:view locale="#{userSession.language}" contentType="text/html"
+		id="viewLocale">
+		<p:growl showSummary="true" showDetail="true" severity="error" autoUpdate="true" sticky="false" id="growlError" life="3000"/>
+		<p:growl showSummary="true" showDetail="true" severity="warn" autoUpdate="true" sticky="false" id="growlWarn" life="3000"/>
+		<div class="row" style="padding-left: 5px;">
+			<div class="col-xs-12 col-md-8">
+				<p:outputLabel value="#{treeOfferDialogBean.title}"
+					style="font-weight:bold" />
+			</div>
+		</div>
+		<div class="row" style="padding-bottom: 2px;">
+			<div class="col-xs-12 col-md-4 col-md-offset-2">
+				<input id="txtTreeSearchPopup" maxlength="100" class="form-control txtTreeSearchCustom"
+					placeholder="#{msg['title.searchNode']}"></input>
+			</div>
+		</div>
+		<div class="widget-body content-tree heightTree"
+			style="height: 350px; overflow: auto">
+			<p:tree id="treeCommonSingle" value="#{treeOfferDialogBean.root}"
+				var="nodeData" cache="false" dynamic="false" rendered="#{treeOfferDialogBean.multi == 'false'}" 
+				selectionMode="single" selection="#{treeOfferDialogBean.treeNodeSelected}">
+				<p:ajax event="expand"
+					listener="#{treeOfferDialogBean.onNodeExpand}" />
+				<p:ajax event="select"
+					listener="#{treeOfferDialogBean.onNodeSelect}" />
+
+				<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}">
+					<h:outputText value="#{nodeData.nodeName}" title="#{nodeData}"/>
+				</p:treeNode>
+				<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)} custom-icon-16" type="OFF_ACTION">
+					<h:outputText value="#{nodeData.nodeName}" title="#{nodeData}"/>
+				</p:treeNode>
+			</p:tree>
+			
+			<p:tree id="treeCommonMulti" value="#{treeOfferDialogBean.root}"
+				var="nodeData" cache="false" dynamic="false" rendered="#{treeOfferDialogBean.multi == 'true'}" 
+				selectionMode="checkbox" selection="#{treeOfferDialogBean.selectedNodes}">
+				<p:ajax event="expand"
+					listener="#{treeOfferDialogBean.onNodeExpand}" />
+				<p:ajax event="select"
+					listener="#{treeOfferDialogBean.onNodeSelect}" />
+
+				<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}">
+					<h:outputText value="#{nodeData.nodeName}" title="#{nodeData}"/>
+				</p:treeNode>
+				<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)} custom-icon-16" type="OFF_ACTION">
+					<h:outputText value="#{nodeData.nodeName}" title="#{nodeData}"/>
+				</p:treeNode>
+			</p:tree>
+		</div>
+		<div class="row" style="paddingmargin-top: 20px; padding-right: 20px;">
+			<div class="col-xs-12 text-right">				
+				<p:commandButton value="#{msg['common.select']}" id="select"
+					styleClass="btn btn-default" icon="fa fa-check"
+					actionListener="#{treeOfferDialogBean.onDialogSelect}" />
+				<p:commandButton value="#{msg['common.cancel']}" id="cancel"
+					actionListener="#{treeOfferDialogBean.onDialogReturn}"
+					styleClass="btn btn-default" icon="fa fa-times"/>
+			</div>
+		</div>
+		<script src="#{request.contextPath}/resources/js/tree_ocs.js"></script>
+	</f:view>
+</h:form>
+</body>
+</html>

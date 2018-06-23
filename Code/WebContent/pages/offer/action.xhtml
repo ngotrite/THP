@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jstl/core">
+
+<h:form id="form-action-list"
+	rendered="#{actionBean.formType eq 'form-action-list'}">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xs-12 col-md-2">
+				<p:commandButton value="clear" update="@form"
+					styleClass="actionTableClearFilter hidden"
+					oncomplete="PF('tblActionWidgetVar').clearFilters()" />
+			</div>
+		</div>
+		<div class="row formFieldMg">
+			<div class="col-xs-12">
+				<p:dataTable id="dtAction" var="rowitem" paginator="true"
+					rows="10" value="#{actionBean.actions}" resizableColumns="true"
+					paginatorPosition="bottom" widgetVar="tblActionWidgetVar"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15,20,50,100" rowIndexVar="rowIndex"
+					rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+					<p:ajax event="filter" ignoreAutoUpdate="false" />
+
+					<f:facet name="header">
+						<p:outputLabel value="#{msg['offer.actionList']}" />
+					</f:facet>
+
+					<p:column headerText="#" styleClass="widthSTTcolumn">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.name']}"
+						styleClass="text-truncate" sortBy="#{rowitem.actionName}"
+						filterBy="#{rowitem.actionName}" filterMatchMode="contains">
+						<h:outputText value="#{rowitem.actionName}"
+							title="#{rowitem.actionName}" styleClass="preformatted" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.desc']}"
+						styleClass="text-truncate" sortBy="#{rowitem.remark}"
+						filterBy="#{rowitem.remark}" filterMatchMode="contains">
+						<h:outputText value="#{rowitem.remark}"
+							title="#{rowitem.remark}" styleClass="preformatted" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.action']}"
+						styleClass="actionColumn">
+						<p:commandLink
+							actionListener="#{actionBean.editAction(rowitem)}"
+							title="#{msg['common.edit']}" resetValues="true"
+							update="categoryCommonTop contentPanel contentTitle"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-pencil icon-only mr-0"></i>
+						</p:commandLink>
+						<p:commandLink
+							update="treeCommon categoryCommonTop contentPanel"
+							title="#{msg['common.clone']}"
+							actionListener="#{actionBean.commandCloneActionTree(rowitem)}"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-clone icon-only mr-0"></i>
+							<p:ajax event="dialogReturn"
+								listener="#{actionBean.onDialogActionReturn}"
+								update="treeCommon categoryCommonTop contentPanel" />
+						</p:commandLink>
+						<p:commandLink
+							actionListener="#{actionBean.removeAction(rowitem)}"
+							title="#{msg['common.delete']}"
+							update="dtAction treeCommon categoryCommonTop contentPanel"
+							oncomplete="$('.actionTableClearFilter').click()"
+							styleClass="btn btn-sm btn-action-del colorRed">
+							<i class="fa fa-times icon-only mr-0"></i>
+							<p:confirm header="#{msg['common.delete']}"
+								message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+						</p:commandLink>
+
+						<f:facet name="header">
+							<p:commandButton value="#{msg['common.addNew']}"
+								resetValues="true" icon="fa fa-plus"
+								update="categoryCommonTop contentPanel contentTitle"
+								actionListener="#{actionBean.addNewAction()}"
+								styleClass="btn btn-default">
+							</p:commandButton>
+						</f:facet>
+
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+	</div>
+</h:form>
+
+<h:form id="form-action-detail" class="container-fluid"
+	rendered="#{actionBean.formType eq 'form-action-detail'}">
+	<div class="row formFieldMg">
+		<div class="col-xs-12 col-sm-6">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['common.ID']}" />
+					<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+				</div>
+				<div class="col-xs-12">
+					<p:inputText value="#{actionBean.action.actionId}" readonly="true"
+						styleClass="form-control" required="true" />
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-6">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['action.category']}" for="CatType" />
+				</div>
+				<div class="col-xs-12">
+					<h:selectOneMenu id="CatType" required="true"
+						value="#{actionBean.action.categoryId}"
+						styleClass="form-control col-xs-12">
+						<f:selectItems value="#{actionBean.categoriesOfAction}"
+							var="category" itemValue="#{category.categoryId}"
+							itemLabel="#{category.categoryName}"></f:selectItems>
+					</h:selectOneMenu>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-6">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['action.actionName']}"
+						for="action_name_id" />
+				</div>
+				<div class="col-xs-12">
+					<p:inputText value="#{actionBean.action.actionName}"
+						maxlength="100" id="action_name_id" styleClass="form-control"
+						required="true" />
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-6">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['common.desc']}" />
+				</div>
+				<div class="col-xs-12">
+					<p:inputText value="#{actionBean.action.remark}"
+						styleClass="form-control" maxlength="255" />
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-6">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['action.action_type']}"
+						for="slActionType" />
+				</div>
+				<div class="col-xs-12">
+					<table class="table-choosing">
+						<tr>
+							<td><h:selectOneMenu styleClass="form-control"
+									disabled="true" style="-webkit-appearance: none;"
+									id="slActionType" required="true"
+									value="#{actionBean.action.actionType}">
+									<f:selectItems value="#{actionBean.actionTypes}" var="item"
+										itemLabel="#{item.actionTypeName}"
+										itemValue="#{item.actionTypeId}" />
+								</h:selectOneMenu></td>
+							<td class="td-btn-fix"><p:commandLink
+									actionListener="#{actionBean.chooseActionType()}"
+									id="chooseAction" immediate="true"
+									disabled="#{!actionBean.edit}"
+									title="#{msg['common.chooseAction']}"
+									styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+									<i class="fa fa-pencil"></i>
+									<p:ajax event="dialogReturn"
+										listener="#{actionBean.onDialogActionTypeReturn}" />
+								</p:commandLink> <p:commandLink
+									actionListener="#{actionBean.notChooseActionType()}"
+									id="notChooseAction" immediate="true"
+									disabled="#{!actionBean.edit}" title="#{msg['common.delete']}"
+									styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+									<i class="fa fa-times icon-only mr-0"></i>
+								</p:commandLink></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['action.dynamic_reseve']}" />
+				</div>
+				<div class="col-xs-12">
+					<table class="table-choosing">
+						<tr>
+							<td><h:selectOneMenu styleClass="form-control"
+									disabled="true" style="-webkit-appearance: none;"
+									id="slDynamicReserve"
+									value="#{actionBean.action.dynamicReserveId}">
+									<f:selectItems value="#{actionBean.dynamicReserves}" var="item"
+										itemLabel="#{item.dynamicReserveName}"
+										itemValue="#{item.dynamicReserveId}" />
+								</h:selectOneMenu></td>
+							<td class="td-btn-fix"><p:commandLink
+									actionListener="#{actionBean.chooseDynamicReseve()}"
+									disabled="#{!actionBean.edit}" id="chooseDR" immediate="true"
+									title="#{msg['common.chooseDR']}"
+									styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+									<i class="fa fa-pencil icon-only mr-0"></i>
+									<p:ajax event="dialogReturn"
+										listener="#{actionBean.onDialogDynamicReseveReturn}" />
+								</p:commandLink> <p:commandLink
+									actionListener="#{actionBean.notChooseDynamicReseve()}"
+									disabled="#{!actionBean.edit}" id="notchooseDR"
+									immediate="true" title="#{msg['common.delete']}"
+									styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+									<i class="fa fa-times icon-only mr-0"></i>
+								</p:commandLink></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['action.priorityFilter']}" />
+				</div>
+				<div class="col-xs-12">
+					<table class="table-choosing">
+						<tr>
+							<td><h:selectOneMenu styleClass="form-control"
+									disabled="true" style="-webkit-appearance: none;"
+									id="slPriorityFilter"
+									value="#{actionBean.action.priorityFilterId}">
+									<f:selectItems value="#{actionBean.priorityFilters}" var="item"
+										itemLabel="#{item.sortPriceComponentName}"
+										itemValue="#{item.sortPriceComponentId}" />
+								</h:selectOneMenu></td>
+							<td class="td-btn-fix"><p:commandLink
+									actionListener="#{actionBean.choosePriorityFilter()}"
+									disabled="#{!actionBean.edit}" id="choosePriorityFilter"
+									immediate="true" title="#{msg['common.chooseSPC']}"
+									styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+									<i class="fa fa-pencil icon-only mr-0"></i>
+									<p:ajax event="dialogReturn"
+										listener="#{actionBean.onDialogPriorityFilterReturn}" />
+								</p:commandLink> <p:commandLink
+									actionListener="#{actionBean.notChoosePriorityFilter()}"
+									disabled="#{!actionBean.edit}" id="notChoosePriorityFilter"
+									immediate="true" title="#{msg['common.delete']}"
+									styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+									<i class="fa fa-times icon-only mr-0"></i>
+								</p:commandLink></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:selectBooleanCheckbox value="#{actionBean.action.state}"
+						itemLabel="#{msg['action.enable']}" />
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-6">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['action.current_sortpc']}" />
+				</div>
+				<div class="col-xs-12">
+					<table class="table-choosing">
+						<tr>
+							<td><h:selectOneMenu styleClass="form-control"
+									disabled="true" style="-webkit-appearance: none;"
+									id="slSortPriceComponent"
+									value="#{actionBean.action.sortPriceComponentId}">
+									<f:selectItems value="#{actionBean.sortPriceComponents}"
+										var="item" itemLabel="#{item.sortPriceComponentName}"
+										itemValue="#{item.sortPriceComponentId}" />
+								</h:selectOneMenu></td>
+							<td class="td-btn-fix"><p:commandLink
+									actionListener="#{actionBean.chooseSortPC()}"
+									disabled="#{!actionBean.edit}" id="chooseSPC" immediate="true"
+									title="#{msg['common.chooseSPC']}"
+									styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+									<i class="fa fa-pencil icon-only mr-0"></i>
+									<p:ajax event="dialogReturn"
+										listener="#{actionBean.onDialogSortPCReturn}" />
+								</p:commandLink> <p:commandLink actionListener="#{actionBean.notChooseSortPC()}"
+									disabled="#{!actionBean.edit}" id="notChooseSPC"
+									immediate="true" title="#{msg['common.delete']}"
+									styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+									<i class="fa fa-times icon-only mr-0"></i>
+								</p:commandLink></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['action.current_reseveinfo']}" />
+				</div>
+				<div class="col-xs-12">
+					<table class="table-choosing">
+						<tr>
+							<td><h:selectOneMenu styleClass="form-control"
+									disabled="true" style="-webkit-appearance: none;"
+									id="slReserveInfoId" value="#{actionBean.action.reserveinfoId}">
+									<f:selectItem itemLabel="(#{msg['common.none']})" />
+									<f:selectItems value="#{actionBean.reserveInfos}" var="item"
+										itemLabel="#{item.resvName}" itemValue="#{item.reserveInfoId}" />
+								</h:selectOneMenu></td>
+							<td class="td-btn-fix"><p:commandLink
+									actionListener="#{actionBean.chooseReseveInfo()}"
+									id="chooseResveserInfo" immediate="true"
+									disabled="#{!actionBean.edit}"
+									title="#{msg['common.chooseResever']}"
+									styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+									<i class="fa fa-pencil icon-only mr-0"></i>
+									<p:ajax event="dialogReturn"
+										listener="#{actionBean.onDialogReseveInfoReturn}" />
+								</p:commandLink> <p:commandLink
+									actionListener="#{actionBean.notChooseReseveInfo()}"
+									id="notChooseResveserInfo" immediate="true"
+									disabled="#{!actionBean.edit}" title="#{msg['common.delete']}"
+									styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+									<i class="fa fa-times icon-only mr-0"></i>
+								</p:commandLink></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['action.effect_date']}" />
+				</div>
+				<div class="col-xs-12">
+					<p:calendar value="#{actionBean.action.effDate}" navigator="true"
+						mask="true" styleClass="calendarIcon"
+						pattern="#{userSession.timeFormat}">
+					</p:calendar>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['action.expiredate']}" />
+				</div>
+				<div class="col-xs-12">
+					<p:calendar value="#{actionBean.action.expDate}" navigator="true"
+						styleClass="calendarIcon" mask="true"
+						pattern="#{userSession.timeFormat}" />
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-12">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12">
+					<p:dataTable id="dtPC" var="rowitem" paginator="true" rows="10"
+						resizableColumns="true" value="#{actionBean.priceComponents}"
+						paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15,20,50,100" rowIndexVar="rowIndex"
+						rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+						<f:facet name="header">
+							#{msg['action.table_title']}
+					</f:facet>
+
+						<p:column headerText="#" styleClass="widthSTTcolumn">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column headerText="#{msg['action.price_component']}">
+							<p:commandLink actionListener="#{actionBean.choosePC(rowitem)}">
+								<h:outputText value="#{rowitem.priceComponentName}"
+									title="#{rowitem.priceComponentName}" styleClass="preformatted" />
+								<p:ajax event="dialogReturn" update="dtPC"
+									listener="#{actionBean.onDialogPCReturn}" />
+							</p:commandLink>
+						</p:column>
+
+						<p:column headerText="#{msg['common.desc']}"
+							styleClass="text-truncate">
+							<h:outputText value="#{rowitem.remark}" title="#{rowitem.remark}"
+								styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.action']}"
+							styleClass="actionColumn" style="width: 216px;">
+
+							<p:commandLink actionListener="#{actionBean.addPcAt(rowitem)}"
+								update="dtPC" disabled="#{!actionBean.edit}"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-plus icon-only mr-0"></i>
+								<p:ajax event="dialogReturn" update="dtPC"
+									listener="#{actionBean.onDialogPCReturn}" />
+							</p:commandLink>
+
+
+							<p:commandLink
+								update="contentTitle categoryCommonTop contentPanel" id="editPC"
+								disabled="#{!actionBean.edit}" title="#{msg['common.edit']}"
+								actionListener="#{actionBean.editPriceComponent(rowitem)}"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-pencil icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.summary.warning']}"
+									message="#{msg['action.editPriceCompornent']}"
+									icon="ui-icon-alert" />
+								<!-- 							<p:tooltip for="editPC" value="#{msg['common.edit']}" -->
+								<!-- 								position="top" /> -->
+							</p:commandLink>
+							<p:commandLink update="dtPC" title="#{msg['common.moveUp']}"
+								disabled="#{actionBean.priceComponents.indexOf(rowitem) eq 0 or !actionBean.edit}"
+								actionListener="#{actionBean.commandUpOnMap(rowitem)}"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-arrow-circle-up icon-only mr-0"></i>
+							</p:commandLink>
+							<p:commandLink update="dtPC" title="#{msg['common.moveDown']}"
+								disabled="#{actionBean.priceComponents.indexOf(rowitem) eq actionBean.priceComponents.size() - 1 or !actionBean.edit}"
+								actionListener="#{actionBean.commandDownOnMap(rowitem)}"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-arrow-circle-down icon-only mr-0"></i>
+							</p:commandLink>
+							<p:commandLink disabled="#{!actionBean.edit}"
+								actionListener="#{actionBean.removePriceComponet(rowitem)}"
+								title="#{msg['common.delete']}" update="dtPC"
+								styleClass="btn btn-sm btn-action-del colorRed">
+								<i class="fa fa-times icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandLink>
+
+							<f:facet name="header">
+								<!-- 								<p:outputLabel value="#{msg['common.action']}" -->
+								<!-- 									rendered="#{!(actionBean.edit || actionBean.action.actionId==0)}" /> -->
+								<p:commandButton value="#{msg['action.addpc']}" process="@this"
+									actionListener="#{actionBean.commandAddNewPC()}"
+									icon="fa fa-plus" disabled="#{!actionBean.edit}"
+									styleClass="btn btn-default btn-addnewPC">
+									<p:ajax event="dialogReturn" update="dtPC"
+										listener="#{actionBean.onDialogPCReturn}" />
+								</p:commandButton>
+							</f:facet>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 text-right">
+			<p:commandButton id="saveAction" icon="fa fa-save"
+				value="#{actionBean.action.actionId eq 0 ? msg['common.apply'] : msg['common.apply']}"
+				update="dtPC treeCommon categoryCommonTop contentPanel"
+				disabled="#{!actionBean.edit}"
+				actionListener="#{actionBean.saveAction()}"
+				styleClass="btn btn-default">
+				<p:confirm header="#{msg['common.apply']}"
+					message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+			</p:commandButton>
+		</div>
+
+		<div class="col-xs-12 col-sm-12">
+			<div class="row">
+				<div class="col-xs-10">
+					<p:outputLabel value="" />
+				</div>
+				<div class="col-xs-2">
+					<div class="col-sm-2">
+						<!-- 						<p:commandButton id="saveAction" icon="fa fa-save" -->
+						<!-- 							value="#{actionBean.action.actionId eq 0 ? msg['common.apply'] : msg['common.apply']}" -->
+						<!-- 							update="dtPC treeCommon categoryCommonTop contentPanel" -->
+						<!-- 							disabled="#{!actionBean.edit}" -->
+						<!-- 							actionListener="#{actionBean.saveAction()}" -->
+						<!-- 							styleClass="btn btn-default"> -->
+						<!-- 							<p:confirm header="#{msg['common.apply']}" -->
+						<!-- 								message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" /> -->
+						<!-- 						</p:commandButton> -->
+						<p:commandButton value="actionHidden"
+							styleClass="hidden btnCallTreeAction"
+							actionListener="#{actionBean.commandCloneActionTree()}">
+							<p:ajax event="dialogReturn"
+								listener="#{actionBean.onDialogActionReturn}"
+								update="treeCommon categoryCommonTop contentPanel" />
+						</p:commandButton>
+						<p:commandButton styleClass="hidden btnChangeCategoryAction"
+							actionListener="#{actionBean.redirectChangeCate()}"
+							update="treeCommon categoryCommonTop contentPanel">
+							<p:ajax event="dialogReturn"
+								listener="#{actionBean.onDialogReturnCategory}"
+								update="treeCommon categoryCommonTop contentPanel" />
+						</p:commandButton>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</h:form>
+</html>

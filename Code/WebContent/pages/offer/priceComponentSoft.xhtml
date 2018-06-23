@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:form id="form-sortPriceCompornent-detail" class="container-fluid"
+	rendered="#{sortPriceComponentBean.formType eq 'detail-sort-price-compornent' || !sortPriceComponentBean.editting}">
+	<div class="row formFieldMg">
+		<div class="col-xs-12 col-sm-6">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['common.ID']}"
+						></p:outputLabel>
+					<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+				</div>
+				<div class="col-xs-12">
+					<p:inputText
+						value="#{sortPriceComponentBean.sortPriceComponentUI.sortPriceComponentId}"
+						readonly="true" styleClass="form-control"></p:inputText>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['common.name']}"
+						></p:outputLabel>
+					<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+				</div>
+				<div class="col-xs-12">
+					<p:inputText
+						value="#{sortPriceComponentBean.sortPriceComponentUI.sortPriceComponentName}"
+						required="true"
+						requiredMessage="#{msg['normalizer.errorDataValueName']}"
+						maxlength="100" styleClass="form-control"></p:inputText>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12 col-sm-6">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['common.category']}" for="category"/>
+				</div>
+				<div class="col-xs-12">
+					<h:selectOneMenu id="category" effect="fold" required="true"
+						value="#{sortPriceComponentBean.sortPriceComponentUI.categoryId}"
+						styleClass="form-control" editable="true">
+						<f:selectItems value="#{sortPriceComponentBean.loadCategory()}" />
+					</h:selectOneMenu>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['common.desc']}"
+						></p:outputLabel>
+				</div>
+				<div class="col-xs-12">
+					<p:inputText
+						value="#{sortPriceComponentBean.sortPriceComponentUI.remark}"
+						maxlength="255" styleClass="form-control"></p:inputText>
+				</div>
+			</div>
+		</div>
+		<!-- 		<div class="col-xs-12 col-sm-12"> -->
+		<!-- 			<p:outputLabel ></p:outputLabel> -->
+		<!-- 		</div> -->
+		<!-- 		<div class="col-xs-12 col-sm-10"></div> -->
+		<!-- 		<div class="col-xs-12 col-sm-2"></div> -->
+		<!-- 		<div class="col-xs-12 col-sm-12"> -->
+		<!-- 			<p:outputLabel ></p:outputLabel> -->
+		<!-- 		</div> -->
+		<div class="col-xs-12 col-md-12">
+			<p:dataTable var="item" id="tableRatetable"
+				value="#{sortPriceComponentBean.lstRateTables}"
+				rowKey="#{item.rateTableId}" emptyMessage="#{msg['common.noData']}"
+				paginator="true" rows="20" paginatorPosition="bottom"
+				rowIndexVar="rowIndex"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,20,50,100">
+				<f:facet name="header">
+					<p:outputLabel value="#{msg['sortPriceComponent.this']}"
+						></p:outputLabel>
+				</f:facet>
+				<p:column headerText="#" styleClass="widthSTTcolumn">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.name']}">
+					<p:commandLink
+						actionListener="#{sortPriceComponentBean.showDialogRatetable(item)}">
+						<h:outputText value="#{item.rateTableName}" />
+						<p:ajax event="dialogReturn"
+							listener="#{sortPriceComponentBean.onDialogReturn}"
+							update="tableRatetable" />
+					</p:commandLink>
+				</p:column>
+
+				<p:column headerText="#{msg['common.desc']}">
+					<h:outputText value="#{item.remark}" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.action']}"
+					styleClass="actionColumnExtra">
+
+					<p:commandLink disabled="#{!sortPriceComponentBean.editting}"
+						actionListener="#{sortPriceComponentBean.addRTAt(item)}"
+						update="tableRatetable"
+						styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+						<i class="fa fa-plus icon-only mr-0"></i>
+						<p:ajax event="dialogReturn" update="tableRatetable"
+							listener="#{sortPriceComponentBean.onDialogReturn}" />
+					</p:commandLink>
+
+					<p:commandLink update="treeCommon categoryCommonTop contentPanel"
+						disabled="#{!sortPriceComponentBean.editting}"
+						title="#{msg['common.edit']}"
+						actionListener="#{sortPriceComponentBean.commandEditItem(item)}"
+						styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+						<i class="fa fa-pencil icon-only mr-0"></i>
+						<p:confirm header="#{msg['common.summary.warning']}"
+							message="#{msg['sortPriceComponent.editPriceCompornent']}"
+							icon="ui-icon-alert" />
+					</p:commandLink>
+					<p:commandLink update="tableRatetable"
+						title="#{msg['common.moveUp']}"
+						disabled="#{sortPriceComponentBean.disableUpDown(item) eq 0 or !sortPriceComponentBean.editting}"
+						actionListener="#{sortPriceComponentBean.commandUpOnMap(item)}"
+						styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+						<i class="fa fa-arrow-circle-up icon-only mr-0"></i>
+					</p:commandLink>
+					<p:commandLink update="tableRatetable"
+						disabled="#{sortPriceComponentBean.disableUpDown(item) eq 1 or !sortPriceComponentBean.editting}"
+						title="#{msg['common.moveDown']}"
+						actionListener="#{sortPriceComponentBean.commandDownOnMap(item)}"
+						styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+						<i class="fa fa-arrow-circle-down icon-only mr-0"></i>
+					</p:commandLink>
+					<p:commandLink update="tableRatetable"
+						disabled="#{!sortPriceComponentBean.editting}"
+						title="#{msg['common.delete']}"
+						actionListener="#{sortPriceComponentBean.commandRemoveItem(item)}"
+						styleClass="btn btn-sm btn-action-del colorRed">
+						<i class="fa fa-times icon-only mr-0"></i>
+						<p:confirm header="#{msg['common.delete']}"
+							message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+					</p:commandLink>
+					<f:facet name="header">
+<!-- 						<p:outputLabel value="#{msg['common.action']}" -->
+<!-- 							rendered="#{!sortPriceComponentBean.editting and sortPriceComponentBean.sortPriceComponentUI.sortPriceComponentId != 0}" /> -->
+<!-- 						<p:commandButton value="#{msg['common.addNew']}" immediate="true" -->
+<!-- 							title="#{msg['common.addNew']}"  icon="fa fa-plus" -->
+<!-- 							rendered="#{sortPriceComponentBean.editting || sortPriceComponentBean.sortPriceComponentUI.sortPriceComponentId == 0}" -->
+<!-- 							actionListener="#{sortPriceComponentBean.commandAddNewRatetable()}" -->
+<!-- 							styleClass="col-xs-12 btnAddRatetableSPC"> -->
+<!-- 							<p:ajax event="dialogReturn" -->
+<!-- 								listener="#{sortPriceComponentBean.onDialogReturn}" -->
+<!-- 								update="tableRatetable" /> -->
+<!-- 						</p:commandButton> -->
+						<p:commandButton value="#{msg['common.addNew']}" immediate="true"
+							title="#{msg['common.addNew']}"  icon="fa fa-plus"
+							disabled="#{!sortPriceComponentBean.editting}"
+							actionListener="#{sortPriceComponentBean.commandAddNewRatetable()}"
+							styleClass="btnAddRatetableSPC">
+							<p:ajax event="dialogReturn"
+								listener="#{sortPriceComponentBean.onDialogReturn}"
+								update="tableRatetable" />
+						</p:commandButton>
+					</f:facet>
+				</p:column>
+			</p:dataTable>
+		</div>
+		<div class="col-xs-12 col-sm-12">
+			<p:outputLabel ></p:outputLabel>
+		</div>
+		<div class="col-xs-12 col-sm-10">
+			<p:outputLabel ></p:outputLabel>
+		</div>
+		<div class="col-xs-12 text-right">
+			<p:commandButton value="#{msg['common.apply']}"
+				title="#{msg['common.apply']}" icon="fa fa-save"
+				actionListener="#{sortPriceComponentBean.commandApply()}"
+				disabled="#{!sortPriceComponentBean.editting}"
+				update="treeCommon categoryCommonTop contentPanel tableRatetable">
+				<p:confirm header="#{msg['common.apply']}"
+					message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+			</p:commandButton>
+			<p:commandButton value="actionHidden"
+				styleClass="hidden btnCallTreeSPC"
+				actionListener="#{sortPriceComponentBean.commandCloneSPCTree()}">
+				<p:ajax event="dialogReturn"
+					listener="#{sortPriceComponentBean.onDialogCloneReturn}"
+					update="treeCommon categoryCommonTop contentPanel" />
+			</p:commandButton>
+			<p:commandButton styleClass="hidden btnChangeCategorySPC"
+				actionListener="#{sortPriceComponentBean.redirectChangeCate()}"
+				update="treeCommon categoryCommonTop contentPanel">
+				<p:ajax event="dialogReturn"
+					listener="#{sortPriceComponentBean.onDialogReturnCategory}"
+					update="treeCommon categoryCommonTop contentPanel" />
+			</p:commandButton>
+		</div>
+		<!-- 		<div class="col-xs-12 col-sm-2"> -->
+		<!-- 			<p:commandButton value="#{msg['common.cancel']}" -->
+		<!-- 				actionListener="#{sortPriceComponentBean.commandCancel()}" -->
+		<!-- 				update="treeCommon categoryCommonTop contentPanel" -->
+		<!-- 				styleClass="col-xs-12"></p:commandButton> -->
+		<!-- 		</div> -->
+
+	</div>
+</h:form>
+
+<h:form id="form-sortPriceCompornent-by-cat" class="container-fluid"
+	rendered="#{sortPriceComponentBean.formType eq 'list-sort-price-compornent-by-category'}">
+	<div class="row formFieldMg">
+		<div class="col-xs-12 col-md-12">
+			<div class="col-xs-12 col-md-9"></div>
+			<div class="col-xs-12 col-md-3">
+<!-- 				<p:commandButton value="clear" update="@form" -->
+<!-- 					styleClass="spcTableClearFilter hidden" -->
+<!-- 					oncomplete="PF('tblSPCWidgetVar').clearFilters()" /> -->
+			</div>
+		</div>
+		<div class="col-xs-12 col-md-12">
+			<p:dataTable var="item"
+				value="#{sortPriceComponentBean.lstSortPriceComponentByCategory}"
+				rowKey="#{item.sortPriceComponentId}" widgetVar="tblSPCWidgetVar"
+				emptyMessage="#{msg['common.noData']}" paginator="true" rows="20"
+				paginatorPosition="bottom" rowIndexVar="rowIndex"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,20,50,100"
+				rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+				<p:ajax event="filter" ignoreAutoUpdate="false" />
+				<f:facet name="header">
+					<p:outputLabel value="#{msg['sortPriceComponent']}"
+						></p:outputLabel>
+				</f:facet>
+				<p:column headerText="#" styleClass="widthSTTcolumn">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.name']}"
+					filterBy="#{item.sortPriceComponentName}"
+					filterMatchMode="contains">
+					<h:outputText value="#{item.sortPriceComponentName}"
+						styleClass="preformatted" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.desc']}"
+					filterBy="#{item.remark}" filterMatchMode="contains">
+					<h:outputText value="#{item.remark}" styleClass="preformatted" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.action']}"
+					styleClass="actionColumn">
+					<p:commandLink title="#{msg['common.edit']}"
+						update="treeCommon categoryCommonTop contentPanel contentTitle"
+						actionListener="#{sortPriceComponentBean.commandEditSPC(item)}"
+						styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+						<i class="fa fa-pencil icon-only mr-0"></i>
+					</p:commandLink>
+					<p:commandLink title="#{msg['common.clone']}"
+						update="treeCommon categoryCommonTop contentPanel"
+						actionListener="#{sortPriceComponentBean.commandCloneSPC(item)}"
+						styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+						<i class="fa fa-clone icon-only mr-0"></i>
+						<p:ajax event="dialogReturn"
+							listener="#{sortPriceComponentBean.onDialogCloneReturn}"
+							update="treeCommon categoryCommonTop contentPanel" />
+					</p:commandLink>
+					<p:commandLink title="#{msg['common.delete']}"
+						update="treeCommon categoryCommonTop contentPanel"
+						actionListener="#{sortPriceComponentBean.commandDeleteSPC(item)}"
+						oncomplete="$('.spcTableClearFilter').click()"
+						styleClass="btn btn-sm btn-action-del colorRed">
+						<i class="fa fa-times icon-only mr-0"></i>
+						<p:confirm header="#{msg['common.delete']}"
+							message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+					</p:commandLink>
+					<f:facet name="header">
+						<p:commandButton value="#{msg['common.addNew']}"
+							title="#{msg['common.addNew']}" icon="fa fa-plus"
+							actionListener="#{sortPriceComponentBean.commandAddNew()}"
+							update="treeCommon categoryCommonTop contentPanel contentTitle" />
+					</f:facet>
+				</p:column>
+			</p:dataTable>
+		</div>
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="Yes" type="button"
+				styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+			<p:commandButton value="No" type="button"
+				styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		</p:confirmDialog>
+	</div>
+</h:form>
+
+
+</html>

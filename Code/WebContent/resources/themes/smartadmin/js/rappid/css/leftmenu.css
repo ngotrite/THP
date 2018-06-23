@@ -1,0 +1,125 @@
+.rap_left {
+   width: 60px;   
+   position: absolute;
+   top: 130px;
+   bottom: 0;
+   background: url('../img/bak_inspec.jpg') repeat-y center top;
+}
+.rap_left ul  {
+   list-style: none;
+   padding: 0px;
+   margin: 0px;
+}
+.rap_left ul li{   
+   padding:20px 0px;
+   border-bottom: 1px solid #333;
+}
+.rap_left ul li.icon_home{
+   background: url('../img/icon.png') no-repeat;
+   background-position: 0px 0px;
+}
+.rap_left ul li.icon_topology{
+   background: url('../img/icon.png') no-repeat;
+   background-position: 0px -60px;
+}
+.rap_left ul li.icon_spoutmanager{
+   background: url('../img/icon.png') no-repeat;
+   background-position: 0px -120px;
+}
+.rap_left ul li.icon_boltmanager{
+   background: url('../img/icon.png') no-repeat;
+   background-position: 0px -180px;
+}
+.rap_left ul li.icon_diagram{
+   background: url('../img/icon.png') no-repeat;
+   background-position: 0px -240px;
+}
+.rap_left ul li.icon_bolttype{
+   background: url('../img/icon.png') no-repeat;
+   background-position: 0px -300px;
+}
+.rap_left ul li.icon_function{
+   background: url('../img/icon.png') no-repeat;
+   background-position: 0px -360px;
+}
+.rap_left ul li.icon_operator{
+   background: url('../img/icon.png') no-repeat;
+   background-position: 0px -420px;
+}
+.rap_left ul li.icon_variable{
+   background: url('../img/icon.png') no-repeat;
+   background-position: 0px -480px;
+}
+.rap_left ul li.icon_condition{
+   background: url('../img/icon.png') no-repeat;
+   background-position: 0px -540px;
+}
+.rap_left ul li.icon_setting{
+   background: url('../img/icon.png') no-repeat;
+   background-position: 0px -600px;
+}
+
+/*//hover*/
+.rap_left ul li.icon_home:hover{
+   background: url('../img/icon.png') no-repeat;
+   background-position: -65px 0px;
+}
+.rap_left ul li.icon_topology:hover,
+.rap_left ul li.icon_topology.active{
+   background: url('../img/icon.png') no-repeat;
+   background-position: -65px -60px;
+}
+.rap_left ul li.icon_spoutmanager:hover,
+.rap_left ul li.icon_spoutmanager.active{
+   background: url('../img/icon.png') no-repeat;
+   background-position: -65px -120px;
+}
+.rap_left ul li.icon_boltmanager:hover,
+.rap_left ul li.icon_boltmanager.active{
+   background: url('../img/icon.png') no-repeat;
+   background-position: -65px -180px;
+}
+.rap_left ul li.icon_diagram:hover,
+.rap_left ul li.icon_diagram.active{
+   background: url('../img/icon.png') no-repeat;
+   background-position: -65px -240px;
+}
+
+.rap_left ul li.icon_bolttype:hover,
+.rap_left ul li.icon_bolttype.active{
+   background: url('../img/icon.png') no-repeat;
+   background-position: -65px -300px;
+}
+
+.rap_left ul li.icon_function:hover,
+.rap_left ul li.icon_function.active{
+   background: url('../img/icon.png') no-repeat;
+   background-position: -65px -360px;
+}
+.rap_left ul li.icon_operator:hover,
+.rap_left ul li.icon_operator.active{
+   background: url('../img/icon.png') no-repeat;
+   background-position: -65px -420px;
+}
+.rap_left ul li.icon_variable:hover,
+.rap_left ul li.icon_variable.active{
+   background: url('../img/icon.png') no-repeat;
+   background-position: -65px -480px;
+}
+.rap_left ul li.icon_condition:hover,
+.rap_left ul li.icon_condition.active{
+   background: url('../img/icon.png') no-repeat;
+   background-position: -65px -540px;
+}
+.rap_left ul li.icon_setting:hover,
+.rap_left ul li.icon_setting.active{
+   background: url('../img/icon.png') no-repeat;
+   background-position: -65px -600px;
+}
+
+.rap_left li a{
+   display:block;   
+   text-indent: -1999px;
+   overflow: hidden;
+   outline: none; 
+}

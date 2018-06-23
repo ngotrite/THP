@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+	<!--BEGIN Panel Check register list type -->
+	<p:panel id="pnlCheckRegisterListType" styleClass="nopadding"
+		rendered="#{normalizerBean.selectedNormType == 3}">
+		<div class="row">
+			<div class="col-xs-12">
+				<p:commandButton value="#{msg['normalizer.editValues']}" disabled="#{!normalizerBean.isEdit}" icon="fa fa-edit"
+					styleClass="mgRight10" oncomplete="PF('dlgValueManager').show()" update="dlgValueManager"></p:commandButton>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p:outputLabel value="#{msg['normalizer.default']}"
+					></p:outputLabel>
+				<p:outputLabel value="*" styleClass="colorRed"></p:outputLabel>
+			</div>
+			<div class="col-xs-12">
+				<h:selectOneMenu styleClass="form-control" value="#{normalizerBean.selectedNormDefaultWithNormValue}">
+					<f:selectItems value="#{normalizerBean.listSelectNormValue}" />
+				</h:selectOneMenu>
+			</div>
+		</div>
+	</p:panel>
+	<!--END Panel Check register list type -->
+</html>

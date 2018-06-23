@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:form id="form-role" class="container-fluid">
+	<p:messages id="roleMessages" severity="error, warn" showDetail="true"
+		autoUpdate="true" closable="true" />
+	<div class="row formFieldMg">
+		<div class="col-xs-6">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['role.name']}" for="roleName" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText id="roleName" value="#{roleBean.sysRole.name}"
+								maxlength="100" required="true"
+								requiredMessage="#{msg['common.required']}"
+								styleClass="form-control" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['role.desc']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{roleBean.sysRole.description}"
+								maxlength="100" styleClass="form-control" />
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['role.ID']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{roleBean.sysRole.id}" readonly="true"
+								styleClass="form-control" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:selectBooleanCheckbox value="#{roleBean.sysRole.isActive}" itemLabel="#{msg['common.active']}">
+							</p:selectBooleanCheckbox>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="row">
+						<div class="col-xs-12 text-right">
+							<p:commandButton id="btnNew" value="#{msg['common.addNew']}"
+								actionListener="#{roleBean.btnNew}" icon="fa fa-plus"
+								disabled="#{roleBean.editing}" update="form-role"
+								styleClass="btn btn-primary" immediate="true" resetValues="true">
+							</p:commandButton>
+							<p:commandButton id="btnSave" value="#{msg['common.save']}"
+								actionListener="#{roleBean.btnSave}" icon="fa fa-save"
+								disabled="#{!roleBean.editing}"
+								update="form-role-list:ID_RoleTable form-role"
+								styleClass="btn btn-default">
+								<p:confirm header="#{msg['common.apply']}"
+									message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+							</p:commandButton>
+							<p:commandButton id="btnCancel" value="#{msg['common.cancel']}"
+								actionListener="#{roleBean.btnCancel}" icon="fa fa-refresh"
+								disabled="#{!roleBean.editing}" update="form-role"
+								styleClass="btn btn-default" immediate="true" resetValues="true">
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-6">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:tabView prependId="false" styleClass="fix-height-tab">
+						<p:tab title="#{msg['role.menuOf']}">
+							<p:pickList id="plRoleMenu" value="#{roleBean.dlSysMenu}"
+								var="menu" effect="bounce" itemValue="#{menu}"
+								itemLabel="#{menu.name}" converter="menuConverter">
+
+								<p:ajax event="transfer" listener="#{roleBean.onMenuTransfer}"
+									update="plRoleMenu" />
+
+								<f:facet name="sourceCaption">
+									<h:outputText value="#{msg['role.menuAvailable']}" />
+								</f:facet>
+								<f:facet name="targetCaption">
+									<h:outputText value="#{msg['role.menuOf']}" />
+								</f:facet>
+							</p:pickList>
+						</p:tab>
+
+						<p:tab title="#{msg['role.groupOf']}">
+							<!-- 							<p:dataTable id="ID_RoleGroupTable" var="group" -->
+							<!-- 								value="#{roleBean.listSysGroup}" rowIndexVar="rowIndex" -->
+							<!-- 								selectionMode="single" rowKey="#{group.id}" scrollable="true" -->
+							<!-- 								scrollHeight="180" -->
+							<!-- 								rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"> -->
+
+							<p:dataTable id="ID_RoleGroupTable" var="group"
+								value="#{roleBean.listSysGroup}" rowIndexVar="rowIndex"
+								paginator="true" rows="20" paginatorPosition="bottom"
+								selectionMode="single" rowKey="#{group.id}" scrollHeight="180"
+								scrollable="true"
+								rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="10,20,50,100"
+								emptyMessage="#{msg['common.noData']}">
+
+								<p:column headerText="#" styleClass="widthSTTcolumn">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+								<p:column headerText="#{msg['group.name']}">
+									<h:outputText value="#{group.name}" styleClass="preformatted" />
+								</p:column>
+								<p:column headerText="#{msg['group.desc']}">
+									<h:outputText value="#{group.description}" />
+								</p:column>
+
+								<p:column headerText="#{msg['common.action']}"
+									styleClass="actionColumn">
+									<p:commandLink actionListener="#{roleBean.removeGroup(group)}"
+										update="ID_RoleGroupTable"
+										styleClass="btn btn-sm btn-action-del colorRed">
+										<i class="fa fa-times icon-only mr-0"></i>
+									</p:commandLink>
+
+									<f:facet name="header">
+										<p:commandButton value="#{msg['group.addGroup']}"
+											disabled="#{!roleBean.editing}" icon="fa fa-plus"
+											actionListener="#{roleBean.btnShowSelectGroupDlg()}"
+											update="formdlgSelectGroupOfRole"
+											oncomplete="PF('dlgSelectGroupOfRole').show()"
+											immediate="true">
+										</p:commandButton>
+									</f:facet>
+								</p:column>
+							</p:dataTable>
+						</p:tab>
+
+						<p:tab title="#{msg['role.userOf']}">
+							<p:dataTable id="ID_RoleUserTable" var="user"
+								value="#{roleBean.listSysUser}" rowIndexVar="rowIndex"
+								selectionMode="single" rowKey="#{user.id}" scrollable="true"
+								scrollHeight="180"
+								rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+
+								<p:column headerText="#" styleClass="widthSTTcolumn">
+									<h:outputText value="#{rowIndex+1}" />
+								</p:column>
+								<p:column headerText="#{msg['user.userName']}">
+									<h:outputText value="#{user.userName}"
+										styleClass="preformatted" />
+								</p:column>
+								<p:column headerText="#{msg['user.email']}">
+									<h:outputText value="#{user.email}" styleClass="preformatted" />
+								</p:column>
+								<p:column headerText="#{msg['user.fullName']}">
+									<h:outputText value="#{user.fullName}"
+										styleClass="preformatted" />
+								</p:column>
+
+								<p:column headerText="#{msg['common.action']}"
+									styleClass="actionColumn">
+									<p:commandLink actionListener="#{roleBean.removeUser(user)}"
+										update="ID_RoleUserTable"
+										styleClass="btn btn-sm btn-action-del colorRed">
+										<i class="fa fa-times icon-only mr-0"></i>
+									</p:commandLink>
+
+									<f:facet name="header">
+										<p:commandButton value="#{msg['user.addUser']}"
+											disabled="#{!roleBean.editing}" icon="fa fa-plus"
+											actionListener="#{roleBean.btnShowSelectUserDlg()}"
+											update="formdlgSelectUserOfRole"
+											oncomplete="PF('dlgSelectUserOfRole').show()"
+											immediate="true">
+										</p:commandButton>
+									</f:facet>
+								</p:column>
+							</p:dataTable>
+						</p:tab>
+					</p:tabView>
+				</div>
+			</div>
+		</div>
+	</div>
+</h:form>
+
+<h:form id="form-role-list" class="container-fluid">
+	<div class="row">
+		<div class="col-xs-12">
+			<p:dataTable id="ID_RoleTable" var="role"
+				value="#{roleBean.listSysRole}" rowIndexVar="rowIndex"
+				paginator="true" rows="20" paginatorPosition="bottom"
+				selectionMode="single" rowKey="#{role.id}"
+				rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+
+				<f:facet name="header">
+					<h:outputLabel value="#{msg['role.list']}"></h:outputLabel>
+				</f:facet>
+
+				<p:column headerText="#" styleClass="widthSTTcolumn">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+				<p:column headerText="#{msg['role.name']}" sortBy="#{role.name}"
+					filterBy="#{role.name}" filterMatchMode="contains">
+					<h:outputText value="#{role.name}" />
+				</p:column>
+				<p:column headerText="#{msg['common.active']}"
+					styleClass="checkboxColumn">
+					<p:selectBooleanCheckbox value="#{role.isActive}" disabled="true">
+					</p:selectBooleanCheckbox>
+				</p:column>
+				<p:column headerText="#{msg['role.desc']}"
+					sortBy="#{role.description}" filterBy="#{role.description}"
+					filterMatchMode="contains">
+					<h:outputText value="#{role.description}" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.action']}"
+					styleClass="actionColumn">
+					<p:commandLink actionListener="#{roleBean.onRowEdit(role)}"
+						update="form-role" immediate="true"
+						styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+						<i class="fa fa-pencil icon-only mr-0"></i>
+					</p:commandLink>
+					<p:commandLink actionListener="#{roleBean.onRowDelete(role)}"
+						update="ID_RoleTable" immediate="true"
+						styleClass="btn btn-sm btn-action-del colorRed">
+						<i class="fa fa-times icon-only mr-0"></i>
+						<p:confirm header="#{msg['common.delete']}"
+							message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</div>
+	</div>
+</h:form>
+
+<p:dialog header="#{msg['title.select']}" modal="true"
+	id="dlgSelectUserOfRole" resizable="false" showEffect="fade"
+	position="center" widgetVar="dlgSelectUserOfRole" height="300"
+	width="600">
+	<h:form id="formdlgSelectUserOfRole">
+		<div class="row formFieldMg">
+			<div class="col-xs-12">
+				<p:dataTable id="ID_RoleUserTableDlg" var="user"
+					value="#{roleBean.listSysUserDlg}" rowIndexVar="rowIndex"
+					paginator="true" rows="20" paginatorPosition="bottom"
+					selection="#{roleBean.selectedUsers}" rowKey="#{user.id}">
+
+					<f:facet name="header">
+						<h:outputLabel value="#{msg['user.list']}"></h:outputLabel>
+					</f:facet>
+
+					<p:column selectionMode="multiple" styleClass="widthSTTcolumn" />
+
+					<p:column headerText="#" styleClass="widthSTTcolumn">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{msg['user.userName']}"
+						sortBy="#{user.userName}" filterBy="#{user.userName}"
+						filterMatchMode="contains">
+						<h:outputText value="#{user.userName}" />
+					</p:column>
+					<p:column headerText="#{msg['user.email']}"
+						sortBy="#{user.userName}" filterBy="#{user.email}"
+						filterMatchMode="contains">
+						<h:outputText value="#{user.email}" />
+					</p:column>
+					<p:column headerText="#{msg['user.fullName']}"
+						sortBy="#{user.fullName}" filterBy="#{user.fullName}"
+						filterMatchMode="contains">
+						<h:outputText value="#{user.fullName}" />
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 text-right">
+				<p:commandButton value="#{msg['common.save']}" icon="fa fa-save"
+					action="#{roleBean.btnSelectUserDlg()}"
+					update="form-role:ID_RoleUserTable" styleClass="btn btn-default">
+				</p:commandButton>
+				<p:commandButton id="btnClose" value="#{msg['common.close']}"
+					onclick="PF('dlgSelectUserOfRole').hide()" icon="fa fa-close"
+					styleClass="btn btn-default" immediate="true">
+				</p:commandButton>
+			</div>
+		</div>
+	</h:form>
+</p:dialog>
+
+<p:dialog header="#{msg['title.select']}" modal="true"
+	id="dlgSelectGroupOfRole" resizable="false" showEffect="fade"
+	position="center" widgetVar="dlgSelectGroupOfRole" height="300"
+	width="600">
+	<h:form id="formdlgSelectGroupOfRole">
+		<div class="row formFieldMg">
+			<div class="col-xs-12">
+				<p:dataTable id="ID_RoleGroupTableDlg" var="group"
+					value="#{roleBean.listSysGroupDlg}" rowIndexVar="rowIndex"
+					paginator="true" rows="20" paginatorPosition="bottom"
+					selection="#{roleBean.selectedGroups}" rowKey="#{group.id}">
+
+					<f:facet name="header">
+						<h:outputLabel value="#{msg['group.list']}"></h:outputLabel>
+					</f:facet>
+
+					<p:column selectionMode="multiple" styleClass="widthSTTcolumn" />
+
+					<p:column headerText="#" styleClass="widthSTTcolumn">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{msg['group.name']}" sortBy="#{group.name}"
+						filterBy="#{group.name}" filterMatchMode="contains">
+						<h:outputText value="#{group.name}" />
+					</p:column>
+					<p:column headerText="#{msg['group.desc']}"
+						sortBy="#{group.description}" filterBy="#{group.description}"
+						filterMatchMode="contains">
+						<h:outputText value="#{group.description}" />
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 text-right">
+				<p:commandButton value="#{msg['common.save']}" icon="fa fa-save"
+					action="#{roleBean.btnSelectGroupDlg()}"
+					update="form-role:ID_RoleGroupTable" styleClass="btn btn-default">
+				</p:commandButton>
+				<p:commandButton id="btnClose" value="#{msg['common.close']}"
+					onclick="PF('dlgSelectGroupOfRole').hide()" icon="fa fa-close"
+					styleClass="btn btn-default" immediate="true">
+				</p:commandButton>
+			</div>
+		</div>
+	</h:form>
+</p:dialog>
+
+</html>

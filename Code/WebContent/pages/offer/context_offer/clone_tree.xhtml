@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+	<p:panel styleClass="treeclone" id="tree_clone_id">
+		<div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p:selectBooleanCheckbox id="chk_offer" binding="#{chk_offer}" itemLabel="Offer"
+					value="#{cloneOfferTempBean.treeCloneModel.offer}" disabled="true">
+					<p:ajax update="tree_clone_id" event="change"
+						listener="#{cloneOfferTempBean.onChangeChecked(chk_offer.value, 'offer')}" />
+				</p:selectBooleanCheckbox>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-11 pull-right">
+				<p:selectBooleanCheckbox id="chk_action" binding="#{chk_action}" itemLabel="Action Level"
+					value="#{cloneOfferTempBean.treeCloneModel.action}">
+					<p:ajax update="tree_clone_id" event="change"
+						listener="#{cloneOfferTempBean.onChangeChecked(chk_action.value, 'action')}" />
+				</p:selectBooleanCheckbox>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-10 pull-right">
+				<p:selectBooleanCheckbox id="chk_pc" binding="#{chk_pc}" itemLabel="Price Component Level"
+					value="#{cloneOfferTempBean.treeCloneModel.pc}">
+					<p:ajax update="tree_clone_id" event="change"
+						listener="#{cloneOfferTempBean.onChangeChecked(chk_pc.value, 'pc')}" />
+				</p:selectBooleanCheckbox>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-9 pull-right">
+				<p:selectBooleanCheckbox id="chk_block" binding="#{chk_block}" itemLabel="Block Level"
+					value="#{cloneOfferTempBean.treeCloneModel.block}">
+					<p:ajax update="tree_clone_id" event="change"
+						listener="#{cloneOfferTempBean.onChangeChecked(chk_block.value, 'block')}" />
+				</p:selectBooleanCheckbox>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-8 pull-right">
+				<p:selectBooleanCheckbox id="chk_rate_tb" binding="#{chk_rate_tb}" itemLabel="Rate Table Level"
+					value="#{cloneOfferTempBean.treeCloneModel.rateTable}">
+					<p:ajax update="tree_clone_id" event="change"
+						listener="#{cloneOfferTempBean.onChangeChecked(chk_rate_tb.value, 'rateTable')}" />
+				</p:selectBooleanCheckbox>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-7 pull-right">
+				<p:selectBooleanCheckbox id="chk_dt" binding="#{chk_dt}" itemLabel="Decision Level"
+					value="#{cloneOfferTempBean.treeCloneModel.dt}">
+					<p:ajax update="tree_clone_id" event="change"
+						listener="#{cloneOfferTempBean.onChangeChecked(chk_dt.value, 'dt')}" />
+				</p:selectBooleanCheckbox>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-6 pull-right">
+				<p:selectBooleanCheckbox id="chk_normalizer" itemLabel="Normalizer(#{msg['common.offer.all_level']})"
+					binding="#{chk_normalizer}"
+					value="#{cloneOfferTempBean.treeCloneModel.normalizer}">
+					<p:ajax update="tree_clone_id" event="change"
+						listener="#{cloneOfferTempBean.onChangeChecked(chk_normalizer.value, 'normalizer')}" />
+				</p:selectBooleanCheckbox>
+			</div>
+		</div>
+	</div>
+	</p:panel>
+	<style>
+.treeclone {
+	border: 1px solid #ccc;
+	padding: 20px;
+	width: 100%;
+}
+
+.treeclone:hover {
+	border: 1px solid #00a65a;
+}
+
+
+.treeclone div>.row {
+	margin-bottom: 10px !important;
+}
+
+</style>
+</ui:composition>
+</html>

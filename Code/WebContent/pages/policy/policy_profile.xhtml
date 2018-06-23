@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui">
+
+<h:form id="form-policy_profile-list" class="container-fluid"
+	rendered="#{policyProfileBean.formType == 'category'}">
+	<p:dataTable id="dtPP" value="#{policyProfileBean.listProfilePep}"
+		widgetVar="vgPolicyProfile" var="item" paginator="true" rows="5"
+		paginatorPosition="bottom"
+		paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		rowsPerPageTemplate="5,10,15,20,50,100" rowIndexVar="index">
+		<p:ajax event="filter" ignoreAutoUpdate="false" />
+		<f:facet name="header">
+			<p:outputLabel value="#{policyProfileBean.policyProfileTitle}"
+				style="font-weight:bold;padding-bottom: -10px;" />
+		</f:facet>
+		<p:column headerText="#" style="width:5%">
+			<h:outputText value="#{index + 1}" title="#{index + 1}" />
+		</p:column>
+		<p:column headerText="#{msg['policy.ppName']}"
+			sortBy="#{item.profilePepName}" filterBy="#{item.profilePepName}"
+			filterMatchMode="contains"
+			style="text-align: center;width:24%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap"
+			id="colRowValue3">
+			<h:outputText value="#{item.profilePepName}"
+				styleClass="preformatted" />
+		</p:column>
+		<p:column headerText="#{msg['policy.monitor_keys']}"
+			sortBy="#{item.monitorKey}" filterMatchMode="contains"
+			filterBy="#{item.monitorKey}" style="text-align: center;width:16%"
+			id="colRowValue5">
+			<h:outputText value="#{item.monitorKey}" title="#{item.monitorKey}" />
+		</p:column>
+		<p:column headerText="#{msg['policy.priority']}"
+			sortBy="#{item.priority}" filterMatchMode="contains"
+			filterBy="#{item.priority}" style="text-align: center;width:14%"
+			id="colRowValue6">
+			<h:outputText value="#{item.priority}" title="#{item.priority}" />
+		</p:column>
+		<p:column headerText="#{msg['policy.desc']}" sortBy="#{item.remark}"
+			filterMatchMode="contains" filterBy="#{item.remark}"
+			style="text-align: center;width:15%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap"
+			id="colRowValue7">
+			<h:outputText value="#{item.remark}" title="#{item.remark}" />
+		</p:column>
+		<p:column headerText="#{msg['common.action']}"
+			styleClass="actionColumn">
+			<p:commandLink
+				styleClass="btn btn-sm btn-action-edit colorStrongGreen"
+				actionListener="#{policyProfileBean.editPP(item)}"
+				resetValues="true"
+				update="categoryCommonTop contentPanel treeCommon  contentTitle form-policy_profile">
+				<i class="fa fa-pencil icon-only mr-0"></i>
+			</p:commandLink>
+
+			<p:commandLink styleClass="btn btn-sm btn-action-del colorRed"
+				actionListener="#{policyProfileBean.deletePP(item)}"
+				resetValues="true"
+				update="form-policy_profile-list categoryCommonTop contentPanel treeCommon">
+				<i class="fa fa-times icon-only mr-0"></i>
+				<p:confirm header="#{msg['common.delete']}"
+					message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+			</p:commandLink>
+			<f:facet name="header">
+				<p:commandButton id="btnNew" value="#{msg['common.addNew']}" icon="fa fa-plus"
+					actionListener="#{policyProfileBean.btnNew}" resetValues="true"
+					update="form-policy_profile categoryCommonTop contentPanel contentTitle "
+					styleClass="btn btn-primary" immediate="true">
+				</p:commandButton>
+			</f:facet>
+		</p:column>
+	</p:dataTable>
+</h:form>
+
+<h:form id="form-policy_profile" class="container-fluid"
+	rendered="#{policyProfileBean.formType == 'detail'}">
+	<div class="container-fluid">
+		<div class="row formFieldMg">
+			<div class="col-sm-6">
+				<div class="row">
+					<div class="col-sm-12">
+						<p:outputLabel value="#{msg['common.ID']}"/>
+					</div>
+					<div class="col-sm-12">
+						<p:inputText
+							value="#{policyProfileBean.profilePep.profilePepId}"
+							styleClass="form-control" readonly="true"
+							maxlength="100" />
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="row">
+					<div class="col-sm-12">
+						<p:outputLabel value="#{msg['policy.title_profile']}"
+							 for="profilePepName" />
+					</div>
+					<div class="col-sm-12">
+						<p:inputText
+							value="#{policyProfileBean.profilePep.profilePepName}"
+							styleClass="form-control" required="true" id="profilePepName"
+							maxlength="100" />
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="row">
+					<div class="col-sm-12">
+						<p:outputLabel value="#{msg['common.category']}"
+							 for="somCatId"></p:outputLabel>
+					</div>
+					<div class="col-sm-12">
+						<h:selectOneMenu styleClass="form-control select" id="somCatId"
+							value="#{policyProfileBean.profilePep.categoryId}"
+							editable="true" required="true"
+							requiredMessage="#{msg['common.required']}">
+							<f:selectItems value="#{policyProfileBean.listItemCategory}"
+								var="cat" itemValue="#{cat.categoryId}"
+								itemLabel="#{cat.categoryName}"></f:selectItems>
+						</h:selectOneMenu>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="row">
+					<div class="col-sm-12">
+						<p:outputLabel value="#{msg['policy.monitor_keys']}"
+							for="sommonitorKey" ></p:outputLabel>
+					</div>
+					<div class="col-sm-12">
+						<h:selectOneMenu styleClass="form-control" id="sommonitorKey"
+							value="#{policyProfileBean.profilePep.monitorKey}"
+							editable="true" required="true"
+							requiredMessage="#{msg['common.required']}">
+							<f:selectItems value="#{policyProfileBean.loadMonitorKey()}" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="row">
+					<div class="col-sm-12">
+						<p:outputLabel value="#{msg['policy.priority']}"
+							 for="priority" />
+					</div>
+					<div class="col-sm-12">
+						<p:inputText value="#{policyProfileBean.profilePep.priority}"
+							styleClass="form-control" required="true" id="priority"
+							maxlength="9">
+							<pe:keyFilter regEx="/[0-9]/i" />
+						</p:inputText>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="row">
+					<div class="col-sm-12">
+						<p:outputLabel value="#{msg['policy.qos']}" for="qosId"
+							></p:outputLabel>
+					</div>
+					<div class="col-sm-12">
+						<h:selectOneMenu styleClass="form-control" id="qosId"
+							value="#{policyProfileBean.profilePep.qosId}" editable="true"
+							required="true" requiredMessage="#{msg['common.required']}">
+							<f:selectItems value="#{policyProfileBean.loadQos()}" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="row">
+					<div class="col-sm-12">
+						<p:outputLabel value="#{msg['policy.desc']}"
+							 />
+					</div>
+					<div class="col-sm-12">
+						<p:inputText value="#{policyProfileBean.profilePep.remark}"
+							styleClass="form-control" maxlength="255" />
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-12">
+				<div class="row">
+					<div class="col-sm-12">
+						<p:dataTable id="dtPCC"
+							value="#{policyProfileBean.listPCCOfProfilePep}" var="itemPCC"
+							paginator="true" rows="5" paginatorPosition="bottom"
+							widgetVar="vgPCC"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="5,10,15,20,50,100" rowIndexVar="index">
+							<f:facet name="header">
+								<p:outputLabel value="#{msg['title.PccRuleMapping']}"
+									></p:outputLabel>
+							</f:facet>
+							<p:column headerText="#" style="width:6%">
+								<h:outputText value="#{index + 1}" title="#{index + 1}" />
+							</p:column>
+							<p:column headerText="#{msg['policy.title_rule']}"
+								sortBy="#{itemPCC.pccBaseName}"
+								filterBy="#{itemPCC.pccBaseName}" filterMatchMode="contains"
+								style="text-align: center;width:24%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"
+								id="colRowValue3">
+								<h:outputText value="#{itemPCC.pccBaseName}"
+									title="#{itemPCC.pccBaseName}" />
+							</p:column>
+							<p:column headerText="#{msg['policy.priority']}"
+								sortBy="#{itemPCC.priority}" filterBy="#{itemPCC.priority}"
+								filterMatchMode="contains" style="text-align: center;width:14%"
+								id="colRowValue6">
+								<h:outputText value="#{itemPCC.priority}"
+									title="#{itemPCC.priority}" />
+							</p:column>
+							<p:column headerText="#{msg['policy.desc']}"
+								sortBy="#{itemPCC.remark}" filterBy="#{itemPCC.remark}"
+								filterMatchMode="contains"
+								style="text-align: center;width:14%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"
+								id="colRowValue7">
+								<h:outputText value="#{itemPCC.remark}"
+									title="#{itemPCC.remark}" />
+							</p:column>
+							<p:column headerText="#{msg['common.action']}"
+								styleClass="actionColumn">
+								<p:commandLink disabled="#{!policyProfileBean.isEditting()}"
+									styleClass="btn btn-sm btn-action-edit colorStrongGreen"
+									actionListener="#{policyProfileBean.editPccRule(itemPCC)}"
+									immediate="true" resetValues="true"
+									update="categoryCommonTop contentPanel treeCommon">
+									<i class="fa fa-pencil icon-only mr-0"></i>
+								</p:commandLink>
+
+								<p:commandLink disabled="#{!policyProfileBean.isEditting()}" 
+									styleClass="btn btn-sm btn-action-del colorRed"
+									actionListener="#{policyProfileBean.deletePccRule(itemPCC)}"
+									resetValues="true" immediate="true"
+									update="form-policy_profile:dtPCC">
+									<i class="fa fa-times icon-only mr-0"></i>
+									<p:confirm header="#{msg['common.delete']}"
+										message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+								</p:commandLink>
+								<f:facet name="header">
+									<p:commandButton id="btnNew" value="#{msg['common.addNew']}"
+										immediate="true" icon="fa fa-plus" disabled="#{!policyProfileBean.isEditting()}"
+										update="dtPCC form-policy_profile categoryCommonTop contentPanel"
+										actionListener="#{policyProfileBean.choosePR()}"
+										styleClass="btn btn-default">
+										<p:ajax event="dialogReturn"
+											update="form-policy_profile:dtPCC"
+											listener="#{policyProfileBean.onDialogPRReturn}" />
+									</p:commandButton>
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<div class="col-sm-8"></div>
+					<div class="col-sm-4" style="text-align: right;">
+						<p:commandButton id="btnSave" value="#{msg['common.save']}"
+							actionListener="#{policyProfileBean.btnSave}" icon="fa fa-save"
+							disabled="#{!policyProfileBean.isEditting()}"
+							update="form-policy_profile categoryCommonTop contentPanel treeCommon"
+							styleClass="btn btn-default">
+							<p:confirm header="#{msg['common.apply']}"
+								message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+						</p:commandButton>
+						<!-- <p:commandButton id="btnCancel" value="#{msg['common.cancel']}"
+							actionListener="#{policyProfileBean.btnCancel}" icon="fa fa-refresh"
+							disabled="#{!policyProfileBean.isEditting()}"
+							update="form-policy_profile categoryCommonTop contentPanel treeCommon "
+							styleClass="btn btn-default" immediate="true">
+						</p:commandButton> -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</h:form>
+<p:dialog header="#{msg['title.PR']}" modal="true" id="dlgPccRule"
+	resizable="false" showEffect="fade" widgetVar="dlgPccRule"
+	styleClass="dlg-center-fix">
+	<h:form id="formDlgPccRule" class="container-fluid">
+		<div class="container-fluid">
+			<div class="row formFieldMg">
+				<div class="col-sm-6">
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel value="#{msg['common.category']}"
+								 for="somCatId"></p:outputLabel>
+						</div>
+						<div class="col-sm-12">
+							<h:selectOneMenu styleClass="form-control col-xs-12"
+								id="somCatId" value="#{policyProfileBean.pccRuleDlg.categoryId}"
+								editable="true" required="true"
+								requiredMessage="#{msg['common.required']}">
+								<f:selectItems value="#{pccRuleBean.loadCategory()}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel value="#{msg['policy.pcc_base_name']}"
+								 for="BaseName" />
+						</div>
+						<div class="col-sm-12">
+							<p:inputText value="#{policyProfileBean.pccRuleDlg.pccBaseName}"
+								styleClass="form-control" required="true" id="BaseName"
+								maxlength="100" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-sm-6">
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel value="#{msg['policy.priority']}"
+								 for="priority" />
+						</div>
+						<div class="col-sm-12">
+							<p:inputText value="#{policyProfileBean.pccRuleDlg.priority}"
+								styleClass="form-control" required="true" id="priority"
+								maxlength="9">
+								<pe:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel value="#{msg['policy.desc']}"
+								 />
+						</div>
+						<div class="col-sm-12">
+							<p:inputText value="#{policyProfileBean.pccRuleDlg.remark}"
+								styleClass="form-control" maxlength="255" />
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel value="#{msg['policy.precedence']}"
+								 for="precedence" />
+						</div>
+						<div class="col-sm-12">
+							<p:inputText value="#{policyProfileBean.pccRuleDlg.precedence}"
+								styleClass="form-control" required="true" id="precedence"
+								maxlength="9">
+								<pe:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6 ">
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel value="#{msg['policy.sendType']}"
+								 for="type" />
+						</div>
+						<div class="col-sm-12">
+							<h:selectOneMenu id="type" styleClass="form-control"
+								value="#{policyProfileBean.pccRuleDlg.type}" required="true">
+								<f:selectItem itemLabel="Hexa String type" itemValue="0" />
+								<f:selectItem itemLabel="Text" itemValue="1" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 ">
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel value="#{msg['policy.effectDate']}"
+								 for="fromDate">
+								<f:convertDateTime pattern="#{userSession.dateFormat}" />
+							</p:outputLabel>
+						</div>
+						<div class="col-sm-12">
+							<p:calendar pattern="#{userSession.dateFormat}" id="fromDate"
+								value="#{policyProfileBean.pccRuleDlg.activeTime}"
+								required="true" converterMessage="#{msg['policy.errorFormat']}" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 ">
+					<div class="row">
+						<div class="col-sm-12">
+							<p:outputLabel value="#{msg['policy.expireDate']}"
+								>
+								<f:convertDateTime pattern="#{userSession.dateFormat}" />
+							</p:outputLabel>
+						</div>
+						<div class="col-sm-12">
+							<p:calendar pattern="#{userSession.dateFormat}"
+								value="#{policyProfileBean.pccRuleDlg.deactiveTime}"
+								converterMessage="#{msg['policy.errorFormat']}" />
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="col-sm-8"></div>
+						<div class="col-sm-4" style="text-align: right;">
+							<p:commandButton id="btnSave" value="#{msg['common.save']}" icon="fa fa-save"
+								actionListener="#{policyProfileBean.btnSavePccRuleDlg}"
+								update="form-pcc-rule-detail treeCommon form-policy_profile:dtPCC"
+								styleClass="btn btn-default">
+							</p:commandButton>
+							<p:commandButton id="btnClose" value="#{msg['common.cancel']}"
+								onclick="PF('dlgPccRule').hide()" styleClass="btn btn-default"
+								immediate="true">
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</h:form>
+</p:dialog>
+</html>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:form class="container-fluid">
+	<div class="row">
+		<div class="col-xs-12">
+			<p:panel id="pnlObjType">
+				<h:selectOneMenu value="#{treeOfferBean.txtSearchObjType}"
+					styleClass="form-control" rendered="#{!treeOfferBean.findDump}">
+					<f:selectItem itemValue="Offer" itemLabel="Offer"></f:selectItem>
+					<f:selectItem itemValue="Action" itemLabel="Action"></f:selectItem>
+					<f:selectItem itemValue="DR" itemLabel="DynamicReserve"></f:selectItem>
+					<f:selectItem itemValue="SPC" itemLabel="Sort Price Component"></f:selectItem>
+					<f:selectItem itemValue="PC" itemLabel="Price Component"></f:selectItem>
+					<f:selectItem itemValue="Block" itemLabel="Block"></f:selectItem>
+					<f:selectItem itemValue="RateTable" itemLabel="RateTable"></f:selectItem>
+					<f:selectItem itemValue="DecisionTable" itemLabel="DecisionTable"></f:selectItem>
+					<f:selectItem itemValue="Normalizer" itemLabel="Normalizer"></f:selectItem>
+				</h:selectOneMenu>
+				<h:selectOneMenu value="#{treeOfferBean.txtSearchObjType}"
+					styleClass="form-control" rendered="#{treeOfferBean.findDump}">
+					
+					<f:selectItem itemValue="Action" itemLabel="Action"></f:selectItem>
+					<f:selectItem itemValue="DR" itemLabel="DynamicReserve"></f:selectItem>
+					<f:selectItem itemValue="SPC" itemLabel="Sort Price Component"></f:selectItem>
+					<f:selectItem itemValue="PC" itemLabel="Price Component"></f:selectItem>
+					<f:selectItem itemValue="Block" itemLabel="Block"></f:selectItem>
+					<f:selectItem itemValue="RateTable" itemLabel="RateTable"></f:selectItem>
+					<f:selectItem itemValue="DecisionTable" itemLabel="DecisionTable"></f:selectItem>
+					<f:selectItem itemValue="Normalizer" itemLabel="Normalizer"></f:selectItem>
+					<f:selectItem itemValue="Formula" itemLabel="Formula"></f:selectItem>
+					<f:selectItem itemValue="ColumnDt" itemLabel="ColumnDt"></f:selectItem>
+					<f:selectItem itemValue="NormValue" itemLabel="NormValue"></f:selectItem>
+					<f:selectItem itemValue="NormParam" itemLabel="NormParam"></f:selectItem>
+				</h:selectOneMenu>
+			</p:panel>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<p:inputNumber minValue="0" decimalPlaces="0" thousandSeparator="" 
+				value="#{treeOfferBean.txtSearchObjID}" placeholder="ObjectID" styleClass="inputNumCustom"/>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<p:inputText value="#{treeOfferBean.txtSearchObjName}" maxlength="50"
+				placeholder="Object Name" styleClass="form-control" />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<p:inputText value="#{treeOfferBean.txtSearchObjDesc}" maxlength="50"
+				placeholder="Object Description" styleClass="form-control" />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-8">
+			<p:selectBooleanCheckbox value="#{treeOfferBean.findDump}" itemLabel="#{msg['title.findDump']}">
+				<p:ajax event="change" listener="#{treeOfferBean.onchangeSearchObjType}" update="pnlObjType tblSearchResult" />
+			</p:selectBooleanCheckbox>
+		</div>
+		<div class="col-xs-4 text-right">
+			<p:commandButton value="#{msg['common.search']}" styleClass="btn btn-default"
+						actionListener="#{treeOfferBean.doSearchObject}" update="tblSearchResult">
+			</p:commandButton>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<p:outputLabel value="#{msg['common.searchResult']}" />
+		</div>
+		<div class="col-xs-12">
+			<p:dataTable id="tblSearchResult" var="item" rowIndexVar="rowIndex"
+				value="#{treeOfferBean.listSearchResult}" 
+				emptyMessage="#{msg['common.noData']}" 
+				scrollable="true" scrollHeight="300"
+				rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"
+				selectionMode="single" rowKey="#{item.id}">
+				<p:ajax event="rowSelect" listener="#{treeOfferBean.onRowObjSelect}" update="contentTitle categoryCommonTop contentPanel"/>
+				
+				<!-- <f:facet name="header">
+					<p:outputLabel value="#{msg['common.searchResult']}" />
+				</f:facet> -->
+								
+				<!-- <p:column headerText="#{msg['common.type']}">
+					<h:outputText value="#{item.type}" />
+				</p:column> -->
+				<p:column headerText="#{msg['common.ID']}"
+					styleClass="widthIDcolumn">
+					<h:outputText value="#{item.objId}" />
+				</p:column>
+				<p:column headerText="#{msg['common.name']}">
+					<h:outputText value="#{item.name}" />
+				</p:column>
+				<p:column headerText="#{msg['common.desc']}">
+					<h:outputText value="#{item.description}" />
+				</p:column>
+				<p:column headerText="#{msg['common.action']}" rendered="#{treeOfferBean.findDump}" style="width:60px;text-align:center">
+					<p:commandLink
+						actionListener="#{treeOfferBean.deleteDumpObject(item)}"
+						update="tblSearchResult treeCommon"
+						styleClass="btn btn-sm btn-action-del colorRed">
+						<i class="fa fa-times icon-only mr-0"></i>
+						<p:confirm header="#{msg['common.delete']}"
+							message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</div>
+	</div>
+</h:form>
+</html>

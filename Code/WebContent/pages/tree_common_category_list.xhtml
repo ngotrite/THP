@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:form class="container-fluid">
+	<div class="row">
+		<div class="col-xs-12">
+			<p:dataTable id="ID_CategoryTable" var="category"
+				rowIndexVar="rowIndex" value="#{treeCommonBean.listAllCategory}"
+				rowKey="#{category.categoryId}" rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"
+				emptyMessage="#{msg['common.noData']}" 
+				paginator="true" rows="10"
+				paginatorPosition="bottom"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,20,50,100">
+				<p:ajax event="filter" ignoreAutoUpdate="false" />
+				<f:facet name="header">
+					<h:outputLabel
+						value="#{msg['title.categoryOf']} #{treeCommonBean.category.categoryName}"></h:outputLabel>
+				</f:facet>
+
+				<p:column headerText="#" styleClass="widthSTTcolumn">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+				<p:column headerText="#{msg['common.ID']}"
+					styleClass="widthIDcolumn" sortBy="#{category.categoryId}">
+					<h:outputText value="#{category.categoryId}" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.name']}"
+					sortBy="#{category.categoryName}"
+					filterBy="#{category.categoryName}" filterMatchMode="contains">
+					<h:outputText value="#{category.categoryName}" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.desc']}"
+					sortBy="#{category.remark}" filterBy="#{category.remark}"
+					filterMatchMode="contains">
+					<h:outputText value="#{category.remark}" />
+				</p:column>
+				<p:column headerText="#{msg['common.action']}"
+					styleClass="actionColumn">
+					<p:commandLink
+						actionListener="#{treeCommonBean.btnCatShowDlg(category)}"
+						update="formDlgCategory" oncomplete="PF('dlgCategory').show()"
+						immediate="true"
+						styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+						<i class="fa fa-pencil icon-only mr-0"></i>
+					</p:commandLink>
+					<p:commandLink
+						actionListener="#{treeCommonBean.deleteCategory(category)}"
+						update="categoryCommonTop treeCommon"
+						styleClass="btn btn-sm btn-action-del colorRed">
+						<i class="fa fa-times icon-only mr-0"></i>
+						<p:confirm header="#{msg['common.delete']}"
+							message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+					</p:commandLink>
+
+					<f:facet name="header">
+						<p:commandButton value="#{msg['common.addChild']}" icon="fa fa-plus"
+							actionListener="#{treeCommonBean.btnCatShowDlg(category)}"
+							update="formDlgCategory" oncomplete="PF('dlgCategory').show()"
+							immediate="true">
+						</p:commandButton>
+					</f:facet>
+				</p:column>
+			</p:dataTable>
+		</div>
+	</div>
+</h:form>
+</html>

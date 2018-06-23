@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="/pages/tree_common.xhtml">
+	<ui:define name="subcontent">
+		<p:panel id="myPanel">
+			<h:form id="form-template-category" class="container-fluid"
+				rendered="#{cdrGenFileNameBean.formType == 'category'}">
+				<div class="container-fluid">
+					<div class="row formFieldMg">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:dataTable id="tableCdrGenFileName" var="item"
+									value="#{cdrGenFileNameBean.listCdrGenFileName}"
+									rowKey="#{item.cdrGenFilenameId}" rowIndexVar="index"
+									emptyMessage="#{msg['common.noData']}" paginator="true"
+									rows="20" paginatorPosition="bottom"
+									paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									rowsPerPageTemplate="10,20,50,100">
+									<f:facet name="header">
+										<p:outputLabel value="#{msg['title.CdrGenFileName']}"
+											style="font-weight:bold" />
+									</f:facet>
+									<p:column headerText="#" style="width:6%">
+										<h:outputText value="#{index + 1}" title="#{index + 1}" />
+									</p:column>
+
+									<p:column headerText="#{msg['common.name']}"
+										sortBy="#{item.name}" filterBy="#{item.name}"
+										filterMatchMode="contains">
+										<h:outputText value="#{item.name}" styleClass="preformatted" />
+									</p:column>
+
+									<p:column headerText="#{msg['common.pattern']}"
+										sortBy="#{item.pattern}" filterBy="#{item.pattern}"
+										filterMatchMode="contains">
+										<h:outputText value="#{item.pattern}" />
+									</p:column>
+
+									<p:column headerText="#{msg['common.desc']}"
+										sortBy="#{item.description}" filterBy="#{item.description}"
+										filterMatchMode="contains">
+										<h:outputText value="#{item.description}"
+											styleClass="preformatted" />
+									</p:column>
+
+									<p:column headerText="#{msg['common.action']}"
+										styleClass="actionColumn">
+										<p:commandLink
+											actionListener="#{cdrGenFileNameBean.editCdrGenFileName(item)}"
+											resetValues="true"
+											update="myPanel categoryCommonTop contentPanel contentTitle form-template-detail"
+											styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+											<i class="fa fa-pencil icon-only mr-0"></i>
+										</p:commandLink>
+										<p:commandLink
+											actionListener="#{cdrGenFileNameBean.deleteCdrGenFileName(item)}"
+											update="tableCdrGenFileName treeCommon" resetValues="true"
+											styleClass="btn btn-sm btn-action-del colorRed">
+											<i class="fa fa-times icon-only mr-0"></i>
+											<p:confirm header="#{msg['common.delete']}"
+												message="#{msg['common.confirmDelete']}"
+												icon="ui-icon-alert" />
+										</p:commandLink>
+										<f:facet name="header"> 
+											<p:commandButton id="btnNew" value="#{msg['common.addNew']}" icon="fa fa-plus"
+												actionListener="#{cdrGenFileNameBean.addNewGenFileName}"
+												update="categoryCommonTop contentPanel myPanel contentTitle form-template-detail"
+												styleClass="btn btn-primary" immediate="true"
+												resetValues="true">
+											</p:commandButton>
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+
+			<h:form id="form-template-detail" class="container-fluid"
+				rendered="#{cdrGenFileNameBean.formType == 'detail' and  categoryCommonBean.formType ne 'category' }">
+				<div class="container-fluid">
+					<div class="row formFieldMg">
+						<div class="col-sm-6 ">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['cdrGenFileName.id']}"
+										></p:outputLabel>
+								</div>
+								<div class="col-xs-12">
+									<p:inputText
+										value="#{cdrGenFileNameBean.cdrGenFileName.cdrGenFilenameId}"
+										styleClass="form-control" readonly="true"></p:inputText>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['cdrTemplate.category']}"
+										></p:outputLabel>
+								</div>
+								<div class="col-xs-12">
+									<h:selectOneMenu
+										value="#{cdrGenFileNameBean.cdrGenFileName.categoryId}"
+										styleClass="form-control select">
+										<f:selectItems value="#{cdrGenFileNameBean.listCategory}"
+											var="cat" itemValue="#{cat.categoryId}"
+											itemLabel="#{cat.categoryName}"></f:selectItems>
+									</h:selectOneMenu>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['cdrGenFileName.name']}"
+										 for="txtName"></p:outputLabel>
+								</div>
+								<div class="col-xs-12">
+									<p:inputText value="#{cdrGenFileNameBean.cdrGenFileName.name}"
+										id="txtName" styleClass="form-control" maxlength="100"
+										required="true"></p:inputText>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['cdrGenFileName.pattern']}"
+										 for="txtPattern"></p:outputLabel>
+								</div>
+								<div class="col-xs-12">
+									<p:inputText
+										value="#{cdrGenFileNameBean.cdrGenFileName.pattern}"
+										required="true" styleClass="form-control" maxlength="500"
+										id="txtPattern"></p:inputText>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-6">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['cdrGenFileName.template']}"
+										></p:outputLabel>
+								</div>
+								<div class="col-xs-12">
+									<table class="table-choosing">
+										<tr>
+											<td>
+												<p:inputText value="#{cdrGenFileNameBean.cdrTemplateName}"
+													styleClass="form-control" readonly="true" id="txtTempalateID">
+												</p:inputText>
+											</td>
+											<td class="td-btn-fix">
+												<p:commandLink
+													disabled="#{!cdrGenFileNameBean.editting}" actionListener="#{cdrGenFileNameBean.chooseTemplate()}"
+													id="btnAddTemplate" immediate="true" update="form-template-detail categoryCommonTop contentPanel"
+													styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+													<i class="fa fa-pencil"></i>
+													<p:ajax event="dialogReturn"
+														update="form-template-detail:txtTempalateID"
+														listener="#{cdrGenFileNameBean.onDialogTemplateReturn}" />
+												</p:commandLink>
+												<p:commandLink
+													disabled="#{!cdrGenFileNameBean.editting}" actionListener="#{cdrGenFileNameBean.deleteTemplate()}"
+													update="form-template-detail" immediate="true"
+													styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+													<i class="fa fa-times icon-only mr-0"></i>
+												</p:commandLink>
+											</td>
+										</tr>
+									</table>						
+								</div>
+								<!-- <div class="col-xs-10">
+									<p:panel id="pnlService" styleClass="nopadding">
+										<p:inputText value="#{cdrGenFileNameBean.cdrTemplateName}"
+											styleClass="form-control" readonly="true" id="txtTempalateID">
+										</p:inputText>
+									</p:panel>
+								</div>
+								<div class="col-xs-2">
+									<p:commandButton id="btnAddTemplate" value="..."
+										immediate="true" styleClass="pull-right"
+										update="form-template-detail categoryCommonTop contentPanel"
+										actionListener="#{cdrGenFileNameBean.chooseTemplate()}">
+										<p:ajax event="dialogReturn"
+											update="form-template-detail:txtTempalateID"
+											listener="#{cdrGenFileNameBean.onDialogTemplateReturn}" />
+									</p:commandButton>
+								</div> -->
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['cdrGenFileName.paymentType']}"
+										></p:outputLabel>
+								</div>
+								<div class="col-xs-12">
+									<table class="table-choosing">
+										<tr>
+											<td>
+												<p:inputText
+													value="#{cdrGenFileNameBean.cdrGenFileName.serviceType}"
+													id="txtServiceType" styleClass="form-control" readonly="true">
+												</p:inputText>
+											</td>
+											<td class="td-btn-fix">
+												<p:commandLink
+													disabled="#{!cdrGenFileNameBean.editting}" actionListener="#{cdrGenFileNameBean.chooseServieCode()}"
+													id="btnAddServieCode" immediate="true" update="form-template-detail categoryCommonTop contentPanel"
+													styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+													<i class="fa fa-pencil"></i>
+													<p:ajax event="dialogReturn"
+														update="form-template-detail:txtServiceType"
+														listener="#{cdrGenFileNameBean.onDialogServieCodeReturn}" />
+												</p:commandLink>
+												<p:commandLink
+													disabled="#{!cdrGenFileNameBean.editting}" actionListener="#{cdrGenFileNameBean.deleteServieCode()}"
+													update="form-template-detail" immediate="true"
+													styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+													<i class="fa fa-times icon-only mr-0"></i>
+												</p:commandLink>
+											</td>
+										</tr>
+									</table>						
+								</div>
+								<!-- <div class="col-xs-10">
+									<p:inputText
+										value="#{cdrGenFileNameBean.cdrGenFileName.serviceType}"
+										id="txtServiceType" styleClass="form-control" readonly="true">
+									</p:inputText>
+								</div>
+								<div class="col-xs-2">
+									<p:commandButton id="btnAddServieCode" value="..."
+										immediate="true" styleClass="pull-right"
+										update="form-template-detail categoryCommonTop contentPanel"
+										actionListener="#{cdrGenFileNameBean.chooseServieCode()}">
+										<p:ajax event="dialogReturn"
+											update="form-template-detail:txtServiceType"
+											listener="#{cdrGenFileNameBean.onDialogServieCodeReturn}" />
+									</p:commandButton>
+								</div> -->
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['cdrGenFileName.processCode']}"
+										></p:outputLabel>
+								</div>
+								<div class="col-xs-12">
+									<p:inputText
+										value="#{cdrGenFileNameBean.cdrGenFileName.processCode}"
+										styleClass="form-control">
+										<p:keyFilter regEx="/[0-9]/i" />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-6">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['cdrTemplate.description']}"
+										></p:outputLabel>
+								</div>
+								<div class="col-xs-12">
+									<p:inputText
+										value="#{cdrGenFileNameBean.cdrGenFileName.description}"
+										styleClass="form-control" maxlength="255"></p:inputText>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12">
+							<div class="row">
+								<div class="col-xs-8"></div>
+								<div class="col-xs-4" style="text-align: right;">
+									<p:commandButton value="#{msg['common.apply']}"
+										update="treeCommon myPanel" id="btnApply" icon="fa fa-save"
+										disabled="#{!cdrGenFileNameBean.editting}"
+										actionListener="#{cdrGenFileNameBean.submitGenFileName}">
+										<p:confirm header="#{msg['common.apply']}"
+											message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+									</p:commandButton>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

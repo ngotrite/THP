@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="/pages/layout_empty.xhtml">
+	<ui:define name="subcontent">
+		<h:form id="form-actionaudit-list" class="container-fluid">
+			<div class="formFieldMg">
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-6 ">
+							<p:outputLabel value="#{msg['log.fromDate']}"
+								 for="fromDate">
+								<f:convertDateTime pattern="#{userSession.dateFormat}" />
+							</p:outputLabel>
+							<p:calendar pattern="#{userSession.dateFormat}" id="fromDate"
+								value="#{actionAuditBean.fromDate}" required="true"
+								converterMessage="#{msg['policy.errorFormat']}" />
+						</div>
+						<div class="col-md-6 ">
+							<p:outputLabel value="#{msg['log.toDate']}"
+								 for="toDate">
+								<f:convertDateTime pattern="#{userSession.dateFormat}" />
+							</p:outputLabel>
+							<p:calendar pattern="#{userSession.dateFormat}" id="toDate"
+								value="#{actionAuditBean.toDate}" required="true"
+								converterMessage="#{msg['policy.errorFormat']}" />
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="row">
+						<div class="col-md-6 ">
+							<div>
+								<p:outputLabel value="#{msg['log.userName']}"
+									 />
+								<h:selectOneMenu styleClass="form-control"
+									value="#{actionAuditBean.userName}" editable="true">
+									<f:selectItems value="#{actionAuditBean.loadUser()}" />
+								</h:selectOneMenu>
+							</div>
+						</div>
+						<div>
+							<div class="col-md-6" style="padding-top: 2%">
+								<p:commandButton id="btnSearch" value="#{msg['common.search']}"
+									actionListener="#{actionAuditBean.btnSearch()}"
+									update=" form-actionaudit-list ListAuditLog "
+									icon=" fa fa fa-search" styleClass="btn btn-default"
+									resetValues="true">
+								</p:commandButton>
+								<h:commandLink>
+									<p:graphicImage name="/themes/logo/ExportExcel.png" width="32" />
+									<p:dataExporter type="xls" target="ListAuditLog"
+										fileName="AuditLog"
+										postProcessor="#{actionAuditBean.postProcessXLS}" />
+								</h:commandLink>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:dataTable id="ListAuditLog" rowIndexVar="rowIndex" resizableColumns="true"
+							value="#{actionAuditBean.lstAuditLog}" var="rowitem"
+							paginator="true" rows="20" paginatorPosition="bottom"
+							rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="5,10,15,20,50,100">
+							<p:column headerText="#" style="width:4%">
+								<h:outputText value="#{rowIndex + 1}" />
+							</p:column>
+							<p:column headerText="#{msg['log.userName']}"
+								sortBy="#{rowitem.userName}" filterBy="#{rowitem.userName}"
+								filterMatchMode="contains" style="text-align: left;"
+								id="colRowValue2">
+								<h:outputText value="#{rowitem.userName}" title="#{rowitem.userName}"/>
+							</p:column>
+							<p:column headerText="#{msg['log.action']}"
+								sortBy="#{rowitem.action}" filterBy="#{rowitem.action}"
+								filterMatchMode="contains" style="text-align: left;"
+								id="colRowValue3">
+								<h:outputText value="#{rowitem.action}" title="#{rowitem.action}" />
+							</p:column>
+							<p:column headerText="#{msg['log.oldDetail']}"
+								sortBy="#{rowitem.oldDetail}" filterBy="#{rowitem.oldDetail}"
+								filterMatchMode="contains" style="text-align: left;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"
+								id="colRowValue4">
+								<h:outputText value="#{rowitem.oldDetail}" title="#{rowitem.oldDetail}" />
+							</p:column>
+							<p:column headerText="#{msg['log.newDetail']}"
+								sortBy="#{rowitem.newDetail}" filterBy="#{rowitem.newDetail}"
+								filterMatchMode="contains" style="text-align: left;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"
+								id="colRowValue5">
+								<h:outputText value="#{rowitem.newDetail}"  title="#{rowitem.newDetail}"/>
+							</p:column>
+							<p:column headerText="#{msg['log.createDate']}"
+								sortBy="#{rowitem.createDate}" filterBy="#{rowitem.createDate}"
+								filterMatchMode="contains" style="text-align: left;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"
+								id="colRowValue6">
+								<h:outputText value="#{rowitem.createDate}" title="#{rowitem.createDate}" />
+							</p:column>
+							<p:column headerText="#{msg['log.entityName']}"
+								sortBy="#{rowitem.entityName}" filterBy="#{rowitem.entityName}"
+								filterMatchMode="contains" style="text-align: left;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"
+								id="colRowValue7">
+								<h:outputText value="#{rowitem.entityName}"  title="#{rowitem.entityName}" />
+							</p:column>
+							<p:column headerText="#{msg['log.ip']}" sortBy="#{rowitem.ip}"
+								filterBy="#{rowitem.ip}" filterMatchMode="contains"
+								style="text-align: center;" id="colRowValue8">
+								<h:outputText value="#{rowitem.ip}" title="#{rowitem.ip}"/>
+							</p:column>
+						</p:dataTable>
+						</div>						
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

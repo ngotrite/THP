@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="/pages/layout_empty.xhtml">
+	<ui:define name="subcontent">
+		<div class="row formFieldMg">
+		<div class="col-xs-12 col-sm-7 nopadding">
+			<h:form id="form-qos-list" class="container-fluid nopadding-right">
+			<article class="col-xs-12">
+                        <div class="jarviswidget jarviswidget-color-yellow" id="wid-id-0" style="margin-right: -10px;"
+                             data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                            <header>
+                                <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                <h2>#{msg['policy.qosList']}</h2>                                
+                            </header>
+				<p:dataTable id="dtRows" value="#{qosBean.rowDts}" var="rowitem"
+					paginator="true" rows="20" paginatorPosition="bottom"
+					widgetVar="wgQos" resizableColumns="true"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15,20,50,100" rowIndexVar="index"
+					rowStyleClass="#{index % 2 == 1? 'rowColorBlue': null}">
+					<p:column headerText="#" style="width:5%">
+						<h:outputText value="#{index + 1}" title="#{index + 1}" />
+					</p:column>
+					<p:column headerText="#{msg['policy.qos_name']}"
+						sortBy="#{rowitem.qosName}" sortable="true" styleClass="text-truncate"
+						filterMatchMode="contains" filterBy="#{rowitem.qosName}"
+						style="text-align: left;width:15%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"
+						id="colRowValue2">
+						<h:outputText value="#{rowitem.qosName}"
+							title="#{rowitem.qosName}" styleClass="preformatted"/>
+					</p:column>
+					<p:column headerText="#{msg['policy.qos_qci']}" styleClass="text-truncate"
+						sortBy="#{rowitem.qci}" filterMatchMode="contains"
+						filterBy="#{rowitem.qci}" style=" text-align: center;width:8%;"
+						id="colRowValue3">
+						<h:outputText value="#{rowitem.qci}" title="#{rowitem.qci}" />
+					</p:column>
+					<p:column headerText="#{msg['qos.qos_mbrul']}" styleClass="text-truncate"
+						sortBy="#{rowitem.mbrul}" filterMatchMode="contains"
+						filterBy="#{rowitem.mbrul}" style="text-align: right;width:10%"
+						id="colRowValue4">
+						<h:outputText value="#{rowitem.mbrul}" title="#{rowitem.mbrul}" />
+					</p:column>
+					<p:column headerText="#{msg['qos.qos_mbrdl']}" styleClass="text-truncate"
+						sortBy="#{rowitem.mbrdl}" filterMatchMode="contains"
+						filterBy="#{rowitem.mbrdl}" style="text-align: right;width:10%"
+						id="colRowValue5">
+						<h:outputText value="#{rowitem.mbrdl}" title="#{rowitem.mbrdl}" />
+					</p:column>
+					<p:column headerText="#{msg['qos.qos_gbrdl']}" styleClass="text-truncate"
+						sortBy="#{rowitem.gbrdl}" filterMatchMode="contains"
+						filterBy="#{rowitem.gbrdl}" style="text-align: right;width:10%"
+						id="colRowValue6">
+						<h:outputText value="#{rowitem.gbrdl}" title="#{rowitem.gbrdl}" />
+					</p:column>
+					<p:column headerText="#{msg['qos.qos_gbrul']}" styleClass="text-truncate"
+						sortBy="#{rowitem.gbrul}" filterMatchMode="contains"
+						filterBy="#{rowitem.gbrul}" style="text-align: right;width:10%"
+						id="colRowValue7">
+						<h:outputText value="#{rowitem.gbrul}" title="#{rowitem.gbrul}" />
+					</p:column>
+					<p:column headerText="#{msg['policy.desc']}" styleClass="text-truncate"
+						sortBy="#{rowitem.remark}" filterMatchMode="contains"
+						filterBy="#{rowitem.remark}"
+						style="text-align: left;width:22%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"
+						id="colRowValue8">
+						<h:outputText value="#{rowitem.remark}" title="#{rowitem.remark}" />
+					</p:column>
+					<p:column headerText="#{msg['common.action']}"
+						 styleClass="actionColumnSmall">
+						<p:commandLink styleClass="btn btn-sm btn-action-edit colorStrongGreen"
+							actionListener="#{qosBean.editQos(rowitem)}"
+							update="form-qos-detail" oncomplete="backtotop();">
+							<i class="fa fa-pencil icon-only mr-0"></i>
+						</p:commandLink>
+
+						<p:commandLink styleClass="btn btn-sm btn-action-del colorRed"
+							actionListener="#{qosBean.deleteQos(rowitem)}"
+							update=" form-qos-detail form-qos-list">
+							<i class="fa fa-times icon-only mr-0"></i>
+							<p:confirm header="#{msg['common.delete']}"
+								message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+						</p:commandLink>
+
+					</p:column>
+				</p:dataTable>
+				</div>
+				</article>
+			</h:form>
+		</div>
+
+		<div class="col-xs-12 col-sm-5 nopadding">
+			<h:form id="form-qos-detail" class="container-fluid nopadding-left">
+			<article class="col-xs-12">
+                        <div class="jarviswidget jarviswidget-color-yellow" id="wid-id-0" style="margin-right: -10px;"
+                             data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                            <header>
+                                <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                                <h2>#{msg['policy.qosForm']}</h2>                                
+                            </header>
+						<p:panel id="pnEdit" style="padding-top: 0px;">
+							<div class="formFieldMg">
+
+								<div class="row">
+									<div class="col-xs-12">
+										<p:outputLabel value="#{msg['policy.qos_name']}"
+											 for="qosName" />
+									</div>
+									<div class="col-xs-12">
+										<p:inputText value="#{qosBean.qos.qosName}" maxlength="100"
+											styleClass="form-control" required="true" id="qosName" />
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<p:outputLabel value="#{msg['policy.qos_qci']}"
+											 for="qci"></p:outputLabel>
+									</div>
+									<div class="col-xs-12">
+										<h:selectOneMenu styleClass="form-control col-xs-12"
+											value="#{qosBean.qos.qci}" editable="true" required="true"
+											id="qci">
+											<f:selectItems value="#{qosBean.listQCI}" />
+										</h:selectOneMenu>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-xs-12">
+										<p:outputLabel value="#{msg['policy.qos_mbrul']}"
+											 for="mbrul" />
+									</div>
+									<div class="col-xs-12">
+										<p:inputText value="#{qosBean.qos.mbrul}" maxlength="9"
+											styleClass="form-control" required="true" id="mbrul"
+											converterMessage="#{msg['policy.errorFormat']}">
+											<pe:keyFilter regEx="/[0-9]/i" />
+										</p:inputText>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<p:outputLabel value="#{msg['policy.qos_mbrdl']}"
+											 for="mbrdl" />
+									</div>
+									<div class="col-xs-12">
+										<p:inputText value="#{qosBean.qos.mbrdl}" maxlength="9"
+											styleClass="form-control" required="true" id="mbrdl"
+											converterMessage="#{msg['policy.errorFormat']}">
+											<pe:keyFilter regEx="/[0-9]/i" />
+										</p:inputText>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<p:outputLabel value="#{msg['policy.qos_gbrul']}"
+											 for="gbrul" />
+									</div>
+									<div class="col-xs-12">
+										<p:inputText value="#{qosBean.qos.gbrul}" maxlength="9"
+											styleClass="form-control" required="true" id="gbrul"
+											converterMessage="#{msg['policy.errorFormat']}">
+											<pe:keyFilter regEx="/[0-9]/i" />
+										</p:inputText>
+
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<p:outputLabel value="#{msg['policy.qos_gbrdl']}"
+											 for="gbrdl" />
+										<p:inputText value="#{qosBean.qos.gbrdl}" maxlength="9"
+											styleClass="form-control" required="true" id="gbrdl"
+											converterMessage="#{msg['policy.errorFormat']}">
+											<pe:keyFilter regEx="/[0-9]/i" />
+										</p:inputText>
+									</div>
+								</div>
+
+								<div class="row">
+									<div class="col-xs-12 ">
+										<p:outputLabel value="#{msg['policy.desc']}"
+											 />
+									</div>
+									<div class="col-xs-12 ">
+										<p:inputText value="#{qosBean.qos.remark}" maxlength="255"
+											styleClass="form-control" />
+									</div>
+								</div>
+
+								<div class="col-xs-12" style="text-align: right;">
+									<div class="row">
+										<p:commandButton id="btnNew" value="#{msg['common.addNew']}"
+											actionListener="#{qosBean.btnNew}" process="@this" icon="fa fa-plus"
+											disabled="#{qosBean.editting}" update="form-qos-detail:pnEdit"
+											styleClass="btn btn-primary" >
+										</p:commandButton>
+										<p:commandButton id="btnSave" value="#{msg['common.save']}"
+											actionListener="#{qosBean.btnSave}" icon="fa fa-save"
+											disabled="#{!qosBean.editting}"
+											update="form-qos-detail form-qos-list"
+											styleClass="btn btn-default">
+										</p:commandButton>
+										<p:commandButton id="btnCancel" icon="fa fa-refresh"
+											value="#{msg['common.cancel']}"
+											actionListener="#{qosBean.btnCancel}"
+											disabled="#{!qosBean.editting}" update="form-qos-detail"
+											styleClass="btn btn-default" immediate="true"
+											resetValues="true">
+										</p:commandButton>
+									</div>
+								</div>
+							</div>
+						</p:panel>
+					</div>
+                </article>
+			</h:form>
+		</div>
+</div>
+
+
+	</ui:define>
+</ui:composition>
+
+</html>
+

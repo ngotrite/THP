@@ -1,0 +1,130 @@
+html, body {
+   margin: 0;
+   padding: 0;
+}
+
+body {
+   -webkit-user-select: none;
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+   font-family: Arial;
+   font-family: "Source Sans Pro", sans-serif;
+}
+
+h1 {
+    color: white;
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    text-align: center;
+    top: 134px;
+    width: 240px;
+    margin-left: 65px;
+    z-index: 1;
+    height: 40px;
+    line-height: 40px;
+    text-transform: uppercase;
+    text-align: center;
+}
+span.title_cba {
+   position: absolute;
+   z-index: 1;
+   top: 140px;
+   color: white;
+   margin: 0;
+   padding: 0;
+   font-size: 20anpx;
+   width: 240px;
+   text-align: center;
+   font-size: 20px;   
+}
+
+.btn {
+  /* background-color: #49afcd;
+   padding: 4px 8px;
+   color: white;
+   text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+   font-size: 11px;
+   line-height: 37px;
+   border: 1px solid #ccc;
+   background-image: -webkit-linear-gradient(top,#5bc0de,#2f96b4);
+   background-image: -moz-linear-gradient(top,#5bc0de,#2f96b4);
+   background-image: linear-gradient(top,#5bc0de,#2f96b4);
+   border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+   margin: 0;
+   margin-left: -5px;
+   cursor: pointer;*/
+  padding: 0px !important;
+   background: #888888 none repeat scroll 0 0;
+    border-image: none;
+    border-right: 1px solid #eee;
+    border-style: solid;
+    border-width: 0 1px 0 0;
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    height: 40px;
+    width: 60px;
+   -webkit-transition: -webkit-transform .8s ease-in-out;
+   transition: transform .8s ease-in-out;
+   margin-left:-4px;
+}
+.btn > img {
+   vertical-align: middle;
+   height: 25px;
+}
+
+.btn:hover {
+   background: #333;
+  /*-webkit-transform: rotate(360deg);
+  transform: rotate(360deg);*/
+}
+.stencil .group > .group-label {
+    padding: 10px 4px !important;
+    font-size: 12px !important;
+    color: #FFF !important;
+}
+
+#user label{
+   font-size: 12px;
+}
+#user, #logout, #fullscreen,
+#user img, #logout img, #fullscreen img{
+   cursor: pointer;
+   z-index: 1;
+}
+.save-json{
+  margin: 0px !important;
+  padding: 11px 15px 14px !important;
+  border-left: 1px solid #fff;
+}
+#frmTopology, #frmDiagFlowDesign {
+  position: absolute;
+  top: 7px;
+}
+
+.btn-list-del, .btn-list-add {
+  display: none;
+}
+
+div[data-field="is_Use_Stream"] {
+  display: none;
+}
+/*.field_general {
+  display: none;
+}*/
+.name_user{
+  font-size: 12px !important;
+  color: #fff;
+  position: absolute;
+  top:17px;
+  left: 25px;
+  margin-left: 10px;
+}
+#user{
+  position: relative;
+  margin-right: 35px;
+}

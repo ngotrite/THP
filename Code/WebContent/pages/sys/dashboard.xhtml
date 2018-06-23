@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/pages/layout_empty.xhtml">
+	<ui:define name="subcontent">
+		<h:form id="form-chart" class="container-fluid">
+			<script type="text/javascript"
+				src="#{request.contextPath}/resources/js/highcharts.js" />
+			<script type="text/javascript"
+				src="#{request.contextPath}/resources/js/exporting.js" />
+			<div class="formFieldMg">
+				<div class="col-xs-12">
+					<div class="col-md-6">
+						<img src="#{request.contextPath}/resources/img/viettel/map.jpg"
+							alt="vOCS" class="img-responsive"
+							style="vertical-align: middle; padding-top: 15%;" />
+					</div>
+					<div id="containerPieChart" class="col-md-6"></div>
+				</div>
+				<div class="col-xs-12">
+					<div class="col-md-6">
+						<div class="box box-default box-solid box-panel-define">
+							<div style="text-align: center">
+								<p:outputLabel value="#{msg['chart.titleDataObj']}"
+									style=" font-size: 150%;font-family: Lucida Grande, Lucida Sans Unicode, Arial, Helvetica, sans-serif;" />
+							</div>
+							<h:form id="form-dataListObj-list">
+								<p:tabView>
+									<p:tab title="#{msg['title.countObject']}">
+										<p:dataList value="#{chartDataProvider.dataListObj}"
+											var="item" type="ordered" style="border: 1px solid #d5d5d5;">
+											<f:facet name="header">
+											</f:facet>
+				       			 #{item.name}: <p:outputLabel value="#{item.count}" />
+										</p:dataList>
+									</p:tab>
+									<p:tab title="#{msg['title.countCatelog']}">
+										<p:dataList value="#{chartDataProvider.dataListObjCatalog}"
+											var="itemCatalog" type="ordered" style="border: 1px solid #d5d5d5;">
+											<f:facet name="header">
+											</f:facet>
+				       			 #{itemCatalog.name}: <p:outputLabel value="#{itemCatalog.count}" />
+										</p:dataList>
+									</p:tab>
+								</p:tabView>
+							</h:form>
+						</div>
+					</div>
+					<div id="containerBarChart" class="col-md-6"></div>
+				</div>
+			</div>
+			<h:inputHidden value="#{chartDataProvider.tilePieChart}" id="tileID" />
+			<h:inputHidden id="dataPieChartID"
+				value="#{chartDataProvider.dataPieChart}" />
+			<h:inputHidden value="#{chartDataProvider.tileBarChart}"
+				id="tileBarID" />
+			<h:inputHidden id="categoriesBarChartID"
+				value="#{chartDataProvider.categoriesBarChart}" />
+			<h:inputHidden id="dataBarChartID"
+				value="#{chartDataProvider.dataBarChart}" />
+			<h:inputHidden value="#{chartDataProvider.tileLineChart}"
+				id="tileLineChartID" />
+			<h:inputHidden id="dataLineChartID"
+				value="#{chartDataProvider.dataLineChart}" />
+			<script type="text/javascript">
+				$(document)
+						.ready(
+								function() {
+									var title = (document
+											.getElementById('form-chart:tileID').value);
+									var data = (document
+											.getElementById('form-chart:dataPieChartID').value);
+									var objectStringArray = (new Function(
+											"return [" + data + "];")());
+									RenderPieChart('containerPieChart',
+											objectStringArray[0], title);
+									var titleBar = (document
+											.getElementById('form-chart:tileBarID').value);
+									var dataList = (document
+											.getElementById('form-chart:dataBarChartID').value);
+									var dataList = (new Function("return ["
+											+ dataList + "];")());
+									var categories = (document
+											.getElementById('form-chart:categoriesBarChartID').value);
+									var categories = (new Function("return ["
+											+ categories + "];")());
+									RenderBarChart('containerBarChart',
+											categories[0], titleBar,
+											dataList[0]);
+									// 									var titleLineChart = (document
+									// 											.getElementById('form-chart:tileLineChartID').value);
+									// 									var dataLineList = (document
+									// 											.getElementById('form-chart:dataLineChartID').value);
+									// 									var dataLineList = (new Function("return ["
+									// 											+ dataLineList + "];")());
+									// 									RenderLineChart('containerLineChart',
+									// 											dataLineList[0], titleLineChart);
+
+									function RenderPieChart(elementId,
+											dataList, title) {
+										Highcharts.setOptions({
+											colors : [ '#F8FF05', '#11D304',
+													'#0073FF', '#A4A4A4',
+													'#BE1DEB' ]
+										});
+										new Highcharts.Chart(
+												{
+													chart : {
+														renderTo : elementId,
+														plotBackgroundColor : null,
+														plotBorderWidth : null,
+														plotShadow : false
+													},
+													title : {
+														text : title,
+														style : {
+															color : '#010a70',
+														}
+													},
+													tooltip : {
+														pointFormat : '{series.name}: <b>{point.percentage:.1f}%</b>'
+													},
+													plotOptions : {
+														pie : {
+															allowPointSelect : true,
+															cursor : 'pointer',
+															showInLegend : true,
+															depth : 35,
+															dataLabels : {
+																enabled : true,
+																color : '#000000',
+																connectorColor : '#000000',
+																formatter : function() {
+																	return '<b>'
+																			+ this.point.name
+																			+ '</b>';
+																}
+															}
+														}
+													},
+													series : [ {
+														type : 'pie',
+														name : 'offer',
+														data : dataList
+													} ]
+												});
+									}
+									;
+								});
+			</script>
+			<script type="text/javascript">
+				function RenderBarChart(elementId, categories, title, dataList) {
+					Highcharts.setOptions({
+						colors : [ 'red', 'green', '#ED561B', '#DDDF00',
+								'#24CBE5' ]
+					});
+					new Highcharts.Chart({
+						chart : {
+							renderTo : elementId,
+							type : 'bar',
+							inverted : false,
+							polar : false
+						},
+						title : {
+							text : title,
+							style : {
+								color : '#010a70',
+							}
+						},
+
+						xAxis : {
+							categories : categories,
+							title : {
+								text : null
+							}
+						},
+						yAxis : {
+							min : 0,
+							title : {
+								text : 'Population (millions)',
+								align : 'high'
+							},
+							labels : {
+								overflow : 'justify'
+							}
+						},
+						tooltip : {
+							valueSuffix : ' millions'
+						},
+						plotOptions : {
+							bar : {
+								dataLabels : {
+									enabled : true
+								}
+							}
+						},
+						legend : {
+							layout : 'vertical',
+							align : 'right',
+							verticalAlign : 'top',
+							x : -40,
+							y : 80,
+							floating : true,
+							borderWidth : 1,
+							shadow : true
+						},
+						credits : {
+							enabled : false
+						},
+						series : [ {
+							name : 'Num of sub',
+							colorByPoint : true,
+							data : dataList
+						} ]
+					});
+				};
+			</script>
+			<script type="text/javascript">
+				function RenderLineChart(elementId, dataLineList,
+						titleLineChart) {
+					new Highcharts.Chart({
+						chart : {
+							renderTo : elementId,
+							type : 'line'
+						},
+						title : {
+							text : titleLineChart,
+							x : -20
+						//center
+						},
+						xAxis : {
+							categories : [ "Jan", 'Feb', 'Mar', 'Apr', 'May',
+									'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov',
+									'Dec' ]
+						},
+						yAxis : {
+							title : {
+								text : 'Population(millions)'
+							},
+							plotLines : [ {
+								value : 0,
+								width : 1,
+								color : '#808080'
+							} ]
+						},
+						tooltip : {
+							valueSuffix : 'millions'
+						},
+						legend : {
+							layout : 'vertical',
+							align : 'right',
+							verticalAlign : 'middle',
+							borderWidth : 0
+						},
+						series : dataLineList
+					});
+				};
+			</script>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

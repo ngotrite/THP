@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui">
+
+<h:form id="form-pc-type-list"
+	rendered="#{pcTypeBean.formType eq 'form-pc-type-list'}">
+	<div class="container-fluid">
+		<div class="row formFieldMg">
+			<div class="col-xs-12">
+				<p:dataTable id="dtPcType" var="rowitem" paginator="true" rows="10"
+					value="#{pcTypeBean.pcTypes}" paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15,20,50,100" rowIndexVar="rowIndex"
+					rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+					<f:facet name="header">
+						<p:outputLabel value="#{msg['pcType.lstPcType']}" />
+					</f:facet>
+
+					<p:column headerText="#" styleClass="widthSTTcolumn">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.name']}">
+						<h:outputText value="#{rowitem.pcTypeName}"
+							styleClass="preformatted" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.desc']}">
+						<h:outputText value="#{rowitem.remark}" styleClass="preformatted" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.action']}"
+						styleClass="actionColumn">
+
+						<p:commandLink actionListener="#{pcTypeBean.editPcType(rowitem)}"
+							update="treeCommon categoryCommonTop contentPanel contentTitle"
+							resetValues="true"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen"
+							title="#{msg['common.edit']}">
+							<i class="fa fa-pencil icon-only mr-0"></i>
+						</p:commandLink>
+						<p:commandLink update="treeCommon dtPcType"
+							actionListener="#{pcTypeBean.removePcType(rowitem)}"
+							styleClass="btn btn-sm btn-action-del colorRed"
+							title="#{msg['common.delete']}">
+							<i class="fa fa-times icon-only mr-0"></i>
+							<p:confirm header="#{msg['common.delete']}"
+								message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+						</p:commandLink>
+						<f:facet name="header">
+							<p:commandButton value="#{msg['common.addNew']}"
+								icon="fa fa-plus" title="#{msg['common.addNew']}"
+								resetValues="true"
+								update="treeCommon categoryCommonTop contentPanel contentTitle"
+								actionListener="#{pcTypeBean.addNewPcType()}"
+								styleClass="btn btn-default">
+							</p:commandButton>
+						</f:facet>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+	</div>
+</h:form>
+
+<h:form id="form-pc-type-detail"
+	rendered="#{pcTypeBean.formType eq 'form-pc-type-detail'}">
+	<div class="container-fluid">
+		<div class="row formFieldMg">
+			<div class="col-xs-12 col-sm-6">
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['common.ID']}" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText readonly="true" value="#{pcTypeBean.pcType.pcTypeId}"
+							styleClass="form-control" />
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['ratetable.name']}"
+							for="txtPcTypeName" />
+					</div>
+					<div class="col-xs-12">
+
+						<p:inputText value="#{pcTypeBean.pcType.pcTypeName}"
+							id="txtPcTypeName" styleClass="form-control" required="true"
+							maxlength="100" />
+					</div>
+				</div>
+
+
+			</div>
+
+			<div class="col-xs-12 col-sm-6">
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['action.category']}" for="CatType" />
+					</div>
+					<div class="col-xs-12">
+						<h:selectOneMenu id="CatType"
+							value="#{pcTypeBean.pcType.categoryId}"
+							styleClass="form-control col-xs-12" required="true">
+							<f:selectItems value="#{pcTypeBean.categoriesOfPcType}"
+								var="category" itemValue="#{category.categoryId}"
+								itemLabel="#{category.categoryName}"></f:selectItems>
+						</h:selectOneMenu>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['pcType.filterID']}"
+							for="slSortPriceComponent" />
+					</div>
+					<div class="col-xs-12">
+						<table class="table-choosing">
+							<tr>
+								<td><h:selectOneMenu styleClass="form-control"
+										required="true" disabled="true"
+										style="-webkit-appearance: none;" id="slSortPriceComponent"
+										value="#{pcTypeBean.pcType.filterId}">
+										<f:selectItems value="#{pcTypeBean.sortPriceComponents}"
+											var="item" itemLabel="#{item.sortPriceComponentName}"
+											itemValue="#{item.sortPriceComponentId}" />
+									</h:selectOneMenu></td>
+								<td class="td-btn-fix"><p:commandLink
+										actionListener="#{pcTypeBean.chooseSortPC()}"
+										disabled="#{!pcTypeBean.editting}" id="chooseSPC"
+										immediate="true" title="#{msg['common.chooseSPC']}"
+										styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+										<i class="fa fa-pencil icon-only mr-0"></i>
+										<p:ajax event="dialogReturn"
+											listener="#{pcTypeBean.onDialogSortPCReturn}" />
+									</p:commandLink> <p:commandLink
+										actionListener="#{pcTypeBean.notChooseSortPC()}"
+										disabled="#{!pcTypeBean.editting}" id="notChooseSPC"
+										immediate="true" title="#{msg['common.delete']}"
+										styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+										<i class="fa fa-times icon-only mr-0"></i>
+									</p:commandLink></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-xs-12 col-sm-12">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['common.desc']}" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText value="#{pcTypeBean.pcType.remark}"
+							styleClass="form-control" maxlength="255" />
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-xs-12 col-md-12">
+				<p:dataTable id="dtBL" var="rowitem" paginator="true" rows="10"
+					value="#{pcTypeBean.lstPcTypeBlockMap}" paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,15,20,50,100" rowIndexVar="rowIndex"
+					rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+
+					<f:facet name="header">
+						<p:outputLabel value="#{msg['pcType.titleOfBL']}"
+							style="font-weight:bold" />
+					</f:facet>
+
+					<p:column headerText="#" styleClass="widthSTTcolumn">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column headerText="#{msg['block']}">
+						<p:commandLink actionListener="#{pcTypeBean.chooseBL(rowitem)}">
+							<h:outputText value="#{pcTypeBean.getBlockName(rowitem)}" />
+							<p:ajax event="dialogReturn" update="dtBL"
+								listener="#{pcTypeBean.onDialogBLReturn}" />
+						</p:commandLink>
+					</p:column>
+
+					<p:column headerText="#{msg['common.desc']}">
+						<h:outputText value="#{pcTypeBean.getBlockDesc(rowitem)}" />
+					</p:column>
+
+ 					<p:column headerText="#{msg['pcType.blockGenType']}">
+ 						<h:selectOneMenu value="#{rowitem.blockGenType}" style="width:100%;text-align:center;">
+							<f:selectItems value="#{pcTypeBean.lstBlockGenType}"/>
+						</h:selectOneMenu>
+ 					</p:column>
+
+ 					<p:column headerText="#{msg['pcType.isReplaceIfExist']}" style="width:80px;text-align:center;">
+ 						<p:selectBooleanCheckbox value="#{rowitem.replaceIfExist}"></p:selectBooleanCheckbox>
+ 					</p:column>
+
+					<p:column styleClass="actionColumnExtra">
+
+						<p:commandLink disabled="#{!pcTypeBean.editting}"
+							actionListener="#{pcTypeBean.addBLAt(rowitem)}" update="dtBL"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-plus icon-only mr-0"></i>
+							<p:ajax event="dialogReturn" update="dtBL"
+								listener="#{pcTypeBean.onDialogBLReturn}" />
+						</p:commandLink>
+
+						<p:commandLink disabled="#{!pcTypeBean.editting}"
+							title="#{msg['common.edit']}"
+							update="contentTitle categoryCommonTop contentPanel"
+							actionListener="#{pcTypeBean.editBlock(rowitem)}"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-pencil icon-only mr-0"></i>
+						</p:commandLink>
+
+						<p:commandLink disabled="#{!pcTypeBean.editting}" update="dtBL"
+							title="#{msg['common.moveUp']}"
+							actionListener="#{pcTypeBean.commandUpOnMap(rowitem)}"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-arrow-circle-up icon-only mr-0"></i>
+						</p:commandLink>
+						<p:commandLink disabled="#{!pcTypeBean.editting}" update="dtBL"
+							title="#{msg['common.moveDown']}"
+							actionListener="#{pcTypeBean.commandDownOnMap(rowitem)}"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-arrow-circle-down icon-only mr-0"></i>
+						</p:commandLink>
+						<p:commandLink disabled="#{!pcTypeBean.editting}" update="dtBL"
+							title="#{msg['common.delete']}"
+							actionListener="#{pcTypeBean.removeBlock(rowitem)}"
+							styleClass="btn btn-sm btn-action-del colorRed">
+							<i class="fa fa-times icon-only mr-0"></i>
+							<p:confirm header="#{msg['common.delete']}"
+								message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+						</p:commandLink>
+						<f:facet name="header">
+							<p:commandButton disabled="#{!pcTypeBean.editting}"
+								value="#{msg['pc.addBlock']}" process="@this"
+								title="#{msg['pc.addBlock']}" icon="fa fa-plus"
+								actionListener="#{pcTypeBean.addNewBlock()}"
+								styleClass="btn btn-default btn-rv-addBL">
+								<p:ajax event="dialogReturn" update="dtBL"
+									listener="#{pcTypeBean.onDialogBLReturn}" />
+							</p:commandButton>
+						</f:facet>
+					</p:column>
+				</p:dataTable>
+			</div>
+			<div class="col-xs-12 col-sm-10">
+				<p:outputLabel></p:outputLabel>
+			</div>
+			<div class="col-xs-12 text-right">
+				<p:commandButton disabled="#{!pcTypeBean.editting}"
+					value="#{msg['common.apply']}" title="#{msg['common.apply']}"
+					icon="fa fa-save"
+					update="dtBL treeCommon form-pc-type-detail contentTitle categoryCommonTop contentPanel"
+					actionListener="#{pcTypeBean.savePcType()}">
+					<p:confirm header="#{msg['common.apply']}"
+						message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+				</p:commandButton>
+			</div>
+		</div>
+	</div>
+
+</h:form>
+
+
+
+</html>

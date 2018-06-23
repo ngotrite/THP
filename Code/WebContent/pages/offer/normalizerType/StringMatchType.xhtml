@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<!--BEGIN Panel String Match type -->
+<p:panel id="pnlStringMatchType" styleClass="nopadding"
+	rendered="#{normalizerBean.selectedNormType == 1}">
+	<div class="row">
+		<div class="col-xs-12">
+			<p:outputLabel value="#{msg['normalizer.inputField2']}"
+				></p:outputLabel>
+			<p:outputLabel value="*" styleClass="colorRed"></p:outputLabel>
+		</div>
+		<div class="col-xs-12">
+			<p:inputText id="inputFieldID2_1" styleClass="form-control"
+				value="#{normalizerBean.inputField2}" readonly="true"></p:inputText>
+		</div>
+<!-- 		<div class="col-xs-3"> -->
+<!-- 			<p:commandButton value="#{msg['normalizer.submitField2']}" update="inputFieldID2_1" actionListener="#{normalizerBean.submitField02()}"></p:commandButton> -->
+<!-- 		</div> -->
+	</div>
+	<div class="row">
+		<div class="col-xs-3">
+			<p:commandButton value="#{msg['normalizer.addChild2']}"
+				actionListener="#{normalizerBean.addChildIPF2()}" icon="fa fa-plus"
+				update="tblInputField2_1" disabled="#{!normalizerBean.isEdit}"></p:commandButton>
+		</div>
+		<div class="col-xs-9">
+			<p:dataTable id="tblInputField2_1" var="item"
+				value="#{normalizerBean.listInputFieldTable2}" paginator="true"
+				rows="20" paginatorPosition="bottom" rowIndexVar="rowIndex"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,20,50,100" editable="true" editMode="cell"
+				rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+				<p:column headerText="#" styleClass="widthSTTcolumn">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+
+				<p:column headerText="#{msg['normalizer.path']}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{item.path}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{item.path}" styleClass="form-control"
+								rendered="#{item.index == 1}">
+								<p:ajax event="focus"
+									listener="#{normalizerBean.createTree(item, 'OFFER_OBJECT')}"
+									oncomplete="$('.btnUpdateHiddenForInputField').click();" />
+							</p:inputText>
+							<h:selectOneMenu styleClass="form-control" rendered="#{item.index > 1}" value="#{normalizerBean.selectedTmpNestedObj}">
+								<f:selectItems value="#{item.listObjectForChoose}" />
+								<p:ajax event="change" listener="#{normalizerBean.changePathChildEvent(item)}" oncomplete="$('.btnUpdateHiddenAll').click();"/>
+							</h:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="#{msg['normalizer.filter']}">
+					<p:cellEditor>
+						<f:facet name="output">
+							<div class="col-xs-12" style="overflow-x: auto;">
+								<h:outputText value="#{item.filter}" />
+							</div>
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{item.filter}" style="width:100%">
+								<p:ajax event="focus"
+									listener="#{normalizerBean.fillDataToTmpInputField(item)}"
+									oncomplete="PF('dlgAddFilter').show();" update="@form:dialogAddFilter" />
+							</p:inputText>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="#{msg['common.action']}"
+					style="text-align:center; width:60px;">
+					<p:commandLink disabled="#{!normalizerBean.isEdit}" update="tblInputField2_1 @form:inputFieldID2_1"
+						actionListener="#{normalizerBean.removeChildIPF2(item)}"
+						styleClass="btn btn-sm btn-action-del colorRed">
+						<i class="fa fa-times icon-only mr-0"></i>
+						<p:confirm header="#{msg['common.delete']}"
+							message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<p:outputLabel value="#{msg['normalizer.inputFieldSpecial']}"
+				></p:outputLabel>
+		</div>
+		<div class="col-xs-12">
+			<p:inputText styleClass="form-control" id="specicalFieldStringMatch"
+				value="#{normalizerBean.normalizer.specialFileds}" disabled="true"></p:inputText>
+		</div>
+	</div>
+<!-- 	<div class="row"> -->
+<!-- 		<div class="col-xs-12"> -->
+<!-- 			<p:messages id="messagesStringmatch" showDetail="true" autoUpdate="true" -->
+<!-- 				closable="true" /> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
+	<div class="row">
+		<div class="col-xs-6 nopadding">
+			<div class="formFieldMg">
+				<div class="col-xs-12">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['normalizer.startChar']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputNumber minValue="0" decimalPlaces="0" thousandSeparator="" styleClass="inputNumCustom"
+								value="#{normalizerBean.startCharactor}">
+								<p:ajax event="change"
+									listener="#{normalizerBean.createSpecialFieldSM}"
+									update="specicalFieldStringMatch" />
+							</p:inputNumber>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-6 nopadding">
+			<div class="formFieldMg">
+				<div class="col-xs-12">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['normalizer.endChar']}"
+								></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputNumber minValue="0" decimalPlaces="0" thousandSeparator="" styleClass="inputNumCustom"
+								value="#{normalizerBean.endCharactor}">
+								<p:ajax event="change"
+									listener="#{normalizerBean.createSpecialFieldSM}"
+									update="specicalFieldStringMatch" />
+							</p:inputNumber>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+			<div class="col-xs-12">
+				<p:commandButton value="#{msg['normalizer.editValues']}" disabled="#{!normalizerBean.isEdit}" icon="fa fa-edit"
+					styleClass="mgRight10" oncomplete="PF('dlgValueManager').show()" update="dlgValueManager"></p:commandButton>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<p:outputLabel value="#{msg['normalizer.default']}"
+					></p:outputLabel>
+				<p:outputLabel value="*" styleClass="colorRed"></p:outputLabel>
+			</div>
+			<div class="col-xs-12">
+				<h:selectOneMenu id="defaultStringMatch" styleClass="form-control" value="#{normalizerBean.selectedNormDefaultWithNormValue}">
+					<f:selectItems value="#{normalizerBean.listSelectNormValue}" />
+				</h:selectOneMenu>
+			</div>
+		</div>
+</p:panel>
+<!--END Panel String match type -->
+</html>

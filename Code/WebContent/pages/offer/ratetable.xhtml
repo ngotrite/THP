@@ -1,0 +1,893 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui">
+
+<h:form id="form-ratetable-detail" class="container-fluid"
+	rendered="#{rateTableBean.formType eq 'ratetable-detail'}">
+
+	<div class="row formFieldMg">
+		<div class="col-xs-12 col-sm-6">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['common.ID']}"></p:outputLabel>
+					<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+				</div>
+				<div class="col-xs-12">
+
+					<p:inputText value="#{rateTableBean.rateTable.rateTableId}"
+						styleClass="form-control" maxlength="9" readonly="true"
+						requiredMessage="#{msg['common.required']}" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['common.name']}" for="txtRateTableName" />
+				</div>
+				<div class="col-xs-12">
+
+					<p:inputText value="#{rateTableBean.rateTable.rateTableName}"
+						styleClass="form-control" maxlength="100" required="true"
+						id="txtRateTableName" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 ">
+					<p:outputLabel value="#{msg['baltype.externalId']}" />
+				</div>
+				<div class="col-xs-12 ">
+					<p:inputText value="#{rateTableBean.rateTable.externalId}"
+						maxlength="100" styleClass="form-control" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 ">
+					<p:outputLabel value="#{msg['common.desc']}" />
+				</div>
+				<div class="col-xs-12 ">
+					<p:inputText value="#{rateTableBean.rateTable.remark}"
+						styleClass="form-control" maxlength="255" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 ">
+					<p:outputLabel value="#{msg['ratetable.decisionTableId']}" />
+				</div>
+				<div class="col-xs-12">
+					<table class="table-choosing">
+						<tr>
+							<td><h:selectOneMenu styleClass="form-control"
+									id="cbDecision" readonly="true" onchange="submit()"
+									disabled="true" style="-webkit-appearance: none;"
+									valueChangeListener="#{rateTableBean.onChangedDecisionTable}"
+									value="#{rateTableBean.rateTable.decisionTableId}">
+									<f:selectItem itemLabel="" />
+									<f:selectItems
+										value="#{rateTableBean.loadComboListDecisionTable()}" />
+									<p:ajax update="pnStateFormula" />
+								</h:selectOneMenu></td>
+							<td class="td-btn-fix"><p:commandLink
+									disabled="#{!rateTableBean.editting}"
+									actionListener="#{rateTableBean.showDialogDecision()}"
+									immediate="true" title="#{msg['common.change']}"
+									styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-AddDecisionRateTable">
+									<i class="fa fa-pencil"></i>
+									<p:ajax event="dialogReturn" update="cbDecision dtRows state"
+										listener="#{rateTableBean.onDialogReturn}" />
+								</p:commandLink> <p:commandLink
+									actionListener="#{rateTableBean.clearDecisison()}"
+									update="cbDecision dtRows state pnStateFormula"
+									title="#{msg['common.delete']}"
+									disabled="#{!rateTableBean.editting}"
+									styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+									<i class="fa fa-times"></i>
+								</p:commandLink></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="col-xs-12 col-sm-6">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['common.category']}" for="slCategoryId" />
+				</div>
+
+				<div class="col-xs-12">
+					<h:selectOneMenu styleClass="form-control col-xs-12"
+						id="slCategoryId" required="true"
+						value="#{rateTableBean.rateTable.categoryId}">
+						<f:selectItems value="#{rateTableBean.categoriesOfRT}" var="item"
+							itemValue="#{item.categoryId}" itemLabel="#{item.categoryName}" />
+					</h:selectOneMenu>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['unittype']}" for="unitTypeId" />
+				</div>
+
+				<div class="col-xs-12">
+					<h:selectOneMenu styleClass="form-control col-xs-12"
+						required="true" id="unitTypeId"
+						value="#{rateTableBean.rateTable.unitTypeId}">
+						<!-- 					<f:selectItem itemLabel="" /> -->
+						<f:selectItems value="#{rateTableBean.listComboUnitType}"
+							var="item" itemValue="#{item.unitTypeId}"
+							itemLabel="#{item.name}" />
+						<p:ajax event="change" update="formulaA formulaB"
+							listener="#{rateTableBean.onChangeUnitType()}" />
+					</h:selectOneMenu>
+
+				</div>
+			</div>
+
+
+
+			<div class="row">
+				<div class="col-xs-12 ">
+					<p:outputLabel value="#{msg['common.state']}" />
+					<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+
+				</div>
+				<div class="col-xs-12 ">
+					<h:selectOneMenu id="state" effect="fold"
+						styleClass="form-control col-xs-12"
+						value="#{rateTableBean.rateTable.state}">
+						<f:selectItems value="#{rateTableBean.loadComboState()}" />
+						<p:ajax update="pnStateFormula" />
+					</h:selectOneMenu>
+				</div>
+			</div>
+
+
+
+			<div class="row">
+				<div class="col-xs-12 ">
+					<p:outputLabel value="#{msg['ratetable.defaultFormulaId']}" />
+				</div>
+				<div class="col-xs-12">
+					<table class="table-choosing">
+						<tr>
+							<td><p:inputText id="defaultFormula" readonly="true"
+									value="#{rateTableBean.getRecipe(rateTableBean.defaultFormulaModel)}"
+									styleClass="form-control"
+									requiredMessage="#{msg['common.required']}">
+								</p:inputText></td>
+							<td class="td-btn-fix"><p:commandLink
+									process="@this unitTypeId"
+									actionListener="#{rateTableBean.showDialogFormula('default_formula', null)}"
+									update="dgFormula" oncomplete="PF('dlgFormula').show();"
+									title="#{msg['common.change']}"
+									disabled="#{!rateTableBean.editting}"
+									styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+									<i class="fa fa-pencil"></i>
+								</p:commandLink> <p:commandLink update="defaultFormula"
+									title="#{msg['common.delete']}"
+									actionListener="#{rateTableBean.clearDefaultFormula()}"
+									disabled="#{!rateTableBean.editting}"
+									styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+									<i class="fa fa-times"></i>
+								</p:commandLink></td>
+						</tr>
+					</table>
+				</div>
+			</div>
+
+
+
+			<div class="row">
+				<p:panel id="pnStateFormula" styleClass="nopadding">
+					<p:panel
+						rendered="#{rateTableBean.rateTable.state == 3 and rateTableBean.rateTable.decisionTableId != null}">
+						<div class="col-xs-12 ">
+							<p:outputLabel value="#{msg['ratetable.formulaId']}" />
+							<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<table class="table-choosing">
+								<tr>
+									<td><p:inputText styleClass="form-control" readonly="true"
+											value="#{rateTableBean.getRecipe(rateTableBean.stateFormulaModel)}">
+											<!-- 								<p:ajax event="click" ignoreAutoUpdate="true" -->
+											<!-- 									listener="#{rateTableBean.showDialogFormula('state_formula', null)}" -->
+											<!-- 									update="dgFormula" oncomplete="PF('dlgFormula').show();" /> -->
+										</p:inputText></td>
+									<td class="td-btn-fix"><p:commandLink
+											actionListener="#{rateTableBean.showDialogFormula('state_formula', null)}"
+											update="dgFormula" oncomplete="PF('dlgFormula').show();"
+											title="#{msg['common.change']}" process="@this unitTypeId"
+											disabled="#{!rateTableBean.editting}"
+											styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+											<i class="fa fa-pencil"></i>
+										</p:commandLink> <p:commandLink update="pnStateFormula"
+											title="#{msg['common.delete']}"
+											actionListener="#{rateTableBean.clearStateFormula()}"
+											disabled="#{!rateTableBean.editting}"
+											styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+											<i class="fa fa-times"></i>
+										</p:commandLink></td>
+								</tr>
+							</table>
+						</div>
+					</p:panel>
+				</p:panel>
+			</div>
+		</div>
+
+		<div class="col-xs-12">
+			<p:dataTable id="dtRows" value="#{rateTableBean.rowDts}"
+				resizableColumns="true"
+				rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"
+				var="rowitem" paginator="true" rows="10" editable="true"
+				editMode="cell" paginatorPosition="bottom" rowIndexVar="rowIndex"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="5,10,15,20,50,100">
+				<f:facet name="header">
+					<p:outputLabel value="#{msg['ratetable.data']}"></p:outputLabel>
+				</f:facet>
+				<p:column headerText="#" style="width:5%">
+					<h:outputText value="#{rowIndex + 1}" />
+				</p:column>
+				<p:column headerText="#{msg['decisontable.default']}"
+					style="width:15%" resizable="true">
+					<p:selectBooleanCheckbox value="#{rowitem.defaultValue}"
+						disabled="true" style="padding-left: 40%;">
+						<p:ajax event="change" update="dtRows"
+							listener="#{rateTableBean.onChangeCheckbox(rowitem)}" />
+					</p:selectBooleanCheckbox>
+				</p:column>
+				<p:columns value="#{rateTableBean.columns}" var="column"
+					resizable="true">
+					<f:facet name="header">
+						<h:outputText value="#{column.header}" />
+					</f:facet>
+					<p:cellEditor>
+						<f:facet name="output">
+							<div style="#{rateTableBean.getStringColorNormValue(rowitem.value.split('/')[rateTableBean.columns.indexOf(column)], column.normalizerId)}">
+								<h:outputText
+									value="#{rateTableBean.getNormName(rowitem.value.split('/')[rateTableBean.columns.indexOf(column)], column.normalizerId)}" />
+							</div>
+						</f:facet>
+						<f:facet name="input">
+							<h:selectOneMenu styleClass="form-control" disabled="true"
+								value="#{rowitem.value.split('/')[rateTableBean.columns.indexOf(column)]}"
+								onchange="onChangedCombobox(this, #{rateTableBean.rowDts.indexOf(rowitem)}, #{rateTableBean.columns.indexOf(column)})">
+								<f:selectItems
+									value="#{rateTableBean.normValuesMap.get(column.normalizerId)}"
+									var="item" itemLabel="#{item.valueName}"
+									itemValue="#{item.valueId}" />
+							</h:selectOneMenu>
+						</f:facet>
+					</p:cellEditor>
+				</p:columns>
+				<p:column headerText="Combined Value" style="width:15%"
+					id="colRowValue">
+					<h:outputText value="#{rowitem.value}" />
+				</p:column>
+				<p:column headerText="#{msg['common.formula']}"
+					styleClass="text-center" style="width: 20%" id="clformulaTable">
+					<p:commandLink update=":form-ratetable-detail:dgFormula"
+						process="@this" oncomplete="PF('dlgFormula').show();"
+						id="formulaTable"
+						actionListener="#{rateTableBean.showDialogFormula('row_formula', rowitem.rowId)}">
+						<h:outputText
+							value="#{rateTableBean.tableFormulaModels.get(rowitem.rowId) ne null ? rateTableBean.getRecipe(rateTableBean.tableFormulaModels.get(rowitem.rowId)) : 'Choose'}" />
+					</p:commandLink>
+
+				</p:column>
+				<p:column headerText="#{msg['common.action']}"
+					styleClass="text-center" style="width: 12%">
+
+					<p:commandLink
+						styleClass="btn btn-sm btn-action-edit colorStrongGreen"
+						disabled="true">
+						<i class="fa fa-pencil icon-only mr-0"></i>
+					</p:commandLink>
+
+					<p:commandLink styleClass="btn btn-sm btn-action-del colorRed"
+						disabled="true">
+						<i class="fa fa-times icon-only mr-0"></i>
+						<p:confirm header="#{msg['common.delete']}"
+							message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+					</p:commandLink>
+
+				</p:column>
+			</p:dataTable>
+		</div>
+
+		<div class="col-xs-12 text-right">
+			<p:commandButton value="#{msg['common.apply']}" id="applyRT"
+				title="#{msg['common.apply']}" icon="fa fa-save"
+				actionListener="#{rateTableBean.commandApplyRateTable()}"
+				update="treeCommon:treeCommonOffer categoryCommonTop contentPanel"
+				disabled="#{!rateTableBean.editting}">
+				<p:confirm header="#{msg['common.apply']}"
+					message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+			</p:commandButton>
+
+			<p:commandButton value="actionHidden"
+				styleClass="hidden btnCallTreeRateTable"
+				actionListener="#{rateTableBean.commandCloneContextMenu()}">
+				<p:ajax event="dialogReturn"
+					listener="#{rateTableBean.onDialogReturn}"
+					update="treeCommon categoryCommonTop contentPanel" />
+			</p:commandButton>
+
+			<p:commandButton styleClass="btnShowCate hidden"
+				actionListener="#{rateTableBean.redirectChangeCate()}"
+				update="treeCommon categoryCommonTop contentPanel">
+				<p:ajax event="dialogReturn"
+					listener="#{rateTableBean.onDialogReturnCategory}"
+					update="treeCommon categoryCommonTop contentPanel" />
+			</p:commandButton>
+		</div>
+	</div>
+
+	<!-- Dialog Formula -->
+	<p:dialog header="#{msg['common.formula']}" modal="true" id="dgFormula"
+		resizable="false" showEffect="explode" widgetVar="dlgFormula"
+		styleClass="dlg-center-fix dlg-center-fix-large">
+		<div class="col-xs-12">
+			<div class="row formFieldMg">
+				<div class="row">
+					<div class="col-xs-12 col-md-2">
+						<p:selectBooleanCheckbox itemLabel="#{msg['common.type']}"
+							value="#{rateTableBean.genericFormulaModel.type}">
+							<p:ajax event="change" update="formulaType" />
+						</p:selectBooleanCheckbox>
+					</div>
+					<p:panel id="formulaType" styleClass="nopadding">
+						<div class="col-xs-12 col-md-4">
+							<h:selectOneMenu styleClass="form-control"
+								disabled="#{rateTableBean.genericFormulaModel.type}"
+								value="#{rateTableBean.genericFormulaModel.temType}">
+								<f:selectItems value="#{rateTableBean.loadComboFormulaType()}" />
+								<p:ajax event="change" update="formulaA formulaB" />
+							</h:selectOneMenu>
+						</div>
+
+						<div class="col-xs-12 col-md-4">
+							<h:selectOneMenu id="parameter_type"
+								style="-webkit-appearance: none;" disabled="true"
+								value="#{rateTableBean.genericFormulaModel.pramType}"
+								styleClass="form-control">
+								<f:selectItem itemLabel="" />
+								<f:selectItems value="#{rateTableBean.listComboParameter}"
+									var="item" itemValue="#{item.parameterId}"
+									itemLabel="#{item.parameterName}" />
+							</h:selectOneMenu>
+						</div>
+
+						<div class="col-xs-12 col-md-2">
+							<p:commandButton value=">>" title="#{msg['common.change']}"
+								disabled="#{!rateTableBean.genericFormulaModel.type}"
+								actionListener="#{rateTableBean.showDialogParameter('TYPE')}"
+								immediate="true">
+								<p:ajax event="dialogReturn"
+									listener="#{rateTableBean.onDialogReturn}"
+									update="parameter_type" />
+							</p:commandButton>
+						</div>
+					</p:panel>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12 col-md-2">
+						<p:selectBooleanCheckbox itemLabel="#{msg['formula.a']}"
+							value="#{rateTableBean.genericFormulaModel.a}">
+							<p:ajax event="change" update="formulaA" />
+						</p:selectBooleanCheckbox>
+					</div>
+					<p:panel id="formulaA" styleClass="nopadding">
+						<div class="col-xs-12 col-md-3">
+							<p:inputNumber value="#{rateTableBean.genericFormulaModel.temA}"
+								disabled="#{rateTableBean.genericFormulaModel.a}" maxlength="9"
+								styleClass="inputNumCustom"
+								decimalPlaces="#{rateTableBean.validateConvertXhtml() eq true ? rateTableBean.unitType.unitPrecision : 0}" />
+
+						</div>
+
+						<!-- 							<p:inputText styleClass="form-control" maxlength="9" -->
+						<!-- 								disabled="#{rateTableBean.genericFormulaModel.a}" -->
+						<!-- 								value="#{rateTableBean.genericFormulaModel.temA}"> -->
+						<!-- 								<pe:keyFilter -->
+						<!-- 									regEx="#{rateTableBean.validateConvertXhtml() eq true ? '/[0-9.]/i' : '/[0-9]/i'}" /> -->
+						<!-- 							</p:inputText> -->
+						<div class="col-xs-12 col-md-1">
+							<h:outputText
+								value="#{rateTableBean.getAbbreviation(rateTableBean.rateTable.unitTypeId)}" />
+						</div>
+						<div class="col-xs-12 col-md-4">
+							<h:selectOneMenu id="parameter_a"
+								style="-webkit-appearance: none;" disabled="true"
+								value="#{rateTableBean.genericFormulaModel.pramA}"
+								styleClass="form-control">
+								<f:selectItem itemLabel="" noSelectionOption="true" />
+								<f:selectItems value="#{rateTableBean.listComboParameter}"
+									var="item" itemValue="#{item.parameterId}"
+									itemLabel="#{item.parameterName}" />
+							</h:selectOneMenu>
+						</div>
+
+						<div class="col-xs-12 col-md-2">
+							<p:commandButton value=">>" title="#{msg['common.change']}"
+								disabled="#{!rateTableBean.genericFormulaModel.a}"
+								actionListener="#{rateTableBean.showDialogParameter('A')}"
+								immediate="true">
+								<p:ajax event="dialogReturn"
+									listener="#{rateTableBean.onDialogReturn}" update="parameter_a" />
+							</p:commandButton>
+						</div>
+
+					</p:panel>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12 col-md-2">
+						<p:selectBooleanCheckbox itemLabel="#{msg['formula.b']}"
+							value="#{rateTableBean.genericFormulaModel.b}">
+							<p:ajax event="change" update="formulaB" />
+						</p:selectBooleanCheckbox>
+					</div>
+					<p:panel id="formulaB" styleClass="nopadding">
+						<div class="col-xs-12 col-md-3">
+							<p:inputNumber value="#{rateTableBean.genericFormulaModel.temB}"
+								disabled="#{rateTableBean.genericFormulaModel.b}" maxlength="9"
+								styleClass="inputNumCustom"
+								decimalPlaces="#{rateTableBean.validateConvertXhtml() eq true ? rateTableBean.unitType.unitPrecision : 0}" />
+						</div>
+
+						<!-- 						<p:inputText styleClass="form-control" maxlength="9" -->
+						<!-- 							disabled="#{rateTableBean.genericFormulaModel.b}" -->
+						<!-- 							value="#{rateTableBean.genericFormulaModel.temB}"> -->
+						<!-- 							<pe:keyFilter -->
+						<!-- 								regEx="#{rateTableBean.validateConvertXhtml() eq true ? '/[0-9.]/i' : '/[0-9]/i'}" /> -->
+						<!-- 						</p:inputText> -->
+
+						<div class="col-xs-12 col-md-1">
+							<h:outputText
+								value="#{rateTableBean.getAbbreviation(rateTableBean.rateTable.unitTypeId)}" />
+						</div>
+
+						<div class="col-xs-12 col-md-4">
+							<h:selectOneMenu id="parameter_b"
+								style="-webkit-appearance: none;" disabled="true"
+								value="#{rateTableBean.genericFormulaModel.pramB}"
+								styleClass="form-control">
+								<f:selectItem itemLabel="" noSelectionOption="true" />
+								<f:selectItems value="#{rateTableBean.listComboParameter}"
+									var="item" itemValue="#{item.parameterId}"
+									itemLabel="#{item.parameterName}" />
+							</h:selectOneMenu>
+						</div>
+
+						<div class="col-xs-12 col-md-2">
+							<p:commandButton value=">>" immediate="true"
+								title="#{msg['common.change']}"
+								disabled="#{!rateTableBean.genericFormulaModel.b}"
+								actionListener="#{rateTableBean.showDialogParameter('B')}">
+								<p:ajax event="dialogReturn"
+									listener="#{rateTableBean.onDialogReturn}" update="parameter_b" />
+							</p:commandButton>
+						</div>
+					</p:panel>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12 col-md-2">
+						<p:selectBooleanCheckbox itemLabel="#{msg['formula.per']}"
+							value="#{rateTableBean.genericFormulaModel.per}">
+							<p:ajax event="change" update="formulaPer" />
+						</p:selectBooleanCheckbox>
+					</div>
+					<p:panel id="formulaPer" styleClass="nopadding">
+						<div class="col-xs-12 col-md-4">
+							<p:inputNumber styleClass="inputNumCustom" maxlength="9"
+								decimalPlaces="0"
+								disabled="#{rateTableBean.genericFormulaModel.per}"
+								value="#{rateTableBean.genericFormulaModel.temPer}">
+							</p:inputNumber>
+						</div>
+
+						<div class="col-xs-12 col-md-4">
+							<h:selectOneMenu id="parameter_per"
+								style="-webkit-appearance: none;" disabled="true"
+								value="#{rateTableBean.genericFormulaModel.pramPer}"
+								styleClass="form-control">
+								<f:selectItem itemLabel="" />
+								<f:selectItems value="#{rateTableBean.listComboParameter}"
+									var="item" itemValue="#{item.parameterId}"
+									itemLabel="#{item.parameterName}" />
+							</h:selectOneMenu>
+						</div>
+
+						<div class="col-xs-12 col-md-2">
+							<p:commandButton value=">>" immediate="true"
+								title="#{msg['common.change']}"
+								disabled="#{!rateTableBean.genericFormulaModel.per}"
+								actionListener="#{rateTableBean.showDialogParameter('PER')}">
+								<p:ajax event="dialogReturn"
+									listener="#{rateTableBean.onDialogReturn}"
+									update="parameter_per" />
+							</p:commandButton>
+						</div>
+					</p:panel>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12 col-md-6">
+						<p:selectBooleanCheckbox
+							itemLabel="#{msg['formula.isPercentage']}"
+							value="#{rateTableBean.genericFormulaModel.formula.isPercentage}"
+							id="isPercentageText">
+							<p:ajax event="change" update="formulaA formulaB" />
+						</p:selectBooleanCheckbox>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12 col-md-2">
+						<p:outputLabel value="#{msg['formula.normalizingValueType']}" />
+					</div>
+
+					<div class="col-xs-12 col-md-8">
+						<h:selectOneMenu
+							value="#{rateTableBean.genericFormulaModel.formula.normalizingValueType}"
+							styleClass="form-control">
+							<f:selectItems value="#{rateTableBean.listFormulaUnitConverter}"
+								var="item" itemValue="#{item.unitConverterId}"
+								itemLabel="#{item.unitConverterName}" />
+							<p:ajax event="change" update="formulaA formulaB" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12 col-md-2">
+						<p:outputLabel value="#{msg['formula.formulaErrorCode']}" />
+					</div>
+
+					<div class="col-xs-12 col-md-8">
+						<h:selectOneMenu id="cbformulaErrorCode" styleClass="form-control"
+							value="#{rateTableBean.genericFormulaModel.formula.formulaErrorCode}"
+							editable="true">
+							<f:selectItem itemLabel="--NONE--" />
+							<f:selectItems value="#{rateTableBean.listComboFormulaErrorCode}"
+								var="item" itemValue="#{item.errorCode}"
+								itemLabel="#{item.description}" />
+						</h:selectOneMenu>
+					</div>
+
+					<div class="col-xs-12 col-md-2">
+						<p:commandLink update="dlgFEC"
+							actionListener="#{rateTableBean.showDialogFEC}" immediate="true"
+							title="#{msg['common.change']}"
+							styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-custom-margin">
+							<i class="fa fa-plus"></i>
+						</p:commandLink>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:tabView id="tabViewTrigger" effect="fade" effectDuration="fast"
+							activeIndex="1" style="height:225px;">
+							<p:tab title="#{msg['formula.triggerlist']}">
+								<p:dataTable id="triggerList" var="item"
+									value="#{rateTableBean.listTriggerOcs}"
+									rowKey="#{item.triggerOcsId}"
+									emptyMessage="#{msg['common.noData']}" paginator="false"
+									scrollable="true" scrollHeight="130">
+									<p:column headerText="#{msg['common.ID']}">
+										<h:outputText value="#{item.triggerOcsId}" />
+									</p:column>
+
+									<p:column headerText="#{msg['triggerMsg.msgName']}">
+										<h:outputText value="#{item.triggerName}" />
+									</p:column>
+
+									<p:column headerText="#{msg['common.desc']}">
+										<h:outputText value="#{item.description}" />
+									</p:column>
+									<p:column headerText="#{msg['common.action']}"
+										styleClass="text-center">
+										<p:commandLink update="triggerList" immediate="true"
+											actionListener="#{rateTableBean.deleteTriggerOcs(item)}"
+											styleClass="btn btn-sm btn-action-del colorRed">
+											<i class="fa fa-times icon-only mr-0"></i>
+											<p:confirm header="#{msg['common.delete']}"
+												message="#{msg['common.confirmDelete']}"
+												icon="ui-icon-alert" />
+										</p:commandLink>
+
+										<f:facet name="header">
+											<p:commandButton value="#{msg['formula.addTrigger']}"
+												icon="fa fa-plus" immediate="true"
+												title="#{msg['formula.addTrigger']}"
+												actionListener="#{rateTableBean.commandAddNewTriggerOcs()}">
+												<p:ajax event="dialogReturn" update="triggerList"
+													listener="#{rateTableBean.onDialogTriggerReturn}" />
+											</p:commandButton>
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+
+							</p:tab>
+							<p:tab title="#{msg['statisticItem.list']}">
+								<p:dataTable id="statisticList" var="item"
+									value="#{rateTableBean.lstStatisticItem}"
+									rowKey="#{item.statisticItemId}"
+									emptyMessage="#{msg['common.noData']}" paginator="false"
+									scrollable="true" scrollHeight="130">
+									<p:column headerText="#{msg['common.ID']}">
+										<h:outputText value="#{item.statisticItemId}" />
+									</p:column>
+
+									<p:column
+										headerText="#{msg['statisticItem.statisticItemName']}">
+										<h:outputText value="#{item.statisticItemName}" />
+									</p:column>
+
+									<p:column headerText="#{msg['common.desc']}">
+										<h:outputText value="#{item.statisticItemDesc}" />
+									</p:column>
+									<p:column headerText="#{msg['common.action']}"
+										styleClass="text-center">
+										<p:commandLink update="statisticList" immediate="true"
+											actionListener="#{rateTableBean.deleteStatisticItem(item)}"
+											styleClass="btn btn-sm btn-action-del colorRed">
+											<i class="fa fa-times icon-only mr-0"></i>
+											<p:confirm header="#{msg['common.delete']}"
+												message="#{msg['common.confirmDelete']}"
+												icon="ui-icon-alert" />
+										</p:commandLink>
+
+										<f:facet name="header">
+											<p:commandButton
+												value="#{msg['statisticItem.addStatisticItem']}"
+												icon="fa fa-plus" immediate="true"
+												title="#{msg['statisticItem.addStatisticItem']}"
+												actionListener="#{rateTableBean.commandAddNewStatistic()}">
+												<p:ajax event="dialogReturn" update="statisticList"
+													listener="#{rateTableBean.onDialogStatisticReturn}" />
+											</p:commandButton>
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+							</p:tab>
+							<p:tab title="#{msg['formula.advance']}">
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-xs-12">
+											<p:selectBooleanCheckbox
+												itemLabel="#{msg['formula.isSendRar']}"
+												value="#{rateTableBean.genericFormulaModel.formula.isSendRar}"
+												id="isSendRarText" />
+										</div>
+										<div class="col-xs-12">
+											<p:selectBooleanCheckbox
+												itemLabel="#{msg['formula.isMonitor']}"
+												value="#{rateTableBean.genericFormulaModel.formula.isMonitor}"
+												id="isMoniorText" />
+										</div>
+										<div class="col-md-12">
+											<p:outputLabel value="#{msg['formula.reservationTime']}" />
+										</div>
+										<div class="col-md-6">
+											<p:inputText maxlength="9" styleClass="form-control"
+												value="#{rateTableBean.genericFormulaModel.formula.reservationTime}">
+												<pe:keyFilter regEx="/[0-9]/i" />
+											</p:inputText>
+										</div>
+									</div>
+								</div>
+							</p:tab>
+
+
+						</p:tabView>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-xs-12">
+			<div class="row formFieldMg">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:commandButton value="#{msg['common.cancel']}"
+							icon="fa fa-times" title="#{msg['common.cancel']}"
+							immediate="true"
+							actionListener="#{rateTableBean.commandCancelFormula()}"
+							oncomplete="PF('dlgFormula').hide()" styleClass="pull-right">
+						</p:commandButton>
+						<p:commandButton value="#{msg['common.apply']}"
+							title="#{msg['common.apply']}" icon="fa fa-save"
+							styleClass="pull-right" process="dgFormula"
+							actionListener="#{rateTableBean.commandApplyFormula()}">
+							<!-- 							<p:confirm header="#{msg['common.apply']}" -->
+							<!-- 								message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" /> -->
+						</p:commandButton>
+					</div>
+				</div>
+			</div>
+		</div>
+	</p:dialog>
+
+</h:form>
+
+<p:dialog header="#{msg['formula.formulaErrorCode']}" modal="true"
+	closable="false" id="dlgFEC" resizable="false" showEffect="fade"
+	position="100,300" widgetVar="dlgFECWR" height="300px" width="600px">
+	<h:form id="form-FEC" class="container-fluid">
+
+		<div class="row formFieldMg">
+			<div class="col-xs-12 col-sm-6">
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['fErrorCode.formulaErrorCodeId']}" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText styleClass="form-control"
+							value="#{rateTableBean.fErrorCode.formulaErrorCodeId}"
+							readonly="true">
+							<pe:keyFilter regEx="/[0-9]/i" />
+						</p:inputText>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['common.type']}" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText styleClass="form-control" maxlength="9"
+							value="#{rateTableBean.fErrorCode.type}"
+							requiredMessage="#{msg['common.required']}">
+							<pe:keyFilter regEx="/[0-9]/i" />
+						</p:inputText>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-6">
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['fErrorCode.errorCode']}"
+							for="txtErrorCode" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText value="#{rateTableBean.fErrorCode.errorCode}"
+							styleClass="form-control" required="true" id="txtErrorCode">
+							<pe:keyFilter regEx="/[0-9]/i" />
+						</p:inputText>
+					</div>
+				</div>
+
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['baltype.balTypeName']}"
+							for="txtDescriptionFEC" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText styleClass="form-control"
+							value="#{rateTableBean.fErrorCode.description}" required="true"
+							id="txtDescriptionFEC" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:commandButton value="#{msg['common.cancel']}" process="@this"
+							actionListener="#{rateTableBean.closeDialogFEC()}"
+							icon="fa fa-close" resetValues="true" update="dlgFEC"
+							styleClass="pull-right">
+						</p:commandButton>
+						<div class="pull-right" style="padding-right: 12px" align="right">
+							<p:commandButton value="#{msg['common.apply']}" icon="fa fa-save"
+								update="form-ratetable-detail:cbformulaErrorCode"
+								actionListener="#{rateTableBean.cmdApplyFEC()}"
+								styleClass="btn btn-default">
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</h:form>
+</p:dialog>
+
+<h:form id="form-ratetable-by-cat" class="container-fluid"
+	rendered="#{rateTableBean.formType eq 'list-ratetable-by-category'}">
+	<div class="row" style="padding-bottom: 10px;">
+
+		<p:commandButton value="clear" update="@form"
+			styleClass="rateTableClearFilter hidden"
+			oncomplete="PF('tblRateWidgetVar').clearFilters()" />
+
+		<div class="col-xs-12 col-md-12">
+			<p:dataTable var="item" id="lstRateByCat"
+				rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"
+				value="#{rateTableBean.listRateTableByCategory}"
+				rowKey="#{item.rateTableId}" emptyMessage="#{msg['common.noData']}"
+				paginator="true" rows="20" paginatorPosition="bottom"
+				rowIndexVar="rowIndex" widgetVar="tblRateWidgetVar"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,20,50,100">
+
+				<f:facet name="header">
+					<p:outputLabel value="#{msg['ratetable.category']}"
+						style="font-weight:bold" />
+				</f:facet>
+
+				<p:ajax event="filter" ignoreAutoUpdate="true" />
+
+				<p:column headerText="#" style="width:7%">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.name']}"
+					sortBy="#{item.rateTableName}" filterBy="#{item.rateTableName}"
+					filterMatchMode="contains">
+					<h:outputText value="#{item.rateTableName}"
+						styleClass="preformatted" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.desc']}" sortBy="#{item.remark}"
+					filterBy="#{item.remark}" filterMatchMode="contains">
+					<h:outputText value="#{item.remark}" styleClass="preformatted" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.action']}"
+					style="text-align:center;">
+					<p:commandLink
+						update="treeCommon categoryCommonTop contentPanel contentTitle"
+						title="#{msg['common.edit']}" resetValues="true"
+						actionListener="#{rateTableBean.commandEditTable(item)}"
+						styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+						<i class="fa fa-pencil icon-only mr-0"></i>
+					</p:commandLink>
+					<p:commandLink update="treeCommon categoryCommonTop contentPanel"
+						title="#{msg['common.clone']}"
+						actionListener="#{rateTableBean.commandCloneTable(item)}"
+						styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+						<i class="fa fa-clone icon-only mr-0"></i>
+						<p:ajax event="dialogReturn"
+							listener="#{rateTableBean.onDialogReturn}"
+							update="treeCommon categoryCommonTop contentPanel" />
+					</p:commandLink>
+					<p:commandLink update="treeCommon categoryCommonTop contentPanel"
+						title="#{msg['common.delete']}"
+						actionListener="#{rateTableBean.commandRemoveTable(item)}"
+						styleClass="btn btn-sm btn-action-del colorRed">
+						<i class="fa fa-times icon-only mr-0"></i>
+						<p:confirm header="#{msg['common.delete']}"
+							message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+					</p:commandLink>
+					<f:facet name="header">
+						<p:commandButton value="#{msg['common.addNew']}" icon="fa fa-plus"
+							title="#{msg['common.addNew']}" resetValues="true"
+							actionListener="#{rateTableBean.commandAddNew()}"
+							update=":treeCommon categoryCommonTop contentPanel contentTitle"
+							styleClass="btn btn-primary" />
+					</f:facet>
+
+				</p:column>
+			</p:dataTable>
+		</div>
+	</div>
+
+</h:form>
+</html>

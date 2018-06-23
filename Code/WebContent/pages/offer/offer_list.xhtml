@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:form id="form-offer-list"
+	rendered="#{offerBean.formType == 'offer-list'}">
+	<div class="container-fluid">
+		<div class="row formFieldMg">
+			<div class="col-xs-12">
+				<p:dataTable var="item" value="#{offerBean.listOfferByCat}"
+					id="offer_list_id" emptyMessage="#{msg['common.noData']}"
+					paginator="true" rows="20" paginatorPosition="bottom"
+					resizableColumns="true" rowIndexVar="rowIndex"
+					widgetVar="offer_list_id"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="10,20,50,100">
+					<f:facet name="header">
+						<p:outputLabel value="#{msg['offer.offerList']}" />
+					</f:facet>
+					<p:column headerText="#" styleClass="widthSTTcolumn">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.name']}"
+						styleClass="text-truncate" sortBy="#{item.offerName}"
+						filterBy="#{item.offerName}" filterMatchMode="contains">
+						<h:outputText value="#{item.offerName}" styleClass="preformatted" />
+					</p:column>
+
+					<!-- 					<p:column headerText="#{msg['offer.type']}" -->
+					<!-- 						sortBy="#{item.offerType}" filterBy="#{item.offerType}" -->
+					<!-- 						filterMatchMode="exact"> -->
+					<!-- 						<h:outputText value="#{item.offerType}" /> -->
+					<!-- 					</p:column> -->
+
+					<p:column headerText="#{msg['common.externalId']}"
+						styleClass="text-truncate" resizable="false"
+						sortBy="#{item.offerExternalId}"
+						filterBy="#{item.offerExternalId}" filterMatchMode="contains">
+						<h:outputText value="#{item.offerExternalId}"
+							title="#{item.offerExternalId}" styleClass="preformatted" />
+					</p:column>
+
+					<!-- 					<p:column headerText="#{msg['offer.']}" -->
+					<!-- 						sortBy="#{item.offerExternalId}" filterBy="#{item.offerExternalId}" -->
+					<!-- 						filterMatchMode="contains"> -->
+					<!-- 						<h:outputText value="#{item.description}" /> -->
+					<!-- 					</p:column> -->
+
+					<p:column styleClass="actionColumn" resizable="false">
+						<p:commandLink resetValues="true"
+							update="categoryCommonTop contentPanel"
+							actionListener="#{offerBean.commandEditTable(item)}"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen"
+							title="#{msg['common.edit']}">
+							<i class="fa fa-pencil icon-only mr-0"></i>
+						</p:commandLink>
+						<p:commandLink update="treeCommon categoryCommonTop contentPanel"
+							actionListener="#{offerBean.commandRemoveTable(item)}"
+							styleClass="btn btn-sm btn-action-del colorRed"
+							title="#{msg['common.delete']}">
+							<i class="fa fa-times icon-only mr-0"></i>
+							<p:confirm header="#{msg['common.delete']}"
+								message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+						</p:commandLink>
+
+						<f:facet name="header">
+							<p:outputLabel value="#{msg['common.action']}"
+								rendered="#{!offerBean.addNewable()}" />
+							<p:commandButton value="#{msg['offer.addNew']}"
+								rendered="#{offerBean.addNewable()}" icon="fa fa-plus"
+								actionListener="#{offerBean.btnAddNewFromCat()}"
+								resetValues="true" update="categoryCommonTop contentPanel" />
+						</f:facet>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+	</div>
+</h:form>
+</html>

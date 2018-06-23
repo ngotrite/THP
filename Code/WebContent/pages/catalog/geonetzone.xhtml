@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="../tree_common.xhtml">
+	<ui:define name="subcontent">
+		<h:form id="form-geonet" class="container-fluid" rendered="#{geoBean.formType eq 'geohome-detail'}">
+
+			<div class="row">
+
+				<div class="col-xs-12 col-md-2">
+					<p:outputLabel value="#{msg['geo.geoHomeZoneId']}" />
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:inputText value="#{geoBean.geoNet.geoHomeZoneId}"
+						styleClass="form-control"
+						requiredMessage="#{msg['common.required']}" />
+				</div>
+			</div>
+
+			<div class="row">
+
+				<div class="col-xs-12 col-md-2">
+					<p:outputLabel value="#{msg['geo.geoHomeZoneName']}" />
+					<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:inputText styleClass="form-control"
+						requiredMessage="#{msg['common.required']}" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 col-md-2">
+					<p:outputLabel value="#{msg['geo.geoHomeZoneCode']}" />
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:inputText styleClass="form-control"
+						requiredMessage="#{msg['common.required']}" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 col-md-2">
+					<p:outputLabel value="#{msg['cell.cellId']}" />
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:inputText styleClass="form-control"
+						value="#{geoBean.geoNet.cellId}"
+						requiredMessage="#{msg['common.required']}" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 col-md-2">
+					<p:outputLabel for="mask" value="#{msg['geoNet.updateDate']}" />
+				</div>
+				<div class="col-xs-12 col-md-4">
+					<p:calendar id="mask" effect="fold"
+						value="#{geoBean.geoNet.updateDate}"
+						requiredMessage="#{msg['common.required']}" pattern="#{userSession.timeFormat}"
+						mask="true" />
+
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12 col-md-4 col-md-offset-6">
+					<p:commandButton value="#{msg['common.apply']}"
+						action="#{geoBean.saveGeoNet()}"
+						update="form-geonet" styleClass="btn btn-default">
+					</p:commandButton>
+					<p:commandButton value="#{msg['common.cancel']}"
+						action="#{geoBean.cancelGeoNet()}"
+						update="form-geonet" styleClass="btn btn-default">
+					</p:commandButton>
+
+				</div>
+			</div>
+
+
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

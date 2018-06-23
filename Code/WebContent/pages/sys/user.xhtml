@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:form id="form-user" class="container-fluid">
+
+	<div class="row formFieldMg">
+		<div class="col-xs-12 col-sm-4">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['user.userName']}" for="userName" />
+				</div>
+				<div class="col-xs-12">
+					<p:inputText id="userName" value="#{userBean.sysUser.userName}"
+						styleClass="form-control" maxlength="20" required="true"
+						validator="ValidatorUsername" />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['user.password']}" for="password" />
+				</div>
+				<div class="col-xs-12">
+					<p:password id="password" value="#{userBean.password}"
+						required="true" styleClass="form-control" maxlength="20" />
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['user.email']}" />
+				</div>
+				<div class="col-xs-12">
+					<p:inputText value="#{userBean.sysUser.email}"
+						styleClass="form-control" maxlength="100"
+						validator="ValidatorEmail">
+					</p:inputText>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<p:selectBooleanCheckbox style="margin-top: 2%;" id="isActive"
+						value="#{userBean.sysUser.isActive}" itemLabel="#{msg['common.active']}"/>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-xs-12 col-sm-4">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['user.firstName']}" />
+				</div>
+				<div class="col-xs-12">
+					<p:inputText value="#{userBean.sysUser.firstName}"
+						styleClass="form-control" maxlength="100">
+						<p:ajax update="fullName" />
+					</p:inputText>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['user.lastName']}" />
+				</div>
+				<div class="col-xs-12">
+					<p:inputText value="#{userBean.sysUser.lastName}"
+						styleClass="form-control" maxlength="100">
+						<p:ajax update="fullName" />
+					</p:inputText>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['user.fullName']}" />
+				</div>
+				<div class="col-xs-12">
+					<p:inputText id="fullName" value="#{userBean.sysUser.fullName}"
+						styleClass="form-control" maxlength="100" readonly="true" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['user.theme']}" />
+				</div>
+				<div class="col-xs-3">
+					<p:commandButton styleClass="btnChooseTheme" icon="ti-layout"
+						process="@this" value="" onclick="PF('dlgThemePicker').show();" />
+				</div>
+				<div class="col-xs-9">
+					<div style="background: #{userBean.colorTheme()};height:30px; width: 100%;"></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-xs-12 col-sm-4">
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['user.ID']}" />
+				</div>
+				<div class="col-xs-12">
+					<p:inputText value="#{userBean.sysUser.id}" readonly="true"
+						styleClass="form-control" />
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['user.expireDate']}"
+						for="cldExpireDate" />
+				</div>
+				<div class="col-xs-12">
+					<p:calendar value="#{userBean.sysUser.expireDate}"
+						id="cldExpireDate" pattern="#{userSession.dateFormat}">
+					</p:calendar>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['user.languague']}" />
+				</div>
+				<div class="col-xs-12">
+					<h:selectOneMenu value="#{userBean.sysUser.languague}"
+						styleClass="form-control">
+						<f:selectItem itemLabel="" />
+						<f:selectItems value="#{userBean.listLang}" var="item"
+							itemValue="#{item.langCode}" itemLabel="#{item.langName}" />
+					</h:selectOneMenu>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-xs-12">
+					<p:outputLabel value="#{msg['user.remark']}" />
+				</div>
+				<div class="col-xs-12">
+					<p:inputText value="#{userBean.sysUser.remark}"
+						styleClass="form-control" maxlength="255" />
+				</div>
+			</div>
+
+
+			<div class="row">
+				<div class="col-xs-12 text-right">
+					<p:commandButton id="btnNew" value="#{msg['common.addNew']}" icon="fa fa-plus"
+						actionListener="#{userBean.btnNew}" disabled="#{userBean.editing}"
+						update="form-user" styleClass="btn btn-primary" immediate="true"
+						resetValues="true">
+					</p:commandButton>
+					<p:commandButton id="btnSave" value="#{msg['common.save']}"
+						actionListener="#{userBean.btnSave}"
+						disabled="#{!userBean.editing}" icon="fa fa-save"
+						update="form-user-list:ID_UserTable form-user"
+						styleClass="btn btn-default">
+						<p:confirm header="#{msg['common.apply']}"
+							message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+					</p:commandButton>
+					<p:commandButton id="btnCancel" value="#{msg['common.cancel']}"
+						actionListener="#{userBean.btnCancel}" icon="fa fa-refresh"
+						disabled="#{!userBean.editing}" update="form-user"
+						styleClass="btn btn-default" immediate="true" resetValues="true">
+					</p:commandButton>
+				</div>
+			</div>
+		</div>
+	</div>
+</h:form>
+
+<h:form id="dialogChooseTheme">
+	<p:dialog header="#{msg['normalizer.colorPicker']}"
+		styleClass="dlgColorPicker" modal="true" showEffect="explode"
+		widgetVar="dlgThemePicker"
+		style="height: 400px; width:430px !important;">
+		<div class="container-fluid">
+			<div class="col-xs-12 text-center">
+				<p:commandButton
+					actionListener="#{userBean.changeTheme('defaultTheme')}"
+					style="background: #00C292 !important;" styleClass="btnChooseTheme"
+					icon="ti-paint-bucket" value="" update="form-user"
+					oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+				</p:commandButton>
+				<div class="col-xs-2 menuleftThemeDF"></div>
+				<div class="col-xs-10 contentThemeDF"></div>
+			</div>
+			<div class="col-xs-12 text-center pd-top10">
+				<p:commandButton
+					actionListener="#{userBean.changeTheme('blueTheme')}"
+					style="background: #03A9F3 !important;" styleClass="btnChooseTheme"
+					icon="ti-paint-bucket" value="" update="form-user"
+					oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+				</p:commandButton>
+				<div class="col-xs-2 menuleftThemeBlue"></div>
+				<div class="col-xs-10 contentThemeBlue"></div>
+			</div>
+			<div class="col-xs-12 text-center pd-top10">
+				<p:commandButton
+					actionListener="#{userBean.changeTheme('seaTheme')}"
+					style="background: #3C8DBC !important;" styleClass="btnChooseTheme"
+					icon="ti-paint-bucket" value="" update="form-user"
+					oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+				</p:commandButton>
+				<div class="col-xs-2 menuleftThemeSea"></div>
+				<div class="col-xs-10 contentThemeSea"></div>
+			</div>
+			<div class="col-xs-12 text-center pd-top10">
+				<p:commandButton
+					actionListener="#{userBean.changeTheme('purpleTheme')}"
+					style="background: #8923F9 !important;" styleClass="btnChooseTheme"
+					icon="ti-paint-bucket" value="" update="form-user"
+					oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+				</p:commandButton>
+				<div class="col-xs-2 menuleftThemePurple"></div>
+				<div class="col-xs-10 contentThemePurple"></div>
+			</div>
+			<div class="col-xs-12 text-center pd-top10">
+				<p:commandButton
+					actionListener="#{userBean.changeTheme('orangeTheme')}"
+					style="background: #F39A0D !important;" styleClass="btnChooseTheme"
+					icon="ti-paint-bucket" value="" update="form-user"
+					oncomplete="$('.dlgColorPicker .ui-dialog-titlebar-close').click();">
+				</p:commandButton>
+				<div class="col-xs-2 menuleftThemeOrange"></div>
+				<div class="col-xs-10 contentThemeOrange"></div>
+			</div>
+		</div>
+	</p:dialog>
+</h:form>
+
+<h:form id="form-user-list" class="container-fluid">
+	<div class="row">
+		<div class="col-xs-12">
+			<p:dataTable id="ID_UserTable" var="user" resizableColumns="true"
+				value="#{userBean.listSysUser}" rowIndexVar="rowIndex"
+				paginator="true" rows="20" paginatorPosition="bottom"
+				selectionMode="single" rowKey="#{user.id}"
+				rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,20,50,100"
+				emptyMessage="#{msg['common.noData']}">
+
+				<f:facet name="header">
+					<h:outputLabel value="#{msg['user.list']}"></h:outputLabel>
+				</f:facet>
+
+				<p:column headerText="#" styleClass="widthSTTcolumn">
+					<h:outputText value="#{rowIndex+1}" />
+				</p:column>
+				<p:column headerText="#{msg['user.userName']}" resizable="true"
+					styleClass="text-truncate preformatted" sortBy="#{user.userName}"
+					filterBy="#{user.userName}" filterMatchMode="contains">
+					<h:outputText value="#{user.userName}" title="#{user.userName}" />
+				</p:column>
+				<p:column headerText="#{msg['user.email']}" resizable="true"
+					styleClass="text-truncate preformatted" sortBy="#{user.userName}"
+					filterBy="#{user.email}" filterMatchMode="contains">
+					<h:outputText value="#{user.email}" title="#{user.email}" />
+				</p:column>
+				<p:column headerText="#{msg['user.fullName']}" resizable="true"
+					styleClass="text-truncate preformatted" sortBy="#{user.fullName}"
+					filterBy="#{user.fullName}" filterMatchMode="contains">
+					<h:outputText value="#{user.fullName}" title="#{user.fullName}" />
+				</p:column>
+				<!-- <p:column headerText="#{msg['user.role']}"
+					sortBy="#{user.role.name}" filterBy="#{user.role.name}"
+					filterMatchMode="contains">
+					<h:outputText value="#{user.role.name}" />
+				</p:column> -->
+				<p:column headerText="#{msg['common.active']}"
+					styleClass="checkboxColumn">
+					<p:selectBooleanCheckbox value="#{user.isActive}" disabled="true">
+					</p:selectBooleanCheckbox>
+				</p:column>
+				<p:column headerText="#{msg['user.expireDate']}"
+					styleClass="text-truncate" sortBy="#{user.expireDate}">
+					<h:outputText value="#{user.expireDate}" title="#{user.expireDate}">
+						<f:convertDateTime pattern="#{userSession.dateFormat}" />
+					</h:outputText>
+				</p:column>
+				<p:column headerText="#{msg['user.remark']}" sortBy="#{user.remark}"
+					styleClass="text-truncate" resizable="true"
+					filterBy="#{user.remark}" filterMatchMode="contains">
+					<h:outputText value="#{user.remark}" title="#{user.remark}" />
+				</p:column>
+
+				<p:column headerText="#{msg['common.action']}"
+					styleClass="actionColumn">
+					<p:commandLink actionListener="#{userBean.onRowEdit(user)}"
+						update="form-user" immediate="true" title="#{msg['common.edit']}"
+						styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+						<i class="fa fa-pencil icon-only mr-0"></i>
+					</p:commandLink>
+					<p:commandLink actionListener="#{userBean.onRowDelete(user)}"
+						update="ID_UserTable" immediate="true"
+						title="#{msg['common.delete']}"
+						styleClass="btn btn-sm btn-action-del colorRed">
+						<i class="fa fa-times icon-only mr-0"></i>
+						<p:confirm header="#{msg['common.delete']}"
+							message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</div>
+	</div>
+</h:form>
+</html>

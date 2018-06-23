@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition>
+	<p:panel styleClass="treeclone" id="tree_clone_id">
+		<div class="row">
+			<div class="col-xs-12 pull-right">
+				<p:panel rendered="#{cloneCommonBean.positionIndex ge 12}"
+					styleClass="nopadding">
+					<p:selectBooleanCheckbox id="chk_action" binding="#{chk_action}" itemLabel="Action Level"
+						disabled="#{cloneCommonBean.positionIndex eq 12}"
+						value="#{cloneCommonBean.treeCloneModel.action}">
+						<p:ajax update="tree_clone_id" event="change"
+							listener="#{cloneCommonBean.onChangeChecked(chk_action.value, 'action')}" />
+					</p:selectBooleanCheckbox>
+				</p:panel>
+			</div>
+		</div>
+		<div class="row">
+			<div
+				class="#{cloneCommonBean.positionIndex eq 11 ? 'col-xs-12' : 'col-xs-11'} pull-right">
+				<p:panel rendered="#{cloneCommonBean.positionIndex ge 11}"
+					styleClass="nopadding">
+					<p:selectBooleanCheckbox id="chk_pc" binding="#{chk_pc}" itemLabel="Price Component Level"
+						disabled="#{cloneCommonBean.positionIndex eq 11}"
+						value="#{cloneCommonBean.treeCloneModel.pc}">
+						<p:ajax update="tree_clone_id" event="change"
+							listener="#{cloneCommonBean.onChangeChecked(chk_pc.value, 'pc')}" />
+					</p:selectBooleanCheckbox>
+				</p:panel>
+			</div>
+		</div>
+		<div class="row">
+			<div
+				class="#{cloneCommonBean.positionIndex eq 10 ? 'col-xs-12' : 'col-xs-'.concat((12 - cloneCommonBean.positionIndex) + 10)} pull-right">
+				<p:panel rendered="#{cloneCommonBean.positionIndex ge 10}"
+					styleClass="nopadding">
+					<p:selectBooleanCheckbox id="chk_block" binding="#{chk_block}" itemLabel="Block Level"
+						disabled="#{cloneCommonBean.positionIndex eq 10}"
+						value="#{cloneCommonBean.treeCloneModel.block}">
+						<p:ajax update="tree_clone_id" event="change"
+							listener="#{cloneCommonBean.onChangeChecked(chk_block.value, 'block')}" />
+					</p:selectBooleanCheckbox>
+				</p:panel>
+			</div>
+		</div>
+		<div class="row">
+			<div
+				class="#{cloneCommonBean.positionIndex eq 9 ? 'col-xs-12' : 'col-xs-'.concat((12 - cloneCommonBean.positionIndex) + 9)} pull-right">
+				<p:panel rendered="#{cloneCommonBean.positionIndex ge 9}"
+					styleClass="nopadding">
+					<p:selectBooleanCheckbox id="chk_rate_tb" binding="#{chk_rate_tb}" itemLabel="Rate Table Level"
+						disabled="#{cloneCommonBean.positionIndex eq 9}"
+						value="#{cloneCommonBean.treeCloneModel.rateTable}">
+						<p:ajax update="tree_clone_id" event="change"
+							listener="#{cloneCommonBean.onChangeChecked(chk_rate_tb.value, 'rateTable')}" />
+					</p:selectBooleanCheckbox>
+				</p:panel>
+			</div>
+		</div>
+		<div class="row">
+			<div
+				class="#{cloneCommonBean.positionIndex eq 8 ? 'col-xs-12' : 'col-xs-'.concat((12 - cloneCommonBean.positionIndex) + 8)} pull-right">
+				<p:panel rendered="#{cloneCommonBean.positionIndex ge 8}"
+					styleClass="nopadding">
+					<p:selectBooleanCheckbox id="chk_dt" binding="#{chk_dt}" itemLabel="Decision Level"
+						disabled="#{cloneCommonBean.positionIndex eq 8}"
+						value="#{cloneCommonBean.treeCloneModel.dt}">
+						<p:ajax update="tree_clone_id" event="change"
+							listener="#{cloneCommonBean.onChangeChecked(chk_dt.value, 'dt')}" />
+					</p:selectBooleanCheckbox>
+				</p:panel>
+			</div>
+		</div>
+		<div class="row">
+			<div
+				class="#{cloneCommonBean.positionIndex eq 7 ? 'col-xs-12' : 'col-xs-'.concat((12 - cloneCommonBean.positionIndex) + 7)} pull-right">
+				<p:panel rendered="#{cloneCommonBean.positionIndex ge 7}"
+					styleClass="nopadding">
+					<p:selectBooleanCheckbox id="chk_norm" binding="#{chk_norm}" itemLabel="Normalizer Level"
+						disabled="#{cloneCommonBean.positionIndex eq 7}"
+						value="#{cloneCommonBean.treeCloneModel.normalizer}">
+						<p:ajax update="tree_clone_id" event="change"
+							listener="#{cloneCommonBean.onChangeChecked(chk_norm.value, 'norm')}" />
+					</p:selectBooleanCheckbox>
+				</p:panel>
+			</div>
+		</div>
+	</p:panel>
+	<style>
+.treeclone {
+	border: 1px solid #ccc;
+	padding: 20px;
+	width: 100%;
+	height: 200px;
+}
+
+.treeclone:hover {
+	border: 1px solid #00a65a;
+}
+</style>
+</ui:composition>
+</html>

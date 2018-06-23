@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="content-type" content="text/html; charset=utf8" />
+	<link rel="shortcut icon"
+		href="#{request.contextPath}/resources/favicon.png"
+		type="image/x-icon" />
+	<link href="#{request.contextPath}/resources/css/layout_vocs.css"
+		rel="stylesheet" type="text/css" />
+	<link href="#{request.contextPath}/resources/css/tree.css"
+		rel="stylesheet" type="text/css" />
+
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+	<!-- Basic Styles -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-widget.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-jqueryui.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-datepicker.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/js/rappid/css/leftmenu.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/demo.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/custom.css" />
+	<link rel="apple-touch-icon"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/sptouch-icon-iphone.png" />
+	<link rel="apple-touch-icon" sizes="76x76"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-ipad.png" />
+	<link rel="apple-touch-icon" sizes="120x120"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-iphone-retina.png" />
+	<link rel="apple-touch-icon" sizes="152x152"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-ipad-retina.png" />
+
+	<!-- huan -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-skins.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/demo.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/css/custom.css" />
+
+	<!-- hieupv -->
+	<!-- Font Awesome -->
+	<link rel="stylesheet"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/font-awesome/css/font-awesome.min.css" />
+	<!-- Ocsicon -->
+	<link rel="stylesheet"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/font-ocs/osicon.css" />
+
+	<!-- Content Template CSS -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/customContent.css" />
+
+	<!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+	<!-- Startup image for web apps -->
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/ipad-landscape.png"
+		media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/ipad-portrait.png"
+		media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/iphone.png"
+		media="screen and (max-device-width: 320px)" />
+
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/js/advance.js" />
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/js/util.js" />
+
+	<!-- Custom JS -->
+	<script
+		src="#{request.contextPath}/resources/themes/smartadmin/js/custom.js"></script>
+	<title>Re-Compiled</title>
+</h:head>
+<body style="height: 500px;" class="#{userSession.sysUser.theme}">
+	<f:view locale="#{userSession.language}" contentType="text/html">
+		<p:ajaxStatus
+			onstart="checkOpenDlg('statusDialog');trimAllInputText();"
+			oncomplete="checkCloseDlg('statusDialog');" />
+		<p:ajaxStatus onstart="trimAllInputText();" oncomplete="" />
+		<p:dialog modal="true" hideEffect="" widgetVar="statusDialog"
+			draggable="false" closable="false" resizable="false"
+			style="background: transparent !important;" styleClass="loading">
+			<img src="#{request.contextPath}/resources/themes/images/loading.gif"
+				style="width: 64px;" />
+		</p:dialog>
+		<h:form id="form-re_compiled_offer_temp">
+			<p:growl id="growlClone" showDetail="true" sticky="true" />
+			<p:panel style="width: 100%; height: 90%;">
+				<div class="container-fluid"
+					style="height: 440px; overflow-y: scroll;">
+					<div class="row formFieldMg" style="margin-top: 2%;">
+						<div class="col-xs-2">
+							<p:outputLabel value="Template Offer" />
+						</div>
+						<div class="col-xs-3">
+							<h:inputText readonly="true"
+								value="#{reCompiledOffes.offer.offerName} ver #{reCompiledOffes.offer.versionInfo}" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-3">
+							<p:outputLabel value="Compiled Offer" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:dataTable value="#{reCompiledOffes.offerModels}" var="rowItem"
+								paginator="true" rows="10" editable="true" editMode="cell"
+								paginatorPosition="bottom" rowIndexVar="index"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="5,10,15,20,50,100">
+								<p:column headerText="#" style="width:5%"
+									styleClass="text-center">
+									<h:outputText value="#{index + 1}" />
+								</p:column>
+
+								<p:column headerText="#{msg['offer.compiled_offers_name']}">
+									<p:selectBooleanCheckbox value="#{rowItem.selected}"
+										itemLabel="#{rowItem.offer.offerName}
+											v#{rowItem.offer.versionInfo}" />
+								</p:column>
+
+
+								<p:columns value="#{reCompiledOffes.parametersOfOffer}"
+									var="column" styleClass="text-center">
+									<f:facet name="header">
+										<h:outputText value="#{column.parameterName}" />
+									</f:facet>
+									<h:outputText
+										value="#{reCompiledOffes.findParameterInList(reCompiledOffes.parametersMap.get(rowItem.offer.offerId), column.parameterId)}" />
+								</p:columns>
+							</p:dataTable>
+						</div>
+					</div>
+				</div>
+			</p:panel>
+
+			<div class="row" style="height: 5%; padding-top: 1%;">
+				<div class="col-xs-2 pull-right">
+					<p:commandButton value="#{msg['offer.deploy.re_compiled']}"
+						update="growlClone"
+						actionListener="#{reCompiledOffes.reCopiled()}" />
+				</div>
+				<div class="col-xs-2 pull-left" style="padding-left: 4%;">
+					<p:commandButton value="#{msg['common.cancel']}" immediate="true"
+						actionListener="#{reCompiledOffes.oncancel()}" />
+				</div>
+			</div>
+		</h:form>
+	</f:view>
+</body>
+</html>

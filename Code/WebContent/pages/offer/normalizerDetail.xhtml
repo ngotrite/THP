@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+<h:form rendered="#{normalizerBean.formtype eq 'normDetail'}"
+	id="normDetail">
+	<div class="container-fluid">
+		<div class="row formFieldMg">
+			<div class="col-sm-6">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['common.ID']}" ></p:outputLabel>
+						<p:outputLabel value="*" styleClass="colorRed"></p:outputLabel>
+					</div>
+					<div class="col-xs-12">
+						<p:inputText styleClass="form-control normalizerName" maxlength="255"
+							readonly="true" value="#{normalizerBean.normalizer.normalizerId}"></p:inputText>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['normalizer.category']}"
+							 for="categoryId"></p:outputLabel>
+					</div>
+					<div class="col-xs-12">
+						<h:selectOneMenu styleClass="form-control" id="categoryId"
+							required="true" value="#{normalizerBean.selectedNormCate}">
+							<f:selectItems itemLabelEscaped="false"
+								value="#{normalizerBean.listNormCate}" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row formFieldMg">
+			<div class="col-xs-12 col-sm-6">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['normalizer.name']}"
+							 for="normalizerName"></p:outputLabel>
+					</div>
+					<div class="col-xs-12">
+						<p:inputText id="normalizerName" required="true"
+							styleClass="form-control normalizerName"
+							value="#{normalizerBean.normName}"></p:inputText>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['normalizer.startDate']}"
+							 for="startDate"></p:outputLabel>
+					</div>
+					<div class="col-xs-12">
+						<p:calendar id="startDate" value="#{normalizerBean.normalizer.startDate}" required="true"
+							yearRange="-50:+50" pattern="#{userSession.timeFormat}"
+							styleClass="normalizerStartdate calendarIcon" mask="true"
+							maxlength="20" navigator="true">
+						</p:calendar>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12 col-sm-6">
+				<div class="row formFieldMg">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['normalizer.type']}"
+							 for="normType"></p:outputLabel>
+					</div>
+					<div class="col-xs-12">
+						<h:selectOneMenu styleClass="form-control" id="normType" required="true"
+							value="#{normalizerBean.selectedNormType}"
+							disabled="#{normalizerBean.normalizer.normalizerId > 0}">
+							<f:selectItems value="#{normalizerBean.listNormType}" />
+							<p:ajax event="change"
+								update="pnlNormContent tableValueManager btnAddnewValueManager"
+								listener="#{normalizerBean.onChangeNormType()}" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+				<div class="row formFieldMg">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['normalizer.state']}"
+							 for="normState"></p:outputLabel>
+					</div>
+					<div class="col-xs-12">
+						<h:selectOneMenu styleClass="form-control" id="normState" required="true"
+							value="#{normalizerBean.selectedNormState}">
+							<f:selectItems value="#{normalizerBean.listNormState}" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<p:outputLabel value="#{msg['normalizer.description']}"
+					></p:outputLabel>
+			</div>
+			<div class="col-xs-12">
+				<p:inputText styleClass="form-control" maxlength="255"
+					value="#{normalizerBean.normalizer.remark}"></p:inputText>
+			</div>
+		</div>
+		<div class="row">
+		<div class="col-xs-12">
+			<div class="box box-default box-solid box-panel-define">
+				<div class="box-header with-border">
+					<h3 class="box-title box-title-tree"><p:outputLabel value="#{msg['normalizer.define']}"></p:outputLabel> </h3>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool btn-slideup-define">
+							<i class="fa fa-angle-down"></i>
+						</button>
+					</div>
+				</div>
+				<div class="box-body">
+					<p:panel rendered="#{!normalizerBean.isCurrentTimeUsing}" class="row formFieldMg">
+						<div class="col-xs-12">
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['normalizer.inputField']}"
+										rendered="#{!normalizerBean.isCurrentTimeUsing}"
+										 for="inputTextField01"></p:outputLabel>
+								</div>
+								<div class="col-xs-12">
+									<p:inputText id="inputTextField01" required="true"
+										rendered="#{!normalizerBean.isCurrentTimeUsing}"
+										styleClass="form-control inputTextField01"
+										value="#{normalizerBean.inputField1}" readonly="true"></p:inputText>
+								</div>
+								<div class="col-xs-12 hidden">
+									<p:commandButton styleClass="btnUpdateHiddenForInputField"
+										oncomplete="PF('dlgTreePathObject').show();"
+										update="contentPanel">
+									</p:commandButton>
+								</div>
+								<div class="col-xs-12 hidden">
+									<p:commandButton styleClass="btnUpdateHiddenAll"
+										update="treeCommon categoryCommonTop contentPanel">
+									</p:commandButton>
+									<p:commandButton styleClass="btnShowCate"
+										actionListener="#{normalizerBean.redirectChangeCate()}"
+										update="categoryCommonTop contentPanel">
+										<p:ajax event="dialogReturn"
+											listener="#{normalizerBean.onDialogReturnCategory}"
+											update="treeCommon categoryCommonTop contentPanel" />
+									</p:commandButton>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-3">
+									<p:commandButton value="#{msg['normalizer.addChild']}"
+										actionListener="#{normalizerBean.addChildIPF1()}"
+										update="tblInputField1" icon="fa fa-plus"
+										rendered="#{!normalizerBean.isCurrentTimeUsing}" disabled="#{!normalizerBean.isEdit}"/>
+								</div>
+								<div class="col-xs-9">
+									<p:dataTable rendered="#{!normalizerBean.isCurrentTimeUsing}"
+										id="tblInputField1" var="item"
+										value="#{normalizerBean.listInputFieldTable1}"
+										paginator="true" rows="20" paginatorPosition="bottom"
+										rowIndexVar="rowIndex"
+										paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+										rowsPerPageTemplate="10,20,50,100" editable="true"
+										editMode="cell"
+										rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+										<p:column headerText="#" styleClass="widthSTTcolumn">
+											<h:outputText value="#{rowIndex+1}" />
+										</p:column>
+
+										<p:column headerText="#{msg['normalizer.path']}">
+											<p:cellEditor>
+												<f:facet name="output">
+													<h:outputText value="#{item.path}" />
+												</f:facet>
+												<f:facet name="input">
+													<p:inputText value="#{item.path}" styleClass="form-control"
+														rendered="#{item.index == 1}">
+														<p:ajax event="focus"
+															listener="#{normalizerBean.createTree(item,'OFFER_OBJECT')}"
+															oncomplete="$('.btnUpdateHiddenForInputField').click();" />
+													</p:inputText>
+													<h:selectOneMenu styleClass="form-control"
+														rendered="#{item.index > 1}"
+														value="#{normalizerBean.selectedTmpNestedObj}">
+														<f:selectItems value="#{item.listObjectForChoose}" />
+														<p:ajax event="change"
+															listener="#{normalizerBean.changePathChildEvent(item)}"
+															oncomplete="$('.btnUpdateHiddenAll').click();" />
+													</h:selectOneMenu>
+												</f:facet>
+											</p:cellEditor>
+										</p:column>
+
+										<p:column headerText="#{msg['normalizer.filter']}">
+											<p:cellEditor>
+												<f:facet name="output">
+													<div class="col-xs-12" style="overflow-x: auto;">
+														<h:outputText value="#{item.filter}" />
+													</div>
+												</f:facet>
+												<f:facet name="input">
+													<p:inputText value="#{item.filter}" style="width:100%">
+														<p:ajax event="focus"
+															listener="#{normalizerBean.fillDataToTmpInputField(item)}"
+															oncomplete="PF('dlgAddFilter').show();"
+															update="@form:dialogAddFilter" />
+													</p:inputText>
+												</f:facet>
+											</p:cellEditor>
+										</p:column>
+
+										<p:column headerText="#{msg['common.action']}"
+											style="text-align:center; width:60px;">
+											<p:commandLink disabled="#{!normalizerBean.isEdit}"
+												update="tblInputField1 @form:inputTextField01"
+												actionListener="#{normalizerBean.removeChildIPF1(item)}"
+												styleClass="btn btn-sm btn-action-del colorRed">
+												<i class="fa fa-times icon-only mr-0"></i>
+												<p:confirm header="#{msg['common.delete']}"
+													message="#{msg['common.confirmDelete']}"
+													icon="ui-icon-alert" />
+											</p:commandLink>
+										</p:column>
+									</p:dataTable>
+								</div>
+							</div>
+						</div>
+					</p:panel>
+					<div class="row formFieldMg">
+						<div class="col-xs-12">
+							<p:panel id="pnlNormContent" styleClass="nopadding">
+
+
+
+								<!--BEGIN Panel String type -->
+								<ui:insert name="type-normalizer-string">
+									<ui:include src="/pages/offer/normalizerType/StringType.xhtml" />
+								</ui:insert>
+								<!--END Panel String type -->
+
+
+
+								<!--BEGIN Panel String Match type -->
+								<ui:insert name="type-normalizer-stringMatch">
+									<ui:include
+										src="/pages/offer/normalizerType/StringMatchType.xhtml" />
+								</ui:insert>
+								<!--END Panel String match type -->
+
+
+
+								<!--BEGIN Panel Number type -->
+								<ui:insert name="type-normalizer-number">
+									<ui:include src="/pages/offer/normalizerType/NumberType.xhtml" />
+								</ui:insert>
+								<!--END Panel Number type -->
+
+
+
+								<!--BEGIN Panel Check register list type -->
+								<ui:insert name="type-normalizer-check-register-list">
+									<ui:include
+										src="/pages/offer/normalizerType/CheckRegisterListType.xhtml" />
+								</ui:insert>
+								<!--END Panel Check register list type -->
+
+
+
+								<!--BEGIN Panel Time type -->
+								<ui:insert name="type-normalizer-time">
+									<ui:include src="/pages/offer/normalizerType/TimeType.xhtml" />
+								</ui:insert>
+								<!--END Panel Time type -->
+
+
+								<!--BEGIN Panel Date type -->
+								<ui:insert name="type-normalizer-date">
+									<ui:include src="/pages/offer/normalizerType/DateType.xhtml" />
+								</ui:insert>
+								<!--END Panel Date type -->
+
+
+								<!--BEGIN Panel Quantity type -->
+								<ui:insert name="type-normalizer-quantity">
+									<ui:include
+										src="/pages/offer/normalizerType/QuantityType.xhtml" />
+								</ui:insert>
+								<!--END Panel Quantity type -->
+
+
+								<!--BEGIN Panel Balance type -->
+								<ui:insert name="type-normalizer-balance">
+									<ui:include src="/pages/offer/normalizerType/BalanceType.xhtml" />
+								</ui:insert>
+								<!--END Panel Balance type -->
+
+
+								<!--BEGIN Panel Zone type -->
+								<ui:insert name="type-normalizer-zone">
+									<ui:include src="/pages/offer/normalizerType/ZoneType.xhtml" />
+								</ui:insert>
+								<!--END Panel Zone type -->
+
+
+								<!--BEGIN Panel Check In List type -->
+								<ui:insert name="type-normalizer-check-in-list">
+									<ui:include
+										src="/pages/offer/normalizerType/CheckInListType.xhtml" />
+								</ui:insert>
+								<!--END Panel Check In List type -->
+
+
+								<!--BEGIN Panel Acm Balance type -->
+								<ui:insert name="type-normalizer-acm-balance">
+									<ui:include
+										src="/pages/offer/normalizerType/AcmBalanceType.xhtml" />
+								</ui:insert>
+								<!--END Panel Acm Balance type -->
+
+
+								<!--BEGIN Panel Number Parameter type -->
+								<ui:insert name="type-normalizer-number-parameter">
+									<ui:include
+										src="/pages/offer/normalizerType/NumberParameterType.xhtml" />
+								</ui:insert>
+								<!--END Panel Number Parameter type -->
+
+
+								<p:commandButton styleClass="show-dialog-param hidden">
+									<p:ajax event="click"
+										listener="#{normalizerBean.createTree(item, 'CATALOG_PARAMETER')}"
+										oncomplete="PF('dlgTreePath').show();" update="contentPanel" />
+								</p:commandButton>
+								<p:commandButton styleClass="show-dialog-zone hidden">
+									<p:ajax event="click"
+										listener="#{normalizerBean.createTree(item, 'CATALOG_ZONEDATA')}"
+										oncomplete="PF('dlgTreePath').show();" update="contentPanel" />
+								</p:commandButton>
+								<p:commandButton styleClass="show-dialog-geohome hidden">
+									<p:ajax event="click"
+										listener="#{normalizerBean.createTree(item, 'CATALOG_GEO_HOME')}"
+										oncomplete="PF('dlgTreePath').show();" update="contentPanel" />
+								</p:commandButton>
+								<p:commandButton styleClass="show-dialog-geonet hidden">
+									<p:ajax event="click"
+										listener="#{normalizerBean.createTree(item, 'CATALOG_GEO_NET')}"
+										oncomplete="PF('dlgTreePath').show();" update="contentPanel" />
+								</p:commandButton>
+								<p:commandButton styleClass="show-dialog-zonemap hidden">
+									<p:ajax event="click"
+										listener="#{normalizerBean.createTree(item, 'CATALOG_ZONE_MAP')}"
+										oncomplete="PF('dlgTreePath').show();" update="contentPanel" />
+								</p:commandButton>
+							</p:panel>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12 text-right">
+				<!-- 				<p:commandButton value="#{msg['common.edit']}" -->
+				<!-- 					styleClass="mgRight10"></p:commandButton> -->
+				<p:commandButton value="#{msg['common.apply']}" icon="fa fa-save"
+					disabled="#{!normalizerBean.isEdit}" styleClass="mgRight10"
+					actionListener="#{normalizerBean.saveNormalizer()}"
+					update="treeCommon categoryCommonTop contentPanel"></p:commandButton>
+			</div>
+		</div>
+	</div>
+
+	<!--BEGIN Dialog Location -->
+	<ui:insert name="dialog-normalizer">
+		<ui:include src="/pages/offer/normalizerType/Dialog.xhtml" />
+	</ui:insert>
+	<!--END Dialog Location  -->
+</h:form>
+</html>

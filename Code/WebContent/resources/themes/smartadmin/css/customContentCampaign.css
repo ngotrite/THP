@@ -1,0 +1,1112 @@
+.form-group-radio .form-control td>label {
+	font-weight: normal;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.fa-trash-o {
+	margin-right: 5px;
+}
+
+.ui-dialog .ui-dialog-buttonpane {
+	padding: 5px;
+}
+
+.ui-dialog {
+	border-radius: 0px !important;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+	color: white !important;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+	background: #4c4f53 none repeat scroll 0 0;
+	color: #fff;
+	padding: 0 10px;
+	border-top-left-radius: 0px !important;
+	border-top-right-radius: 0px !important;
+	font-size: 14px;
+}
+
+.ui-dialog .ui-dialog-title, .ui-widget-header a {
+	color: #fff;
+}
+
+.ui-paginator-page.ui-state-default.ui-state-active.ui-corner-all {
+	background-color: #eee;
+	font-weight: bold;
+}
+
+.ui-selectonemenu-label.ui-inputfield.ui-corner-all {
+	padding: 0;
+}
+
+.choosenbox td {
+	padding: 5px;
+}
+
+.ui-icon-bullet {
+	background-position: -81px -145px;
+}
+
+.ui-selectonemenu .ui-selectonemenu-trigger .ui-icon {
+	margin-top: 7px;
+}
+
+.ui-dialog-content {
+	overflow: hidden;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+	margin-right: 4px;
+	margin-top: -9px;
+}
+
+.button-cus {
+	margin-left: 5px;
+	padding: 2px;
+}
+
+.btn {
+	margin-left: 5px;
+}
+
+.calendar input {
+	border: none !important;
+}
+
+div#ui-datepicker-div {
+	background: #fff none repeat scroll 0 0 !important;
+	border: 1px solid #aaa !important;
+	color: #404040 !important;
+	padding: 2px;
+	height: 213px;
+}
+
+div#ui-datepicker-div .ui-datepicker-header {
+	height: 31px;
+	padding: 4px 0px;
+}
+
+div#ui-datepicker-div .ui-datepicker-next {
+	width: 36px;
+}
+
+div#ui-datepicker-div .ui-datepicker-prev {
+	width: 36px;
+}
+
+div#ui-datepicker-div .ui-datepicker-prev span {
+	left: 8px;
+}
+
+div#ui-datepicker-div .ui-datepicker-next span {
+	left: 8px;
+}
+
+.ui-datepicker-next>span {
+	background: none;
+	width: 36px;
+}
+
+.ui-datepicker-prev>span {
+	background: none;
+	width: 36px;
+}
+
+.ui-selectonemenu-panel .ui-selectonemenu-list-item {
+	padding: 6px 6px;
+}
+
+.calendar input {
+	border: none;
+	background-color: transparent;
+	padding: 0px;
+	width: 100%;
+	height: 100%;
+}
+
+.combobox-container label {
+	padding: 0px;
+	width: 100%;
+}
+
+.ui-datepicker-next span {
+	left: -10px;
+}
+
+.ui-icon .ui-icon-triangle-1-s .ui-c {
+	background: none !important;
+}
+
+.ui-selectonemenu-filter-container {
+	width: 100%;
+}
+
+.ui-selectonemenu-panel .ui-selectonemenu-filter {
+	padding-right: 15px;
+	width: 100%;
+}
+
+.ui-messages-close {
+	width: 16px;
+	height: 16px;
+	background:
+		url(#{request.contextPath}/resources/themes/images/close-icon_16.png)
+		no-repeat
+}
+
+/*custom bachtx3*/
+#left-panel {
+	top: 85px;
+}
+
+#header-right {
+	margin-top: 35px;
+}
+
+#header {
+	background-image: none;
+	background: #fff;
+	height: 85px;
+	box-shadow: 0px 5px 6px #ccc;
+}
+
+.btn-header.pull-right {
+	margin-left: 10px;
+}
+
+.btn-header>*:first-child>a {
+	background: none;
+	border: none;
+}
+
+#logout label {
+	margin-left: -6px;
+	font-size: 12px;
+	font-family: Arial, Helvetica;
+}
+
+#left-panel ul li img {
+	width: 20px;
+	height: 20px;
+}
+
+#left-panel ul li {
+	padding: 7px 0px;
+}
+
+#left-panel ul li ul li a {
+	padding-bottom: 4px;
+}
+
+#logo-group {
+	height: 60px;
+}
+
+#logo-group img {
+	margin-left: 15px;
+}
+
+#content .row {
+	border-bottom: 1px solid #aaa;
+	height: 35px;
+	margin-bottom: 10px;
+}
+
+#content .bread_crumb {
+	margin-top: -2px !important;
+}
+
+#content .row-block-home {
+	height: auto;
+	margin-bottom: 10px;
+	overflow: auto;
+}
+
+#content .row ul {
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+}
+
+#content .row ul li {
+	display: inline;
+	padding: 0px 10px 0px 15px;
+}
+
+#content .row ul li.home span {
+	margin-left: 10px;
+}
+
+#content .row ul li.home {
+	border-right: 1px solid #aaa;
+}
+
+#content .row, #content .row-block-home {
+	margin-top: 10px;
+}
+
+.form-group .ui-icon-triangle-1-e {
+	background-position: -32px -16px;
+	width: 16px;
+	height: 16px;
+	margin-top: 8px;
+	margin-left: -3px;
+}
+
+.form-group .ui-icon-triangle-1-s {
+	background-position: -64px -16px;
+	width: 16px;
+	height: 16px;
+	margin-top: 8px;
+	margin-left: -3px;
+}
+
+.form-group .ui-corner-right {
+	border-radius: 0px;
+	border-right: none;
+	border-bottom: none;
+	border-top: none;
+}
+/*footer*/
+#footer {
+	width: 100%;
+	background: #fff;
+	height: 85px;
+	box-shadow: 7px 0px 10px #333;
+}
+
+#footer .right, #footer .left {
+	float: left;
+	height: 100%;
+}
+
+#footer .right h3 {
+	font-size: 13px;
+	margin-right: 20px;
+	line-height: 40px;
+	text-align: right;
+}
+
+#footer .left img {
+	float: right;
+	height: auto;
+	margin-top: 25px;
+}
+
+#footer .right {
+	width: 41%;
+}
+
+#footer .left {
+	width: 59%;
+}
+/*end footer*/
+/*block main page home*/
+#content tr td.vocs-15pc {
+	width: 150px;
+	padding: 0px 20px 0px 0px;
+	height: 300px;
+}
+
+#content .row-block-home table {
+	background: #fff;
+	width: 86%;
+	margin: 0px 25px;
+}
+
+#content .row-block-home .jarviswidget {
+	background: #fff;
+	height: 340px;
+}
+
+#content .row-block-home .jarviswidget header h2 {
+	text-transform: uppercase;
+}
+
+#content .row-block-home table td {
+	padding: 10px 10px 10px 0px;
+	border-bottom: 1px dotted #aaa;
+}
+
+#content .row-block-home table td span a {
+	color: #333;
+	font-size: 13px;
+	margin-left: 15px;
+}
+
+#content .row-block-about {
+	height: 600px;
+	margin: 0px;
+	background: #fff;
+	border: none;
+}
+
+#content .row-block-about .row {
+	border: none;
+}
+
+.about-vtcore {
+	margin-top: 15px;
+}
+
+.about-vtcore label {
+	background: red none repeat scroll 0 0;
+	color: #fff;
+	font-weight: bold;
+	height: 25px;
+	left: 14px;
+	line-height: 25px;
+	position: absolute;
+	text-align: center;
+	width: 110px;
+}
+
+.about-vtcore article {
+	padding-top: 30px;
+	line-height: 25px;
+}
+
+#header .link-site {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	height: 30px;
+	width: auto;
+	overflow: hidden;
+	background: #5A5A5A;
+}
+
+#header .link-site ul {
+	padding: 0px;
+	margin: 0px;
+	list-style: none;
+}
+
+#header .link-site ul li {
+	float: left;
+	width: 120px;
+	height: 30px;
+	border-right: 1px solid #fff;
+	overflow: hidden;
+	background: #00908D;
+}
+
+#header .link-site ul li a {
+	color: #FFF;
+	padding: 0px;
+	line-height: 30px;
+	text-align: center;
+}
+
+#header .link-site ul li:hover a, #header .link-site ul li.active a {
+	color: #00908D !important;
+}
+
+#header .link-site ul li:hover, #header .link-site ul li.active {
+	background: #fff;
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+}
+
+.ui-datatable .ui-column-filter {
+	display: block !important;
+	margin: auto;
+	width: 100%;
+}
+
+.ui-datatable-tablewrapper {
+	clear: both;
+}
+
+.ui-icon .ui-icon-closethick, .ui-icon-closethick {
+	background: transparent !important;
+}
+
+.ui-datatable-header .ui-widget-header .ui-corner-top {
+	width: 100% !important;
+}
+/*end block page home*/
+/*menu left*/
+#left-panel li.level1 span {
+	text-transform: uppercase;
+	font-size: 12px;
+	color: #FFF;
+	margin-left: 10px;
+}
+
+#left-panel li.level1 {
+	border-bottom: 1px solid #aaa;
+}
+
+.minified  #left-panel li.level1 {
+	padding-left: 8px;
+}
+
+#left-panel .icon-home {
+	padding: 4px 0px;
+}
+
+.minified #left-panel .icon-home {
+	padding: 0px;
+}
+
+.icon-home i {
+	font-size: 28px;
+	margin-left: -8px;
+}
+
+.icon-home span {
+	text-transform: uppercase;
+	margin-left: -3px;
+}
+
+img.account {
+	float: left;
+}
+
+.icon-member div {
+	margin-left: 13px;
+}
+
+.icon-member {
+	background: #5A5A5A;
+}
+
+.icon-member {
+	padding: 1px 0px !important;
+}
+
+.icon-member .username {
+	color: #fff;
+	margin: 10px;
+}
+
+.icon-home {
+	border-bottom: 1px solid #aaa;
+}
+
+aside {
+	background: #424244;
+}
+
+#left-panel nav ul ul {
+	background: #585A5B;
+}
+
+.minified #left-panel {
+	width: 60px;
+}
+
+.minified #main {
+	margin-left: 60px;
+}
+
+.minified .icon-member {
+	height: 58px;
+}
+
+.minified ul li span {
+	color: #888888 !important;
+}
+
+.minified nav>ul>li>a>.menu-item-parent {
+	left: 43px !important;
+}
+
+.minified nav>ul>li.icon-home>a>.menu-item-parent {
+	left: 67px !important;
+	top: -1px;
+}
+
+.minified nav>ul>li>ul {
+	left: 61px;
+	top: 45px;
+}
+
+.minified .icon-home {
+	margin-left: -6px;
+}
+
+.minified #left-panel .icon-member input {
+	display: none;
+}
+
+.minified #left-panel .icon-member .input-group {
+	margin-left: 10px;
+	margin-right: 14px;
+	padding: 10px 0;
+}
+
+.minified #left-panel .icon-member {
+	display: none;
+}
+
+#left-panel .icon-member .input-group-addon {
+	background: transparent none repeat scroll 0 0;
+	border: medium none;
+	color: #fff;
+}
+
+#left-panel .icon-member input {
+	border: medium none;
+	border-radius: 6px;
+	font-size: 11px;
+	height: 25px;
+	margin-left: 4px;
+	padding-left: 10px;
+	width: 160px;
+}
+
+.input-group-addon {
+	padding: 6px 15px 10px 3px;
+}
+
+#left-panel li.icon-member span, .minified #left-panel li.icon-member span
+	{
+	color: #333;
+}
+
+#left-panel li.icon-member input[type="text"]:focus+.input-group-addon,
+	#left-panel .form-control:focus, #left-panel li.icon-member input[type="text"]+.input-group-addon,
+	#left-panel .form-control {
+	border: none !important;
+}
+
+li .collapse-sign {
+	width: 16px;
+	height: 16px;
+	float: right;
+	/*background: url('#{request.contextPath}/resources/themes/smartadmin/img/add.png') no-repeat ;*/
+}
+
+li.open .collapse-sign {
+	width: 16px;
+	height: 16px;
+	float: right;
+	margin-top: -1px;
+	/*background: url('#{request.contextPath}/resources/themes/smartadmin/img/minus.png') no-repeat ;*/
+}
+
+.ui-datatable thead th {
+	background: #eee !important;
+	text-align: left !important;
+	font-weight: bold !important;
+}
+
+.ui-datatable thead th span {
+	color: #333;
+}
+
+.ui-datatable thead th, .ui-datatable tr td {
+	padding: 8px 10px;
+}
+
+.ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td {
+	border-color: #ddd;
+}
+
+.ui-widget-header {
+	background: transparent;
+}
+
+.ui-fieldset-content {
+	border: none;
+	padding: 0px;
+}
+
+.ui-widget-content {
+	border: none;
+	padding: 0px;
+}
+
+.ui-paginator .ui-paginator-page, .ui-paginator .ui-paginator-next,
+	.ui-paginator .ui-paginator-last, .ui-paginator .ui-paginator-first,
+	.ui-paginator .ui-paginator-prev, .ui-paginator .ui-paginator-current {
+	display: inline-block;
+	margin-left: 1px;
+	margin-right: 1px;
+	outline: medium none;
+	padding: 4px 8px;
+	text-decoration: none;
+	width: 28px;
+}
+
+select.ui-state-default {
+	width: 60px;
+	height: 29px;
+}
+
+.row-telecom .col-md-8, .row-basic-script .col-md-8, .row-cdr-service .col-md-8,
+	.row-cdr-prop .col-md-8, .row-account-balance .col-md-8,
+	.row-cdr-process .col-md-8 {
+	padding: 0px;
+}
+
+.row-telecom .col-md-4, .row-basic-script .col-md-4, .row-cdr-service .col-md-4,
+	.row-cdr-prop .col-md-4, .row-account-balance .col-md-4,
+	.row-cdr-process .col-md-4 {
+	padding-left: 10px;
+	padding-right: 0px;
+}
+
+.ui-treenode-label .ui-state-hover {
+	background: none;
+}
+
+.form-group>label {
+	font-weight: bold;
+}
+
+.form-group td>label {
+	font-weight: bold;
+}
+
+.top-search-table {
+	text-align: right;
+	margin-right: -10px;
+}
+
+.top-search-table input {
+	background: #fff;
+}
+
+.ui-selectonemenu .ui-widget .ui-state-default .ui-corner-all .form-control
+	{
+	width: 100% !important;
+}
+/*Media*/
+@media ( min-width :320px) and (max-width:767px) {
+	.link-site {
+		display: none;
+	}
+	#content .row-block-about {
+		height: 500px;
+	}
+	#content .row-block-home .jarviswidget {
+		height: 390px;
+	}
+	.btn-header.pull-right {
+		margin-left: 0px;
+	}
+}
+
+@media ( min-width :320px) and (max-width:980px) {
+	.row-telecom .col-md-4, .row-cdr-service .col-md-4, .row-cdr-prop .col-md-4,
+		.row-basic-script .col-md-4, .row-account-balance .col-md-4,
+		.row-cdr-process .col-md-4 {
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+}
+
+@media ( min-width :768px) and (max-width:979px) {
+	#content .row-block-about {
+		height: 390px;
+	}
+	#content .row-block-home .jarviswidget {
+		height: 350px;
+	}
+}
+
+@media ( min-width : 980px) and (max-width:1279px) {
+	#content .row-block-about {
+		height: 420px;
+	}
+}
+
+@media ( min-width : 1280px) and (max-width:1359px) {
+	#content .row-block-about {
+		height: 450px;
+	}
+}
+
+@media ( min-width : 1920px) and (max-width:1920px) {
+	#content .row-block-about {
+		height: 800px;
+	}
+}
+
+.row-cdr-process .radio-type table {
+	height: 40px;
+}
+
+.row-cdr-process .radio-type table td {
+	padding: 0px 10px;
+}
+
+.row-cdr-process .radio-process table td {
+	padding: 0px 10px;
+}
+
+.row-cdr-process .radio-process table {
+	height: 70px;
+}
+
+.edit-billing-cycle .ui-fieldset-content {
+	padding: 10px;
+}
+
+.add-edit-billing .form-group label {
+	width: 95px;
+}
+
+.calendar .form-control input {
+	width: 100%;
+}
+
+.btn-primary, .btn-primary, .btn-primary, .btn-primary, .open .dropdown-toggle.btn-primary
+	{
+	background-color: #296191;
+	border-color: #1f496d;
+	color: #fff;
+}
+
+.form-zone-map .ui-widget-content a {
+	color: #fff;
+}
+
+.form-zone-map .ui-widget-header a {
+	color: #fff;
+}
+
+/*Style ProdSpec*/
+.manage-price-dialog .jarviswidget>div {
+	border-top: 1px solid #ccc !important;
+	padding: 0px !important;
+}
+
+.manage-price-dialog .radio-prod .form-control {
+	padding: 3px 12px;
+}
+
+.manage-price-dialog .radio-prod .form-control div {
+	margin-right: 6px;
+}
+
+.manage-price-dialog .radio-prod .form-control label {
+	margin-right: 12px;
+}
+
+.manage-price-dialog .form-control .radio-prod>div {
+	margin-right: 6px;
+}
+
+.manage-price-dialog .form-group {
+	margin-bottom: 5px;
+}
+
+.manage-price-dialog .col-xs-12, .manage-price-dialog col-sm-12,
+	.manage-price-dialog col-md-12, .manage-price-dialog col-lg-12 {
+	padding: 0px;
+}
+
+.manage-price-dialog .jarviswidget {
+	margin: 0px;
+}
+
+.ui-dialog .ui-dialog-title {
+	font-weight: 500;
+}
+
+.manage-price-dialog .ui-panel .ui-widget .ui-widget-content .ui-corner-all
+	{
+	padding: 0px;
+	border-top: 1px solid #ccc !important;
+}
+
+.edit-rate-plan .form-actions {
+	border-top: none;
+	display: block;
+	margin: 25px 0 -13px;
+	padding: 15px 10px 25px;
+	text-align: right;
+}
+
+.edit-rate-plan .ui-fieldset-content {
+	border: 1px solid #ccc;
+}
+
+.edit-rate-plan .ui-widget-header a {
+	color: #fff !important;
+}
+
+#frmRatePlan .ui-selectoneradio div, #frmRatePlan .ui-selectoneradio label
+	{
+	margin-right: 10px;
+}
+
+#frmRatePlan .ui-selectoneradio div {
+	margin-left: 5px;
+}
+
+#frmRatePlan .vocs-300 input {
+	margin-left: 10px;
+	width: 328px;
+}
+
+#frmRatePlan .vocs-300 {
+	padding: 0px 8px;
+}
+
+#dlgProdBenefit table tr {
+	margin: 10px 0px;
+}
+
+.comfirm-del .ui-button {
+	padding: 6px 12px;
+}
+
+.ui-button-icon-only .ui-icon {
+	top: 5px;
+}
+
+.acc-bal-type .ui-datatable-tablewrapper tr th {
+	background: #eee;
+}
+
+.dialog-script-template header {
+	border-color: none !important;
+}
+
+.acc-bal-type .jarviswidget-color-blueDark>header {
+	border-color: none !important;
+}
+
+.script-detail .ui-fieldset-content .details {
+	padding: 10px 57px;
+}
+
+.script-detail .bor-content-temp {
+	border-right: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	width: 709px;
+	max-height: 400px;
+	overflow: auto;
+}
+
+.dialog-manage-price .ui-panel .ui-panel-content {
+	padding: 0px;
+}
+
+.dialog-manage-price label {
+	font-weight: bold;
+}
+
+.ui-dialog .ui-dialog-buttonpane {
+	text-align: center !important;
+}
+
+#frmRatePlanTemplate .vocs-250 {
+	width: 300px;
+}
+
+#frmRatePlanTemplate .vocs-250 .ui-selectonemenu {
+	margin-top: 5px;
+	width: 100% !important;
+}
+
+#frmRatePlanTemplate .vocs-250 .ui-corner-right {
+	border-bottom: medium none;
+	border-right: medium none;
+	border-top: medium none;
+}
+
+.loading .ui-dialog-titlebar {
+	display: none;
+}
+
+.jarviswidget-ctrls .button-icon i, .jarviswidget>header>.widget-icon {
+	line-height: 32px !important;
+}
+
+.ui-shadow, .ui-dialog {
+	box-shadow: none;
+}
+
+.benefit .jarviswidget {
+	border-top: 1px solid #ccc;
+}
+
+.benefit .jarviswidget>div {
+	border-width: 0 1px 1px;
+}
+
+/*Customize scrollbar*/
+.scrollbar::-webkit-scrollbar {
+	width: 10px;
+	background-color: #cccccc;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+	background-color: #00918c;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+	background-color: #999999;
+	border: 1px solid #ccc;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:active {
+	background-color: #666666;
+	border: 1px solid #ccc;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+	border: 1px gray solid;
+	-webkit-box-shadow: 0 0 2px gray inset;
+}
+
+nav>ul>li>ul>li>a, nav>ul>li>ul>li>ul>li>a {
+	padding-bottom: 10px;
+	padding-top: 2px;
+}
+
+.minified .link-site nav>ul>li {
+	border-top: none;
+	border-bottom: none;
+}
+
+.listRatePanTemp .form-group {
+	border-top: 1px solid #ccc;
+}
+
+.listRatePanTemp .jarviswidget>div {
+	border-width: 0px 1px 1px;
+}
+
+.ui-selectonemenu-panel {
+	border-bottom: 1px solid #ccc;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+}
+
+.well-sm {
+	padding: 9px 0px;
+}
+
+.input-group .input-lg {
+	font-size: 13px;
+}
+
+#dlgRuleNode_title, #dlgOutputEvent_title, #dlgRuleExpression .ui-dialog-title,
+	#dlgActionResult .ui-dialog-title, #dlgProperty .ui-dialog-title {
+	height: 30px
+}
+
+#dlgRuleExpression .ui-dialog-content, #dlgActionResult .ui-dialog-content
+	{
+	padding: 0px 15px !important;
+}
+
+#dlgProperty .ui-dialog-content {
+	padding: 0px 15px !important;
+}
+
+#dlgRuleExpression .ui-corner-right, #dlgActionResult .ui-corner-right {
+	border-top: none;
+	border-bottom: none;
+	border-right: none;
+}
+
+#dlgRuleExpression .ui-inputfield, #dlgActionResult .ui-inputfield,
+	#dlgProperty .ui-inputfield {
+	padding: 0px;
+	width: 257px !important;
+}
+
+#dlgRuleExpression .vocs-300, #dlgRuleExpression .vocs-120,
+	#dlgActionResult .vocs-250, #dlgActionResult .vocs-120, #dlgProperty td
+	{
+	height: 30px;
+	line-height: 30px;
+}
+
+#dlgRuleExpression legend, #dlgActionResult legend {
+	width: 40px;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+#dlgProperty legend {
+	width: 94px;
+	font-size: 14px;
+	font-weight: normal;
+}
+
+#dlgRuleExpression table td.vocs-120 label, #dlgActionResult table td.vocs-120 label,
+	#dlgProperty td.vocs-120 label {
+	font-weight: bold;
+}
+
+#dlgRuleExpression .ui-selectonemenu .ui-selectonemenu-trigger,
+	#dlgActionResult .ui-selectonemenu .ui-selectonemenu-trigger {
+	width: 25px;
+}
+
+#dlgRuleExpression table tr, #dlgActionResult table tr {
+	height: 40px;
+}
+
+#formRuleNode fieldset.ui-widget-content {
+	border: none;
+}
+
+#formRuleNode .ui-widget-header {
+	background: none;
+}
+
+#formRuleNode article {
+	padding: 0px;
+}
+
+#formRuleNode .form-group {
+	padding: 0px 10px;
+	border-width: 0 1px;
+}
+
+#formRuleNode button.ui-button {
+	min-width: 41px;
+}
+
+#formRuleNode .ui-datatable-footer {
+	padding: 10px 0px;
+}
+
+#dlgRuleNode .ui-dialog-titlebar, #dlgOutputEvent .ui-dialog-titlebar,
+	#dlgRuleExpression .ui-dialog-titlebar, #dlgActionResult .ui-dialog-titlebar,
+	#dlgProperty .ui-dialog-titlebar {
+	border-bottom: 1px solid #ccc;
+}
+
+.ui-panel-titlebar .ui-widget-header .ui-helper-clearfix .ui-corner-all
+	{
+	display: none;
+}
+
+.ui-radiobutton {
+	display: inline-block;
+	line-height: 16px;
+	margin: 0px -5px 0px 0px;
+	width: 25px;
+}
+
+.radio-item label {
+	margin: 0px 25px 5px 5px;
+	width: 25px;
+}
+
+.recurring .ui-panelgrid-cell {
+	border-style: none;
+}
+
+.recurring .ui-panelgrid .ui-panelgrid-cell, .recurring .ui-datatable-header
+	{
+	padding: 4px 0px;
+}
+
+/*end table*/

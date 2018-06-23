@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="/pages/tree_common.xhtml">
+	<ui:define name="subcontent">
+		<p:panel id="myPanel">
+			<h:form id="form-ProcessConfig-category" class="container-fluid"
+				rendered="#{cdrProcessConfigBean.formType == 'category'}">
+				<div class="container-fluid">
+					<div class="row formFieldMg">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:dataTable id="tableCdrProcessConfig" var="item"
+									value="#{cdrProcessConfigBean.listCdrProcessConfig}"
+									rowKey="#{item.cdrProcessConfigId}"
+									emptyMessage="#{msg['common.noData']}" paginator="true"
+									rows="20" paginatorPosition="bottom" rowIndexVar="index"
+									paginatorProcessConfig="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									rowsPerPageProcessConfig="10,20,50,100">
+									<f:facet name="header">
+										<p:outputLabel value="#{msg['title.CdrProcessConfig']}"
+											style="font-weight:bold" />
+									</f:facet>
+									<p:column headerText="#" style="width:6%">
+										<h:outputText value="#{index + 1}" title="#{index + 1}" />
+									</p:column>
+
+									<p:column headerText="#{msg['common.name']}"
+										filterBy="#{item.processName}" sortBy="#{item.processName}"
+										filterMatchMode="contains">
+										<h:outputText value="#{item.processName}"
+											styleClass="preformatted" />
+									</p:column>
+
+									<p:column headerText="#{msg['common.action']}"
+										styleClass="actionColumn">
+										<p:commandLink
+											actionListener="#{cdrProcessConfigBean.editCdrProcessConfig(item)}"
+											update="myPanel categoryCommonTop contentPanel contentTitle "
+											resetValues="true"
+											styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+											<i class="fa fa-pencil icon-only mr-0"></i>
+										</p:commandLink>
+										<p:commandLink
+											actionListener="#{cdrProcessConfigBean.deleteCdrProcessConfig(item)}"
+											resetValues="true"
+											update="tableCdrProcessConfig form-ProcessConfig-category treeCommon"
+											styleClass="btn btn-sm btn-action-del colorRed">
+											<i class="fa fa-times icon-only mr-0"></i>
+											<p:confirm header="#{msg['common.delete']}"
+												message="#{msg['common.confirmDelete']}"
+												icon="ui-icon-alert" />
+										</p:commandLink>
+										<f:facet name="header">
+											<p:commandButton id="btnNew" value="#{msg['common.addNew']}" icon="fa fa-plus"
+												actionListener="#{cdrProcessConfigBean.addNewProcessConfig}"
+												update="categoryCommonTop contentPanel myPanel contentTitle"
+												styleClass="btn btn-primary" immediate="true"
+												resetValues="true">
+											</p:commandButton>
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+
+			<h:form id="form-ProcessConfig-detail" class="container-fluid"
+				rendered="#{cdrProcessConfigBean.formType == 'detail' and  categoryCommonBean.formType ne 'category' }">
+				<div class="row formFieldMg">
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['cdrProcessConfig.id']}"
+									></p:outputLabel>
+							</div>
+							<div class="col-xs-12">
+								<p:inputText
+									value="#{cdrProcessConfigBean.cdrProcessConfig.cdrProcessConfigId}"
+									styleClass="form-control" readonly="true"></p:inputText>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['common.category']}"
+									></p:outputLabel>
+							</div>
+							<div class="col-xs-12">
+								<h:selectOneMenu
+									value="#{cdrProcessConfigBean.cdrProcessConfig.categoryId}"
+									styleClass="form-control select">
+									<f:selectItems value="#{cdrProcessConfigBean.listCategory}"
+										var="cat" itemValue="#{cat.categoryId}"
+										itemLabel="#{cat.categoryName}"></f:selectItems>
+								</h:selectOneMenu>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['common.name']}"
+									 for="txtProcessName"></p:outputLabel>
+							</div>
+							<div class="col-xs-12">
+								<p:inputText
+									value="#{cdrProcessConfigBean.cdrProcessConfig.processName}"
+									styleClass="form-control" maxlength="100" required="true"
+									id="txtProcessName"></p:inputText>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['cdrProcessConfig.processCode']}"
+									></p:outputLabel>
+							</div>
+							<div class="col-xs-12">
+								<p:inputText
+									value="#{cdrProcessConfigBean.cdrProcessConfig.processCode}"
+									styleClass="form-control" maxlength="100">
+									<p:keyFilter regEx="/[0-9]/i" />
+								</p:inputText>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['cdrProcessConfig.serviceCode']}"
+									 for="txtServieCode"></p:outputLabel>
+							</div>
+							<div class="col-xs-12">
+								<table class="table-choosing">
+									<tr>
+										<td>
+											<p:inputText id="txtServieCode"
+												value="#{cdrProcessConfigBean.cdrServiceCode}"
+												styleClass="form-control" readonly="true" required="true">
+											</p:inputText>
+										</td>
+										<td class="td-btn-fix">
+											<p:commandLink
+												disabled="#{!cdrProcessConfigBean.editting}" actionListener="#{cdrProcessConfigBean.chooseServieCode()}"
+												id="btnAddServieCode" immediate="true" update="form-ProcessConfig-detail categoryCommonTop contentPanel"
+												styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+												<i class="fa fa-pencil"></i>
+												<p:ajax event="dialogReturn"
+													update="form-ProcessConfig-detail:txtServieCode"
+													listener="#{cdrProcessConfigBean.onDialogServieCodeReturn}" />
+											</p:commandLink>
+											<p:commandLink
+												disabled="#{!cdrProcessConfigBean.editting}" actionListener="#{cdrProcessConfigBean.deleteServieCode()}"
+												update="form-ProcessConfig-detail" immediate="true"
+												styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+												<i class="fa fa-times icon-only mr-0"></i>
+											</p:commandLink>
+										</td>
+									</tr>
+								</table>						
+							</div>
+							<!-- <div class="col-xs-10">
+								<p:inputText id="txtServieCode"
+									value="#{cdrProcessConfigBean.cdrServiceCode}"
+									styleClass="form-control" readonly="true" required="true">
+								</p:inputText>
+							</div>
+							<div class="col-xs-2">
+								<p:commandButton id="btnAddServieCode" value="..."
+									immediate="true" styleClass="pull-right"
+									update="form-ProcessConfig-detail categoryCommonTop contentPanel"
+									actionListener="#{cdrProcessConfigBean.chooseServieCode()}">
+									<p:ajax event="dialogReturn"
+										update="form-ProcessConfig-detail:txtServieCode"
+										listener="#{cdrProcessConfigBean.onDialogServieCodeReturn}" />
+								</p:commandButton>
+							</div> -->
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 nopadding">
+					<p:tabView id="tabview">
+						<p:tab title="#{msg['cdrProcessConfig.detail']}">
+							<div class="container-fluid">
+								<div class="row formFieldMg">
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-xs-12">
+												<p:outputLabel value="#{msg['cdrProcessConfig.directory']}"
+													 for="txtcdrDir"></p:outputLabel>
+											</div>
+											<div class="col-xs-12">
+												<p:inputText id="txtcdrDir" required="true"
+													value="#{cdrProcessConfigBean.cdrProcessConfig.cdrDir}"
+													styleClass="form-control" maxlength="100"></p:inputText>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-xs-12">
+												<p:outputLabel
+													value="#{msg['cdrProcessConfig.filePattern']}"
+													 for="txtFilePattern"></p:outputLabel>
+											</div>
+											<div class="col-xs-12">
+												<table class="table-choosing">
+													<tr>
+														<td>
+															<p:inputText readonly="true" id="txtFilePattern"
+																required="true" value="#{cdrProcessConfigBean.cdrPattern}"
+																styleClass="form-control" maxlength="100">
+															</p:inputText>
+														</td>
+														<td class="td-btn-fix">
+															<p:commandLink
+																disabled="#{!cdrProcessConfigBean.editting}" actionListener="#{cdrProcessConfigBean.choosePattern()}"
+																id="btnAddPattern" immediate="true" update="form-ProcessConfig-detail categoryCommonTop contentPanel"
+																styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+																<i class="fa fa-pencil"></i>
+																<p:ajax event="dialogReturn"
+																	update="form-ProcessConfig-detail:tabview:txtFilePattern"
+																	listener="#{cdrProcessConfigBean.onDialogPatternReturn}" />
+															</p:commandLink>
+															<p:commandLink
+																disabled="#{!cdrProcessConfigBean.editting}" actionListener="#{cdrProcessConfigBean.deletePattern()}"
+																update="form-ProcessConfig-detail" immediate="true"
+																styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+																<i class="fa fa-times icon-only mr-0"></i>
+															</p:commandLink>
+														</td>
+													</tr>
+												</table>						
+											</div>
+											<!-- <div class="col-xs-11">
+												<p:inputText readonly="true" id="txtFilePattern"
+													required="true" value="#{cdrProcessConfigBean.cdrPattern}"
+													styleClass="form-control" maxlength="100">
+												</p:inputText>
+											</div>
+											<div class="col-xs-1">
+												<p:commandButton id="btnAddPattern" value="..."
+													immediate="true" styleClass="pull-right"
+													update="form-ProcessConfig-detail categoryCommonTop contentPanel"
+													actionListener="#{cdrProcessConfigBean.choosePattern()}">
+													<p:ajax event="dialogReturn"
+														update="form-ProcessConfig-detail:tabview:txtFilePattern"
+														listener="#{cdrProcessConfigBean.onDialogPatternReturn}" />
+												</p:commandButton>
+											</div> -->
+										</div>
+										<div class="row">
+											<div class="col-xs-12">
+												<p:outputLabel value="#{msg['cdrProcessConfig.cdrType']}"
+													 for="txtType"></p:outputLabel>
+											</div>
+											<div class="col-xs-12">
+												<h:selectOneMenu styleClass="form-control" required="true"
+													id="txtType"
+													value="#{cdrProcessConfigBean.cdrProcessConfig.type}">
+													<f:selectItems
+														value="#{cdrProcessConfigBean.listSelectCdrType}" />
+												</h:selectOneMenu>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-xs-12">
+												<p:selectBooleanCheckbox itemLabel="#{msg['cdrProcessConfig.enable']}"
+													value="#{cdrProcessConfigBean.cdrProcessConfig.status}">
+												</p:selectBooleanCheckbox>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</p:tab>
+						<p:tab title="#{msg['cdrProcessConfig.schedule']}">
+							<div class="container-fluid">
+								<div class="row formFieldMg">
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-xs-12">
+												<p:outputLabel value="#{msg['cdrProcessConfig.ruleScan']}"
+													></p:outputLabel>
+											</div>
+											<div class="col-xs-12">
+												<p:inputText
+													value="#{cdrProcessConfigBean.cdrProcessConfig.ruleScan}"
+													styleClass="form-control" maxlength="100"></p:inputText>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-xs-12">
+												<p:outputLabel
+													value="#{msg['cdrProcessConfig.billingDirectory']}"
+													></p:outputLabel>
+											</div>
+											<div class="col-xs-12">
+												<p:inputText
+													value="#{cdrProcessConfigBean.cdrProcessConfig.billingDir}"
+													styleClass="form-control" maxlength="100"></p:inputText>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-xs-12">
+												<p:outputLabel
+													value="#{msg['cdrProcessConfig.backupDirectory']}"
+													></p:outputLabel>
+											</div>
+											<div class="col-xs-12">
+												<p:inputText
+													value="#{cdrProcessConfigBean.cdrProcessConfig.backupDir}"
+													styleClass="form-control" maxlength="100"></p:inputText>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-xs-12">
+												<p:outputLabel
+													value="#{msg['cdrProcessConfig.rejectDirectory']}"
+													></p:outputLabel>
+											</div>
+											<div class="col-xs-12">
+												<p:inputText
+													value="#{cdrProcessConfigBean.cdrProcessConfig.rejectDir}"
+													styleClass="form-control" maxlength="100"></p:inputText>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-xs-6">
+												<p:outputLabel
+													value="#{msg['cdrProcessConfig.timeProcess']}"
+													 for="txtTimeProcess"></p:outputLabel>
+											</div>
+											<div class="col-xs-6">
+												<p:outputLabel value="#{msg['cdrProcessConfig.maxRecord']}"
+													 for="txtmaxRecs"></p:outputLabel>
+											</div>
+											<div class="col-xs-6">
+												<p:inputNumber minValue="0" decimalPlaces="0"
+													thousandSeparator="" required="true"
+													value="#{cdrProcessConfigBean.cdrProcessConfig.timeProcess}"
+													styleClass="inputNumCustom" id="txtTimeProcess"></p:inputNumber>
+											</div>
+											<div class="col-xs-6">
+												<p:inputNumber minValue="0" decimalPlaces="0"
+													thousandSeparator="" id="txtmaxRecs"
+													value="#{cdrProcessConfigBean.cdrProcessConfig.maxRecs}"
+													styleClass="inputNumCustom" required="true"></p:inputNumber>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-xs-12">
+												<p:outputLabel
+													value="#{msg['cdrProcessConfig.processOption']}"
+													></p:outputLabel>
+											</div>
+											<div class="col-xs-2"></div>
+											<div class="col-xs-10">
+												<p:selectOneRadio
+													value="#{cdrProcessConfigBean.cdrProcessConfig.cdrProcessedOpt}"
+													layout="grid" columns="1">
+													<f:selectItems
+														value="#{cdrProcessConfigBean.listProcessOptions}" />
+												</p:selectOneRadio>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</p:tab>
+						<p:tab title="#{msg['cdrProcessConfig.ftp']}">
+							<div class="container-fluid">
+								<div class="row formFieldMg">
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-xs-12">
+												<p:outputLabel
+													value="#{msg['cdrProcessConfig.FTPServerAddress']}"
+													></p:outputLabel>
+											</div>
+											<div class="col-xs-12">
+												<p:inputText
+													value="#{cdrProcessConfigBean.cdrProcessConfig.ftpAddress}"
+													styleClass="form-control" maxlength="100"></p:inputText>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-xs-12">
+												<p:outputLabel value="#{msg['cdrProcessConfig.FTPUser']}"
+													></p:outputLabel>
+											</div>
+											<div class="col-xs-12">
+												<p:inputText
+													value="#{cdrProcessConfigBean.cdrProcessConfig.ftpUser}"
+													styleClass="form-control" maxlength="100"></p:inputText>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-xs-12">
+												<p:outputLabel
+													value="#{msg['cdrProcessConfig.FTPPassword']}"
+													></p:outputLabel>
+											</div>
+											<div class="col-xs-8">
+												<p:inputText type="password"
+													value="#{cdrProcessConfigBean.cdrProcessConfig.ftpPass}"
+													styleClass="form-control inputPasswordFtp" maxlength="100"></p:inputText>
+											</div>
+											<div class="col-xs-4">
+												<p:commandButton
+													value="#{msg['cdrProcessConfig.showPassword']}"
+													style="margin-top:-4px"
+													styleClass="pull-right btn-showPassword"
+													onclick="showPwFtp();"></p:commandButton>
+												<p:commandButton
+													value="#{msg['cdrProcessConfig.hidePassword']}"
+													style="margin-top:-4px"
+													styleClass="hidden pull-right btn-hidePassword"
+													onclick="hidePwFtp();"></p:commandButton>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</p:tab>
+						<p:tab title="#{msg['cdrProcessConfig.kafkaServer']}">
+							<div class="container-fluid">
+								<div class="row formFieldMg">
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-xs-12">
+												<p:outputLabel
+													value="#{msg['cdrProcessConfig.KafkaServerAddress']}"
+													></p:outputLabel>
+											</div>
+											<div class="col-xs-12">
+												<p:inputText
+													value="#{cdrProcessConfigBean.cdrProcessConfig.kafkaServer}"
+													styleClass="form-control" maxlength="100"></p:inputText>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-xs-12">
+												<p:outputLabel value="#{msg['cdrProcessConfig.Topic']}"
+													></p:outputLabel>
+											</div>
+											<div class="col-xs-12">
+												<p:inputText
+													value="#{cdrProcessConfigBean.cdrProcessConfig.topic}"
+													styleClass="form-control" maxlength="100"></p:inputText>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-xs-12">
+												<p:outputLabel value="#{msg['cdrProcessConfig.Topic1']}"
+													></p:outputLabel>
+											</div>
+											<div class="col-xs-12">
+												<p:inputText
+													value="#{cdrProcessConfigBean.cdrProcessConfig.topic1}"
+													styleClass="form-control" maxlength="100"></p:inputText>
+											</div>
+										</div>
+									</div>
+
+									<div class="col-xs-12">
+										<div class="row">
+											<div class="col-xs-12">
+												<p:selectBooleanCheckbox
+													value="#{cdrProcessConfigBean.cdrProcessConfig.enableKafka}"
+													itemLabel="#{msg['cdrProcessConfig.enableKafka']}" />
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</p:tab>
+					</p:tabView>
+				</div>
+				<div class="col-xs-12 nopadding">
+					<div class="row">
+						<div class="col-xs-8"></div>
+						<div class="col-xs-4" style="text-align: right">
+							<p:commandButton value="#{msg['common.apply']}"
+								update="treeCommon myPanel form-ProcessConfig-detail"
+								disabled="#{!cdrProcessConfigBean.editting}" icon="fa fa-save"
+								actionListener="#{cdrProcessConfigBean.submitProcessConfig}">
+								<p:confirm header="#{msg['common.apply']}"
+									message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

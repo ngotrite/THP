@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui">
+<h:head />
+<body>
+	<ui:composition>
+		<h:form id="form-zone" class="container-fluid"
+			rendered="#{zoneMapBean.formType eq 'zone-detail'}">
+			<div class="row formFieldMg">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['zone.zoneId']}" />
+							<p:outputLabel value=" *" style="color:red" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" readonly="true"
+								value="#{zoneMapBean.zone.zoneId}" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['zone.zoneName']}" for="txtZoneName" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="100"
+								required="true" id="txtZoneName"
+								value="#{zoneMapBean.zone.zoneName}" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['zone.zoneCode']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="100"
+								value="#{zoneMapBean.zone.zoneCode}" />
+						</div>
+					</div>
+
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['zonemap.zoneMapId']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{zoneMapBean.zone.zoneMapId}"
+								styleClass="form-control" readonly="true" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['zonemap.zoneMapName']}" />
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu style="-webkit-appearance: none;"
+								disabled="true" value="#{zoneMapBean.zone.zoneMapId}"
+								styleClass="form-control">
+								<f:selectItem itemLabel="" />
+								<f:selectItems value="#{zoneMapBean.listComboZoneMap}"
+									var="item" itemValue="#{item.zoneMapId}"
+									itemLabel="#{item.zoneMapName}" />
+							</h:selectOneMenu>
+						</div>
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['zone.remark']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="255"
+								value="#{zoneMapBean.zone.remark}" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-12">
+					<div class="col-xs-12 col-md-6">
+						<p:commandLink value="#{msg['common.temImport']}" ajax="false"
+							immediate="true"
+							actionListener="#{zoneMapBean.fileDownloadView()}">
+							<p:fileDownload value="#{zoneMapBean.fileTemEX}" />
+						</p:commandLink>
+
+					</div>
+					<div class="col-xs-12 col-md-6">
+						<div class="row">
+							<div class="pull-right">
+								<p:commandButton value="#{msg['common.apply']}"
+									disabled="#{zoneMapBean.apply}" icon="fa fa-save"
+									actionListener="#{zoneMapBean.saveZone()}"
+									update="treeCommon categoryCommonTop contentPanel DTZoneData"
+									styleClass="btn btn-default">
+									<p:confirm header="#{msg['common.apply']}"
+										message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+								</p:commandButton>
+							</div>
+							<div class="pull-right">
+								<h:commandButton value="#{msg['common.export']}"
+									rendered="#{!zoneMapBean.apply}" styleClass="btn-export-zone">
+									<p:dataExporter type="xls" target="DTZoneData"
+										fileName="#{zoneMapBean.getExportZoneName()}" pageOnly="false"
+										postProcessor="#{zoneMapBean.postProcessXLSZDT}" />
+								</h:commandButton>
+
+								<p:commandButton value="clear" update="@form"
+									styleClass="zoneDataClearFilter hidden"
+									oncomplete="PF('tblZoneDataWidgetVar').clearFilters()" />
+							</div>
+							<div class="pull-right">
+								<p:fileUpload fileUploadListener="#{zoneMapBean.uploadExelZDT}"
+									rendered="#{!zoneMapBean.apply}" mode="advanced" auto="true"
+									update="DTZoneData" label="#{msg['common.import']}"
+									styleClass="fupload" sizeLimit="20971520"
+									allowTypes="/(\.|\/)(xls)$/"
+									invalidSizeMessage="#{msg['validate.importSize']}"
+									invalidFileMessage="#{msg['validate.importFormat']}"
+									disabled="#{zoneMapBean.zone.zoneId == 0}" />
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="col-xs-12 col-md-12">
+
+					<p:dataTable var="item" id="DTZoneData"
+						rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}"
+						value="#{zoneMapBean.listZoneDataByZone}"
+						widgetVar="tblZoneDataWidgetVar" rowKey="#{item.zoneDataId}"
+						selection="#{zoneMapBean.listZDSelection}"
+						emptyMessage="#{msg['common.noData']}" paginator="true" rows="20"
+						paginatorPosition="bottom" rowIndexVar="rowIndex"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="10,20,50,100">
+
+						<p:ajax event="filter" ignoreAutoUpdate="true" />
+
+						<f:facet name="header">
+							<p:outputLabel value="#{msg['zonedata.list']}"
+								styleClass="line32"></p:outputLabel>
+						</f:facet>
+
+						<p:column selectionMode="multiple" exportable="false"
+							style="width:5%;text-align:center" />
+						<p:ajax event="rowSelectCheckbox" update="form-zone"
+							listener="#{zoneMapBean.selectEvent}" />
+						<p:ajax event="rowUnselectCheckbox" update="buttonRemove"
+							listener="#{zoneMapBean.selectEvent}" />
+						<p:ajax event="toggleSelect" update="buttonRemove"
+							listener="#{zoneMapBean.selectEvent}" />
+						<p:ajax event="rowSelect" update="buttonRemove"
+							listener="#{zoneMapBean.selectEvent}" />
+						<p:ajax event="rowUnselect" update="buttonRemove"
+							listener="#{zoneMapBean.selectEvent}" />
+
+
+						<p:column headerText="#" style="width:7%" exportable="false">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+
+						<p:column sortBy="#{item.zoneDataId}" filterMatchMode="contains"
+							filterBy="#{item.zoneDataId}" headerText="#{msg['common.ID']}">
+							<h:outputText value="#{item.zoneDataId}" />
+						</p:column>
+
+						<p:column sortBy="#{item.zoneDataValue}"
+							filterMatchMode="contains" filterBy="#{item.zoneDataValue}"
+							headerText="#{msg['common.value']}">
+							<h:outputText value="#{item.zoneDataValue}" />
+						</p:column>
+
+
+						<p:column headerText="#{msg['cell.cellUpdateTime']}"
+							filterMatchMode="contains" sortBy="#{item.updateDate}"
+							filterBy="#{item.updateDate}">
+							<h:outputText value="#{item.updateDate}" style="width:100%">
+								<f:convertDateTime pattern="#{userSession.timeFormat}" />
+							</h:outputText>
+
+						</p:column>
+
+						<p:column headerText="#{msg['common.action']}" exportable="false"
+							styleClass="actionColumnSmall">
+							<p:commandLink disabled="#{zoneMapBean.apply}"
+								actionListener="#{zoneMapBean.showDialogZD(item)}"
+								update="dlgZoneData" resetValues="true" process="@this"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-pencil icon-only mr-0"></i>
+							</p:commandLink>
+							<p:commandLink disabled="#{zoneMapBean.apply}"
+								actionListener="#{zoneMapBean.commandDeleteZoneData(item)}"
+								update="DTZoneData"
+								styleClass="btn btn-sm btn-action-del colorRed">
+								<i class="fa fa-times icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandLink>
+							<f:facet name="header">
+								<p:commandButton value="#{msg['common.addNew']}"
+									resetValues="true" process="@this" icon="fa fa-plus"
+									disabled="#{zoneMapBean.zone.zoneId == 0 || zoneMapBean.apply}"
+									actionListener="#{zoneMapBean.showDialogZD(null)}"
+									update="dlgZoneData" />
+							</f:facet>
+						</p:column>
+
+
+						<f:facet name="footer">
+							<p:commandButton value="#{msg['common.deleteSelected']}"
+								id="buttonRemove" update="form-zone:DTZoneData"
+								disabled="#{!zoneMapBean.activeButton()}"
+								actionListener="#{zoneMapBean.commandRemoveZD()}"
+								styleClass="pull-right">
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandButton>
+						</f:facet>
+					</p:dataTable>
+				</div>
+			</div>
+		</h:form>
+
+		<p:dialog header="#{msg['zonedata.title']}" modal="true"
+			id="dlgZoneData" resizable="false" showEffect="fade"
+			widgetVar="dlgZoneDataWR" height="300px"	width="600px">
+			<h:form id="form-zd-dgl" class="container-fluid">
+				<div class="row formFieldMg">
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['zonedata.zoneDataId']}" />
+							</div>
+							<div class="col-xs-12">
+								<p:inputText readonly="true" maxlength="10"
+									value="#{zoneMapBean.zoneData.zoneDataId}"
+									styleClass="form-control" />
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['common.value']}"
+									for="txtZoneDataValue" />
+							</div>
+							<div class="col-xs-12">
+								<p:inputText value="#{zoneMapBean.zoneData.zoneDataValue}"
+									styleClass="form-control" maxlength="100" required="true"
+									id="txtZoneDataValue" />
+							</div>
+						</div>
+					</div>
+
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['geoNet.updateDate']}" for="mask" />
+							</div>
+							<div class="col-xs-12">
+								<p:calendar id="mask" effect="fold"
+									styleClass="fullsizeCalendar"
+									value="#{zoneMapBean.zoneData.updateDate}" disabled="true"
+									requiredMessage="#{msg['common.required']}"
+									pattern="#{userSession.timeFormat}" mask="true" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12"></div>
+							<div class="col-xs-12"></div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12 col-md-10"></div>
+							<div class="col-xs-12 col-md-2">
+								<p:commandButton value="#{msg['common.apply']}"
+									icon="fa fa-save"
+									actionListener="#{zoneMapBean.cmdApplyZoneDT}"
+									styleClass="pull-right" update="form-zone:DTZoneData">
+								</p:commandButton>
+							</div>
+						</div>
+					</div>
+
+
+
+				</div>
+			</h:form>
+		</p:dialog>
+
+	</ui:composition>
+</body>
+</html>

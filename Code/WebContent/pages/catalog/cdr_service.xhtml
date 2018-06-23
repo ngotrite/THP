@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="/pages/tree_common.xhtml">
+	<ui:define name="subcontent">
+		<p:panel id="myPanel">
+			<h:form id="form-category" class="container-fluid"
+				rendered="#{cdrServiceBean.formType == 'category'}">
+				<div class="container-fluid">
+					<div class="row formFieldMg">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:dataTable id="ID_RoleTable" var="item"
+									value="#{cdrServiceBean.listCdrService}"
+									rowKey="#{item.cdrServiceId}" rowIndexVar="index"
+									emptyMessage="#{msg['common.noData']}" paginator="true"
+									rows="20" paginatorPosition="bottom"
+									paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+									rowsPerPageTemplate="10,20,50,100">
+									<f:facet name="header">
+										<p:outputLabel value="#{msg['title.CdrService']}"
+											style="font-weight:bold" />
+									</f:facet>
+									<p:column headerText="#" style="width:6%">
+										<h:outputText value="#{index + 1}" title="#{index + 1}" />
+									</p:column>
+
+									<p:column headerText="#{msg['common.name']}"
+										sortBy="#{item.name}" filterBy="#{item.name}"
+										filterMatchMode="contains">
+										<h:outputText value="#{item.name}" styleClass="preformatted" />
+									</p:column>
+
+									<p:column headerText="#{msg['common.desc']}"
+										sortBy="#{item.remark}" filterBy="#{item.remark}"
+										filterMatchMode="contains">
+										<h:outputText value="#{item.remark}" styleClass="preformatted" />
+									</p:column>
+									<p:column headerText="#{msg['common.action']}"
+										styleClass="actionColumn">
+										<p:commandLink
+											actionListener="#{cdrServiceBean.editCdrService(item)}"
+											resetValues="true"
+											update="myPanel categoryCommonTop contentPanel contentTitle"
+											styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+											<i class="fa fa-pencil icon-only mr-0"></i>
+										</p:commandLink>
+										<p:commandLink
+											actionListener="#{cdrServiceBean.deleteCdrService(item)}"
+											update="ID_RoleTable form-category treeCommon"
+											resetValues="true"
+											styleClass="btn btn-sm btn-action-del colorRed">
+											<i class="fa fa-times icon-only mr-0"></i>
+											<p:confirm header="#{msg['common.delete']}"
+												message="#{msg['common.confirmDelete']}"
+												icon="ui-icon-alert" />
+										</p:commandLink>
+										<f:facet name="header">
+											<p:commandButton id="btnNew" value="#{msg['common.addNew']}"
+												actionListener="#{cdrServiceBean.btnAddNew}"
+												update="categoryCommonTop contentPanel contentTitle"
+												styleClass="btn btn-primary" immediate="true" icon="fa fa-plus"
+												resetValues="true">
+											</p:commandButton>
+										</f:facet>
+									</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+
+			<h:form id="form-info-detail" class="container-fluid"
+				rendered="#{cdrServiceBean.formType == 'detail' and  categoryCommonBean.formType ne 'category' }">
+				<div class="container-fluid">
+					<div class="row formFieldMg">
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<div>
+										<p:outputLabel value="#{msg['cdrService.serviceID']}"
+											for="txtServiceId" />
+									</div>
+									<p:inputText value="#{cdrServiceBean.cdrService.cdrServiceId}"
+										required="true" id="txtServiceId" styleClass="form-control"
+										maxlength="9" readonly="true">
+										<p:keyFilter regEx="/[0-9]/i" />
+									</p:inputText>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<div>
+										<p:outputLabel value="#{msg['common.category']}"
+											 for="txtCategoryId" />
+									</div>
+									<h:selectOneMenu
+										value="#{cdrServiceBean.cdrService.categoryId}"
+										styleClass="form-control select" required="true"
+										id="txtCategoryId">
+										<f:selectItems value="#{cdrServiceBean.listCategory}"
+											var="cat" itemValue="#{cat.categoryId}"
+											itemLabel="#{cat.categoryName}"></f:selectItems>
+									</h:selectOneMenu>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<div>
+										<p:outputLabel value="#{msg['cdrService.serviceName']}"
+											 for="txtCdrService"></p:outputLabel>
+									</div>
+									<p:inputText value="#{cdrServiceBean.cdrService.name}"
+										required="true" id="txtCdrService" styleClass="form-control"
+										maxlength="100" />
+								</div>
+							</div>
+							<div class="col-sm-6">
+								<div class="form-group">
+									<div>
+										<p:outputLabel value="#{msg['cdrService.serviceCode']}"
+											 for="cdrServiceCode"></p:outputLabel>
+									</div>
+									<p:inputText styleClass="form-control" maxlength="100"
+										id="cdrServiceCode" required="true"
+										value="#{cdrServiceBean.cdrService.cdrServiceCode}" />
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="form-group">
+									<div>
+										<p:outputLabel value="#{msg['cdrService.serviceDescription']}"></p:outputLabel>
+									</div>
+									<p:inputText value="#{cdrServiceBean.cdrService.remark}"
+										styleClass="form-control" maxlength="255" />
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-8"></div>
+							<div class="col-xs-4" style="text-align: right">
+								<p:commandButton value="#{msg['common.apply']}" id="apply"
+									action="#{cdrServiceBean.saveCdrService}" icon="fa fa-save"
+									disabled="#{!cdrServiceBean.edit}" styleClass="btn btn-default"
+									update="treeCommon form-info-detail">
+									<p:confirm header="#{msg['common.apply']}"
+										message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+								</p:commandButton>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>
+</html>

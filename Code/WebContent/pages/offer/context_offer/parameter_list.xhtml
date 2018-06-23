@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="content-type" content="text/html; charset=utf8" />
+	<link rel="shortcut icon"
+		href="#{request.contextPath}/resources/favicon.png"
+		type="image/x-icon" />
+	<link href="#{request.contextPath}/resources/css/layout_vocs.css"
+		rel="stylesheet" type="text/css" />
+	<link href="#{request.contextPath}/resources/css/tree.css"
+		rel="stylesheet" type="text/css" />
+
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<!-- font roboto -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/roboto/roboto.css" />
+	<!-- font themify -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/themify/themify-icons.css" />
+	<!-- simple line font -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/simpleLineIcon/css/simple-line-icons.css" />
+
+	<!-- end font -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/webfonts/stylesheet.css" />
+	<!-- Basic Styles -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-widget.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-jqueryui.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-datepicker.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/js/rappid/css/leftmenu.css" />
+	<!-- <link rel="stylesheet" type="text/css" media="screen" href="#{request.contextPath}/resources/themes/smartadmin/css/demo.css"/> -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/custom.css" />
+	<link rel="apple-touch-icon"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/sptouch-icon-iphone.png" />
+	<link rel="apple-touch-icon" sizes="76x76"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-ipad.png" />
+	<link rel="apple-touch-icon" sizes="120x120"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-iphone-retina.png" />
+	<link rel="apple-touch-icon" sizes="152x152"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-ipad-retina.png" />
+
+	<!-- huan -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-skins.css" />
+	<!-- <link rel="stylesheet" type="text/css" media="screen" href="#{request.contextPath}/resources/themes/smartadmin/css/demo.css"/> -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/css/custom.css" />
+
+	<!-- hieupv -->
+	<!-- Font Awesome -->
+	<link rel="stylesheet"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/font-awesome/css/font-awesome.min.css" />
+	<!-- Ocsicon -->
+	<link rel="stylesheet"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/font-ocs/osicon.css" />
+
+	<!-- Content Template CSS -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/customContent.css" />
+
+	<!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+	<!-- Startup image for web apps -->
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/ipad-landscape.png"
+		media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/ipad-portrait.png"
+		media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/iphone.png"
+		media="screen and (max-device-width: 320px)" />
+
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/js/advance.js" />
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/js/util.js" />
+
+	<!-- Custom JS -->
+	<script
+		src="#{request.contextPath}/resources/themes/smartadmin/js/custom.js"></script>
+	<title>Parameter List</title>
+</h:head>
+<body style="height: 400px;">
+	<h:form>
+		<div class="container-fluid"
+			style="height: 400px; overflow-y: scroll;">
+			<div class="row formFieldMg">
+				<div class="col-xs-12">
+					<div class="formGroup">
+						<p:outputLabel value="#{msg['offer.parameter_list']}"
+							 />
+						<p:dataTable paginator="true" rows="10"
+							value="#{cloneOfferTempBean.parameters}" var="rowItem"
+							paginatorPosition="bottom"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="5,10,15,20,50,100">
+							<p:column headerText="#" style="width:5%">
+								<h:outputText
+									value="#{cloneOfferTempBean.parameters.indexOf(rowItem) + 1}" />
+							</p:column>
+
+							<p:column headerText="#{msg['offer.parameters']}">
+								<h:outputText value="#{rowItem.parameterName}" />
+							</p:column>
+
+							<p:column headerText="#{msg['offer.default_value']}">
+								<h:outputText value="#{rowItem.parameterValue}" />
+							</p:column>
+
+							<p:column headerText="#{msg['common.desc']}">
+								<h:outputText value="#{rowItem.remark}" />
+							</p:column>
+
+							<!-- 							<p:column headerText="#{msg['common.action']}" -->
+							<!-- 								styleClass="text-center" style="width: 20%;"> -->
+
+							<!-- 								<p:commandLink -->
+							<!-- 									styleClass="btn btn-sm btn-action-edit colorStrongGreen"> -->
+							<!-- 									<i class="fa fa-pencil icon-only mr-0"></i> -->
+							<!-- 								</p:commandLink> -->
+							<!-- 							</p:column> -->
+						</p:dataTable>
+					</div>
+				</div>
+			</div>
+		</div>
+	</h:form>
+	<style type="text/css">
+</style>
+</body>
+</html>

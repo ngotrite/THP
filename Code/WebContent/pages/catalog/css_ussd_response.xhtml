@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="../tree_common.xhtml">
+	<ui:define name="subcontent">
+		<h:form id="form-css-list" class="container-fluid"
+			rendered="#{cssUssdResponseBean.formType eq 'list-css'}">
+			<div class="row" style="padding-bottom: 10px;">
+
+				<div class="col-xs-12 col-md-12">
+					<p:dataTable var="item"
+						value="#{cssUssdResponseBean.cssUssdResponses}"
+						id="DTCssUssdResponse" widgetVar="DTCssUssdResponseWV"
+						emptyMessage="#{msg['common.noData']}" paginator="true" rows="20"
+						paginatorPosition="bottom" rowIndexVar="rowIndex"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="10,20,50,100">
+
+						<f:facet name="header">
+							<p:outputLabel value="#{msg['CssUssdResponse.lst']}"
+								style="font-weight:bold" />
+						</f:facet>
+
+						<p:ajax event="filter" ignoreAutoUpdate="true" />
+
+						<p:column headerText="#" style="width:3%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.name']}" sortBy="#{item.name}"
+							filterBy="#{item.name}" filterMatchMode="contains">
+							<h:outputText value="#{item.name}" styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.desc']}"
+							sortBy="#{item.remark}" filterBy="#{item.remark}"
+							filterMatchMode="contains">
+							<h:outputText value="#{item.remark}" styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.action']}"
+							style="text-align:center;">
+							<p:commandLink
+								update=":treeCommon categoryCommonTop contentPanel contentTitle"
+								actionListener="#{cssUssdResponseBean.editCSS(item)}"
+								resetValues="true"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-pencil icon-only mr-0"></i>
+							</p:commandLink>
+
+							<p:commandLink update="treeCommon categoryCommonTop contentPanel"
+								actionListener="#{cssUssdResponseBean.deleteCSS(item)}"
+								styleClass="btn btn-sm btn-action-del colorRed">
+								<i class="fa fa-times icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandLink>
+							<f:facet name="header">
+								<p:commandButton value="#{msg['common.addNew']}"
+									resetValues="true" icon="fa fa-plus"
+									actionListener="#{cssUssdResponseBean.addNewCSS()}"
+									update="treeCommon categoryCommonTop contentPanel contentTitle"
+									styleClass="btn btn-primary" />
+							</f:facet>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+		</h:form>
+
+		<h:form id="form-css-detail" class="container-fluid"
+			rendered="#{cssUssdResponseBean.formType eq 'css-detail'}">
+
+			<div class="row formFieldMg">
+				<div class="col-xs-12 col-sm-6">
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.ID']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText
+								value="#{cssUssdResponseBean.cssUssdResponse.cssUssdResponseId}"
+								maxlength="9" readonly="true" styleClass="form-control">
+								<pe:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['smsNotifyTemplate.name']}"
+								for="txtName" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" required="true"
+								id="txtName" value="#{cssUssdResponseBean.cssUssdResponse.name}"
+								maxlength="100" />
+						</div>
+					</div>
+
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.category']}" for="CatType" />
+						</div>
+
+						<div class="col-xs-12">
+							<h:selectOneMenu styleClass="form-control col-xs-12" id="CatType"
+								required="true"
+								value="#{cssUssdResponseBean.cssUssdResponse.categoryId}">
+								<f:selectItems value="#{cssUssdResponseBean.categoriesOfCSS}"
+									var="category" itemValue="#{category.categoryId}"
+									itemLabel="#{category.categoryName}"></f:selectItems>
+							</h:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['smsNotifyTemplate.langId']}" />
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu styleClass="form-control col-xs-12"
+								value="#{cssUssdResponseBean.cssUssdResponse.langId}">
+								<f:selectItems value="#{cssUssdResponseBean.lstLang}" var="lang"
+									itemValue="#{lang.langId}" itemLabel="#{lang.langName}"></f:selectItems>
+							</h:selectOneMenu>
+						</div>
+					</div>
+
+				</div>
+				<div class="col-xs-12 col-sm-12">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.desc']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control"
+								value="#{cssUssdResponseBean.cssUssdResponse.remark}"
+								maxlength="255" />
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['CssUssdResponse.ussdResponseId']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText
+								value="#{cssUssdResponseBean.cssUssdResponse.ussdResponseId}"
+								maxlength="9" styleClass="form-control">
+								<pe:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['fErrorCode.errorCode']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control"
+								value="#{cssUssdResponseBean.cssUssdResponse.errorCode}"
+								maxlength="9">
+								<pe:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['cssUssdResponse.externalId']}" />
+						</div>
+						<div class="col-xs-12">
+							<table class="table-choosing">
+								<tr>
+									<td><h:selectOneMenu styleClass="form-control"
+											disabled="true" style="-webkit-appearance: none;"
+											id="slOffer"
+											value="#{cssUssdResponseBean.cssUssdResponse.offerExternalId}">
+											<f:selectItems value="#{cssUssdResponseBean.offers}"
+												var="item" itemLabel="#{item.offerName}"
+												itemValue="#{item.offerExternalId}" />
+										</h:selectOneMenu></td>
+									<td class="td-btn-fix"><p:commandLink
+											actionListener="#{cssUssdResponseBean.chooseOffer()}"
+											disabled="#{cssUssdResponseBean.editting}" id="chooseOffer" immediate="true"
+											title="#{msg['common.choose']}"
+											styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+											<i class="fa fa-pencil icon-only mr-0"></i>
+											<p:ajax event="dialogReturn"
+												listener="#{cssUssdResponseBean.onDialogOfferReturn}" />
+										</p:commandLink> <p:commandLink
+											actionListener="#{cssUssdResponseBean.notChooseOffer()}"
+											disabled="#{cssUssdResponseBean.editting}" id="notchooseOffer"
+											immediate="true" title="#{msg['common.delete']}"
+											styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+											<i class="fa fa-times icon-only mr-0"></i>
+										</p:commandLink></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-12">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel
+								value="#{msg['smsNotifyTemplate.messageTemplate']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputTextarea maxlength="500"
+								value="#{cssUssdResponseBean.cssUssdResponse.content}"
+								styleClass="form-control" rows="6" cols="33">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-12">
+					<div class="row">
+						<div class="pull-right" style="padding-right: 12px" align="right">
+							<p:commandButton value="#{msg['common.apply']}" type="submit"
+								disabled="#{cssUssdResponseBean.editting}" icon="fa fa-save"
+								actionListener="#{cssUssdResponseBean.saveCSS()}"
+								update="treeCommon categoryCommonTop contentPanel"
+								styleClass="btn btn-default">
+								<p:confirm header="#{msg['common.apply']}"
+									message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

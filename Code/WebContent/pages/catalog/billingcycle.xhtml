@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="../tree_common.xhtml">
+	<ui:define name="subcontent">
+
+		<h:form id="form-billing-cycle-by-cat" class="container-fluid"
+			rendered="#{billingCycleTypeBean.formType eq 'list-billing-cycle-type-by-category'}">
+			<div class="row" style="padding-bottom: 10px;">
+				<div class="col-xs-12 col-md-12">
+					<div class="col-xs-12 col-md-2">
+						<p:commandButton value="clear" update="@form"
+							styleClass="billingCycleCateTableClearFilter hidden"
+							oncomplete="PF('tblBillingWidgetVar').clearFilters()" />
+					</div>
+				</div>
+				<div class="col-xs-12 col-md-12">
+					<p:dataTable var="item" item="table" id="DTBillingCycle"
+						value="#{billingCycleTypeBean.listBillingCycleByCategory}"
+						rowKey="#{item.billingCycleTypeId}"
+						widgetVar="tblBillingWidgetVar"
+						emptyMessage="#{msg['common.noData']}" paginator="true" rows="20"
+						paginatorPosition="bottom" rowIndexVar="rowIndex"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="10,20,50,100">
+						<p:ajax event="filter" ignoreAutoUpdate="false" />
+						<f:facet name="header">
+							<p:outputLabel value="#{msg['billingcycleType.list']}"
+								styleClass="colorStrongBlue" />
+						</f:facet>
+						<p:column headerText="#" style="width:7%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.name']}"
+							filterBy="#{item.billingCycleTypeName}"
+							filterMatchMode="contains">
+							<h:outputText value="#{item.billingCycleTypeName}"
+								styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.desc']}"
+							filterBy="#{item.remark}" filterMatchMode="contains">
+							<h:outputText value="#{item.remark}" styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.action']}"
+							style="text-align:center;">
+							<p:commandLink
+								update="treeCommon categoryCommonTop contentPanel contentTitle"
+								resetValues="true"
+								actionListener="#{billingCycleTypeBean.commandEditTable(item)}"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-pencil icon-only mr-0"></i>
+							</p:commandLink>
+							<p:commandLink update="treeCommon categoryCommonTop contentPanel"
+								actionListener="#{billingCycleTypeBean.commandRemoveTable(item)}"
+								styleClass="btn btn-sm btn-action-del colorRed">
+								<i class="fa fa-times icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandLink>
+
+							<f:facet name="header">
+								<p:commandButton value="#{msg['common.addNew']}"
+									resetValues="true" icon="fa fa-plus"
+									actionListener="#{billingCycleTypeBean.commandAddNew()}"
+									rendered="#{billingCycleTypeBean.editting}"
+									update="treeCommon categoryCommonTop contentPanel contentTitle" />
+							</f:facet>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+		</h:form>
+
+		<h:form id="form-billingcycle-detail" class="container-fluid"
+			rendered="#{billingCycleTypeBean.formType eq 'detail-billing-cycle-type' || !billingCycleTypeBean.editting}">
+			<div class="row formFieldMg">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.ID']}"></p:outputLabel>
+							<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="9"
+								readonly="true"
+								value="#{billingCycleTypeBean.billingCycleTypeUI.billingCycleTypeId}"></p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['billingcycle.typeName']}"
+								for="txtBillingCycleTypeName"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="100"
+								id="txtBillingCycleTypeName" required="true"
+								value="#{billingCycleTypeBean.txtBillingCycleTypeName}"></p:inputText>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.category']}" for="category"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu id="category" effect="fold" required="true"
+								value="#{billingCycleTypeBean.billingCycleTypeUI.categoryId}"
+								styleClass="form-control" editable="true">
+								<f:selectItems value="#{billingCycleTypeBean.loadCategory()}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.beginDate']}" for="beginDate" />
+						</div>
+						<div class="col-xs-12">
+							<p:calendar id="beginDate" navigator="true"
+								styleClass="calendarIcon" mask="true" required="true"
+								pattern="#{userSession.dateFormat}"
+								value="#{billingCycleTypeBean.billingCycleTypeUI.beginDate}">
+							</p:calendar>
+						</div>
+					</div>
+
+				</div>
+				<div class="col-xs-12 col-sm-12">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.desc']}"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="255"
+								value="#{billingCycleTypeBean.billingCycleTypeUI.remark}">
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.unit']}"></p:outputLabel>
+							<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+<!-- 							<h:selectOneMenu id="calcUnit" effect="fold" class="form-control" -->
+<!-- 								disabled="#{billingCycleTypeBean.checkListBillingCycle(billingCycleTypeBean.billingCycleTypeUI)}" -->
+<!-- 								value="#{billingCycleTypeBean.billingCycleTypeUI.calcUnitId}" -->
+<!-- 								editable="true"> -->
+<!-- 								<f:selectItems value="#{billingCycleTypeBean.loadCalcUnit()}" /> -->
+<!-- 								<p:ajax event="change" update="pnFromOf"></p:ajax> -->
+<!-- 							</h:selectOneMenu> -->
+							<h:selectOneMenu id="calcUnit" effect="fold" class="form-control"
+								disabled="#{billingCycleTypeBean.checkListBillingCycle(billingCycleTypeBean.billingCycleTypeUI)}"
+								value="#{billingCycleTypeBean.billingCycleTypeUI.calcUnitId}"
+								editable="true">
+								<f:selectItems value="#{billingCycleTypeBean.lstCalcUnit}" var="calcUnit" itemValue="#{calcUnit.calcUnitId}"  itemLabel="#{calcUnit.calcUnitName}"/>
+								<p:ajax event="change" update="pnFromOf"></p:ajax>
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<p:panel id="pnFromOf" styleClass="nopadding">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['billingcycle.fromDayOfWeek']}"
+									rendered="#{billingCycleTypeBean.billingCycleTypeUI.calcUnitId == 4}"></p:outputLabel>
+								<p:outputLabel value="#{msg['billingcycle.fromDayOfMonth']}"
+									rendered="#{billingCycleTypeBean.billingCycleTypeUI.calcUnitId == 6}"></p:outputLabel>
+							</div>
+							<div class="col-xs-12">
+								<h:selectOneMenu class="form-control"
+									rendered="#{billingCycleTypeBean.billingCycleTypeUI.calcUnitId == 4 || billingCycleTypeBean.billingCycleTypeUI.calcUnitId == 6}"
+									value="#{billingCycleTypeBean.billingCycleTypeUI.fromOfDay}">
+									<f:selectItems
+										value="#{billingCycleTypeBean.loadFromDay(billingCycleTypeBean.billingCycleTypeUI.calcUnitId)}" />
+								</h:selectOneMenu>
+							</div>
+						</p:panel>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.quantity']}"></p:outputLabel>
+							<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="9"
+								value="#{billingCycleTypeBean.billingCycleTypeUI.quantity}">
+								<pe:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel></p:outputLabel>
+						</div>
+						<div class="col-xs-12 text-right">
+							<p:commandButton value="#{msg['billingcycle.genBillingCycle']}"
+								disabled="#{billingCycleTypeBean.apply}"
+								rendered="#{billingCycleTypeBean.billingCycleTypeUI.calcUnitId > 2 and billingCycleTypeBean.billingCycleTypeUI.billingCycleTypeId != 0}"
+								actionListener="#{billingCycleTypeBean.dialogGen()}"
+								update="treeCommon categoryCommonTop contentPanel contentTitle"></p:commandButton>
+
+							<p:commandButton value="#{msg['common.apply']}" icon="fa fa-save"
+								disabled="#{billingCycleTypeBean.apply}"
+								actionListener="#{billingCycleTypeBean.commandSaveOrUpdate()}"
+								update="treeCommon categoryCommonTop contentPanel form-billingcycle-detail tabBillingCycle">
+								<p:confirm header="#{msg['common.apply']}"
+									message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+							</p:commandButton>
+
+							<p:commandButton value="#{msg['common.back']}" immediate="true"
+								rendered="false"
+								oncomplete="$('.billingCycleCateTableClearFilter').click()"
+								actionListener="#{billingCycleTypeBean.commandCancel()}"
+								update="treeCommon categoryCommonTop contentPanel"></p:commandButton>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row" style="padding-bottom: 10px;">
+				<div class="col-xs-12 col-md-12">
+					<p:dataTable var="item" id="tabBillingCycle"
+						rendered="#{billingCycleTypeBean.billingCycleTypeUI.calcUnitId > 2 and billingCycleTypeBean.billingCycleTypeUI.billingCycleTypeId != 0}"
+						value="#{billingCycleTypeBean.loadListBillingCycleDB(billingCycleTypeBean.billingCycleTypeUI.billingCycleTypeId)}"
+						selection="#{billingCycleTypeBean.listBillingCycleSelection}"
+						rowKey="#{item.billingCycleId}" rowIndexVar="rowIndex"
+						emptyMessage="#{msg['common.noData']}" paginator="true" rows="10"
+						paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="10,20,50,100">
+
+						<f:facet name="header">
+							<p:outputLabel
+								rendered="#{billingCycleTypeBean.billingCycleTypeUI.calcUnitId > 2 and billingCycleTypeBean.billingCycleTypeUI.billingCycleTypeId != 0}"
+								value="#{msg['billingcycle.list']}"></p:outputLabel>
+						</f:facet>
+
+						<p:column selectionMode="multiple"
+							style="width:5%;text-align:center" />
+						<p:ajax event="rowSelectCheckbox"
+							update="form-billingcycle-detail" />
+						<p:ajax event="rowUnselectCheckbox"
+							update="buttonRemove buttonChangeStatus" />
+						<p:ajax event="toggleSelect"
+							update="buttonRemove buttonChangeStatus" />
+						<p:ajax event="rowSelect" update="buttonRemove buttonChangeStatus" />
+						<p:ajax event="rowUnselect"
+							update="buttonRemove buttonChangeStatus" />
+						<p:column headerText="#" style="width:7%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+						<p:column headerText="#{msg['common.startDate']}"
+							filterBy="#{item.cycleBeginDate}" filterMatchMode="contains">
+							<h:outputText value="#{item.cycleBeginDate}">
+								<f:convertDateTime pattern="#{userSession.dateFormat}" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="#{msg['common.endDate']}"
+							filterBy="#{item.cycleEndDate}" filterMatchMode="contains">
+							<h:outputText value="#{item.cycleEndDate}">
+								<f:convertDateTime pattern="#{userSession.dateFormat}" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="#{msg['common.state']}">
+							<h:outputText value="#{item.state eq 1 ?'Active':''}" />
+						</p:column>
+						<f:facet name="footer">
+							<p:commandButton value="#{msg['common.deleteSelected']}"
+								id="buttonRemove" process="tabBillingCycle"
+								update="form-billingcycle-detail buttonRemove"
+								disabled="#{!billingCycleTypeBean.activeButtonDelete()}"
+								actionListener="#{billingCycleTypeBean.commandRemoveBillingCycle()}"
+								styleClass="pull-right">
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandButton>
+							<p:commandButton value="#{msg['billingcycle.changeStatus']}"
+								disabled="#{!billingCycleTypeBean.activeButtonChangeStatus()}"
+								id="buttonChangeStatus" process="tabBillingCycle"
+								update="form-billingcycle-detail"
+								actionListener="#{billingCycleTypeBean.commandChangeStatusBillingCycle()}"
+								styleClass="pull-right">
+								<p:confirm header="#{msg['billingcycle.changeStatus']}"
+									message="#{msg['validate.changeStatusQuestion']}"
+									icon="ui-icon-alert" />
+							</p:commandButton>
+						</f:facet>
+					</p:dataTable>
+				</div>
+			</div>
+		</h:form>
+
+		<h:form id="form-billingcycle-gen" class="container-fluid"
+			rendered="#{billingCycleTypeBean.formType eq 'detail-billing-cycle-gen'}">
+			<div class="row formFieldMg">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['billingcycle.billingCycleData']}"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="100"
+								readonly="true"
+								value="#{billingCycleTypeBean.billingCycleTypeUI.billingCycleTypeName}"></p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.quantity']}"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="9"
+								readonly="true"
+								value="#{billingCycleTypeBean.billingCycleTypeUI.quantity}">
+								<pe:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['billingcycle.fromDate']}"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:calendar id="fromDate" disabled="true"
+								styleClass="fullsizeCalendar"
+								pattern="#{userSession.dateFormat}"
+								value="#{billingCycleTypeBean.commandGenFromDate()}">
+							</p:calendar>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.unit']}"></p:outputLabel>
+							<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu id="calcUnitDialog" readonly="true"
+								disabled="true" class="form-control"
+								value="#{billingCycleTypeBean.billingCycleTypeUI.calcUnitId}">
+								<f:selectItems value="#{billingCycleTypeBean.listItemCalcUnit}" />
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="row">
+						<p:panel id="fromOf" styleClass="nopadding">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['billingcycle.fromDayOfWeek']}"
+									rendered="#{billingCycleTypeBean.billingCycleTypeUI.calcUnitId == 4}"></p:outputLabel>
+								<p:outputLabel value="#{msg['billingcycle.fromDayOfMonth']}"
+									rendered="#{billingCycleTypeBean.billingCycleTypeUI.calcUnitId == 6}"></p:outputLabel>
+							</div>
+							<div class="col-xs-12">
+								<h:selectOneMenu effect="fold" class="form-control"
+									disabled="true"
+									rendered="#{billingCycleTypeBean.billingCycleTypeUI.calcUnitId == 4 || billingCycleTypeBean.billingCycleTypeUI.calcUnitId == 6}"
+									value="#{billingCycleTypeBean.billingCycleTypeUI.fromOfDay}"
+									editable="true">
+									<f:selectItems
+										value="#{billingCycleTypeBean.loadFromDay(billingCycleTypeBean.billingCycleTypeUI.calcUnitId)}" />
+								</h:selectOneMenu>
+							</div>
+						</p:panel>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['billingcycle.toDate']}"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:calendar value="#{billingCycleTypeBean.toDate}"
+								navigator="true" styleClass="calendarIcon" mask="true"
+								pattern="#{userSession.dateFormat}">
+							</p:calendar>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-7"></div>
+				<div class="col-xs-12 text-right">
+					<p:commandButton value="#{msg['billingcycle.genBillingCycle']}"
+						update="treeCommon categoryCommonTop contentPanel contentTitle"
+						actionListener="#{billingCycleTypeBean.commandGenBillingCycle()}"></p:commandButton>
+					<p:commandButton value="#{msg['common.back']}"
+						actionListener="#{billingCycleTypeBean.cancelGen()}"
+						update="treeCommon categoryCommonTop contentPanel"></p:commandButton>
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

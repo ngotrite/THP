@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="../tree_common.xhtml">
+	<ui:define name="subcontent">
+		<h:form id="form-sms-list" class="container-fluid"
+			rendered="#{smsNotiTemBean.formType eq 'list-sms'}">
+			<div class="row" style="padding-bottom: 10px;">
+
+				<div class="col-xs-12 col-md-12">
+					<p:dataTable var="item" value="#{smsNotiTemBean.smsNotiTems}"
+						id="DTSms" widgetVar="DTSmsWV"
+						emptyMessage="#{msg['common.noData']}" paginator="true" rows="20"
+						paginatorPosition="bottom" rowIndexVar="rowIndex"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="10,20,50,100">
+
+						<f:facet name="header">
+							<p:outputLabel value="#{msg['smsNotifyTemplate.lst']}"
+								style="font-weight:bold" />
+						</f:facet>
+
+						<p:ajax event="filter" ignoreAutoUpdate="true" />
+
+						<p:column headerText="#" style="width:3%">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.name']}" sortBy="#{item.name}"
+							filterBy="#{item.name}" filterMatchMode="contains">
+							<h:outputText value="#{item.name}" styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.desc']}"
+							sortBy="#{item.remark}" filterBy="#{item.remark}"
+							filterMatchMode="contains">
+							<h:outputText value="#{item.remark}" styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.action']}"
+							style="text-align:center;">
+							<p:commandLink
+								update=":treeCommon categoryCommonTop contentPanel contentTitle"
+								actionListener="#{smsNotiTemBean.editSMS(item)}"
+								resetValues="true"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-pencil icon-only mr-0"></i>
+							</p:commandLink>
+
+							<p:commandLink update="treeCommon categoryCommonTop contentPanel"
+								actionListener="#{smsNotiTemBean.deleteSMS(item)}"
+								styleClass="btn btn-sm btn-action-del colorRed">
+								<i class="fa fa-times icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandLink>
+							<f:facet name="header">
+								<p:commandButton value="#{msg['common.addNew']}"
+									resetValues="true" icon="fa fa-plus"
+									actionListener="#{smsNotiTemBean.addNewSMS()}"
+									update="treeCommon categoryCommonTop contentPanel contentTitle"
+									styleClass="btn btn-primary" />
+							</f:facet>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+		</h:form>
+
+		<h:form id="form-sms-detail" class="container-fluid"
+			rendered="#{smsNotiTemBean.formType eq 'sms-detail'}">
+
+			<div class="row formFieldMg">
+				<div class="col-xs-12 col-sm-6">
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.ID']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText
+								value="#{smsNotiTemBean.smsNotiTem.smsNotifyTemplateId}"
+								maxlength="9" readonly="true" styleClass="form-control">
+								<pe:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['smsNotifyTemplate.name']}"
+								for="txtName" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" required="true"
+								id="txtName" value="#{smsNotiTemBean.smsNotiTem.name}"
+								maxlength="100" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.desc']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control"
+								value="#{smsNotiTemBean.smsNotiTem.remark}" maxlength="255" />
+						</div>
+					</div>
+
+				</div>
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['common.category']}" for="CatType" />
+						</div>
+
+						<div class="col-xs-12">
+							<h:selectOneMenu styleClass="form-control col-xs-12" id="CatType"
+								required="true" value="#{smsNotiTemBean.smsNotiTem.categoryId}">
+								<f:selectItems value="#{smsNotiTemBean.categoriesOfSMS}"
+									var="category" itemValue="#{category.categoryId}"
+									itemLabel="#{category.categoryName}"></f:selectItems>
+							</h:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['smsNotifyTemplate.langId']}" />
+						</div>
+						<div class="col-xs-12">
+							<h:selectOneMenu styleClass="form-control col-xs-12"
+								value="#{smsNotiTemBean.smsNotiTem.langId}">
+								<f:selectItems value="#{smsNotiTemBean.lstLang}" var="lang"
+									itemValue="#{lang.langId}" itemLabel="#{lang.langName}"></f:selectItems>
+							</h:selectOneMenu>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel
+								value="#{msg['smsNotifyTemplate.smsTemplateCode']}"></p:outputLabel>
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{smsNotiTemBean.smsNotiTem.smsTemplateCode}"
+								maxlength="100" styleClass="form-control">
+								<pe:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-12">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel
+								value="#{msg['smsNotifyTemplate.messageTemplate']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputTextarea maxlength="500"
+								value="#{smsNotiTemBean.smsNotiTem.messageTemplate}"
+								styleClass="form-control" rows="6" cols="33">
+							</p:inputTextarea>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-12">
+					<div class="row">
+						<div class="pull-right" style="padding-right: 12px" align="right">
+							<p:commandButton value="#{msg['common.apply']}" type="submit"
+								disabled="#{smsNotiTemBean.editting}" icon="fa fa-save"
+								actionListener="#{smsNotiTemBean.saveSMS()}"
+								update="treeCommon categoryCommonTop contentPanel"
+								styleClass="btn btn-default">
+								<p:confirm header="#{msg['common.apply']}"
+									message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui">
+<h:head />
+<ui:composition>
+	<h:form id="form-geohome" class="container-fluid"
+		rendered="#{geoBean.formType eq 'geohome-detail'}">
+
+		<div class="row formFieldMg">
+			<div class="col-xs-12 col-sm-6">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['geo.geoHomeZoneId']}" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText value="#{geoBean.geoHome.geoHomeZoneId}"
+							styleClass="form-control" readonly="true" maxlength="9" />
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['geo.geoHomeZoneName']}"
+							for="txtGeoHomeZoneName" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText value="#{geoBean.geoHome.geoHomeZoneName}"
+							styleClass="form-control" maxlength="100" required="true"
+							id="txtGeoHomeZoneName" />
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['geo.geoHomeZoneCode']}" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText styleClass="form-control" maxlength="100"
+							value="#{geoBean.geoHome.geoHomeZoneCode}" />
+					</div>
+				</div>
+
+
+			</div>
+
+			<div class="col-xs-12 col-sm-6">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['common.category']}" for="slCat" />
+					</div>
+
+					<div class="col-xs-12">
+						<h:selectOneMenu styleClass="form-control col-xs-12" id="slCat"
+							required="true" value="#{geoBean.geoHome.categoryId}">
+							<f:selectItems value="#{geoBean.getCategoriesOfGeoHome()}"
+								var="item" itemValue="#{item.categoryId}"
+								itemLabel="#{item.categoryName}" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['geo.geoHomeZoneType']}"></p:outputLabel>
+					</div>
+					<div class="col-xs-12">
+						<!-- 				<p:inputText styleClass="form-control" -->
+						<!-- 					value="#{geoBean.geoHome.geoHomeZoneType}" -->
+						<!-- 					requiredMessage="#{msg['common.required']}" /> -->
+						<h:selectOneMenu id="homezonetype" effect="fold"
+							styleClass="form-control col-xs-12"
+							value="#{geoBean.geoHome.geoHomeZoneType}">
+							<f:selectItems value="#{geoBean.loadComboGeoHomeZoneType()}" />
+						</h:selectOneMenu>
+					</div>
+
+
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['geo.remark']}" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText styleClass="form-control" maxlength="255"
+							value="#{geoBean.geoHome.remark}" />
+					</div>
+				</div>
+			</div>
+
+			<div class="col-xs-12 col-sm-12">
+				<div class="col-xs-12 col-md-6">
+					<p:commandLink value="#{msg['common.temImport']}" ajax="false"
+						immediate="true" actionListener="#{geoBean.fileDownloadView()}">
+						<p:fileDownload value="#{geoBean.fileTemEX}" />
+					</p:commandLink>
+				</div>
+				<div class="col-xs-12 col-md-6">
+					<div class="row">
+						<div class="pull-right">
+							<p:commandButton value="#{msg['common.apply']}"
+								disabled="#{geoBean.apply}"
+								actionListener="#{geoBean.saveGeoHome()}" icon="fa fa-save"
+								update="treeCommon categoryCommonTop contentPanel"
+								styleClass="btn btn-default">
+								<p:confirm header="#{msg['common.apply']}"
+									message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+							</p:commandButton>
+						</div>
+						<div class="pull-right">
+							<h:commandButton value="#{msg['common.export']}"
+								rendered="#{!geoBean.apply}" styleClass="btn-export-zone">
+								<p:dataExporter type="xls" target="DTGeoNetTable"
+									fileName="GeoNetZone" pageOnly="true"
+									postProcessor="#{geoBean.postProcessXLS}" />
+							</h:commandButton>
+						</div>
+						<div class="pull-right">
+							<p:fileUpload fileUploadListener="#{geoBean.uploadExel}"
+								mode="advanced" auto="true" update="DTGeoNetTable"
+								label="#{msg['common.import']}" styleClass="fupload"
+								allowTypes="/(\.|\/)(xls)$/" sizeLimit="20971520"
+								invalidSizeMessage="#{msg['validate.importSize']}"
+								invalidFileMessage="#{msg['validate.importFormat']}"
+								disabled="#{geoBean.geoHome.geoHomeZoneId == 0}"
+								rendered="#{!geoBean.apply}" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-xs-12 col-md-12">
+				<p:dataTable var="item" value="#{geoBean.listGeoNetByGeoHome}"
+					id="DTGeoNetTable" rowKey="#{item.geoNetZoneId}"
+					emptyMessage="#{msg['common.noData']}" paginator="true" rows="20"
+					paginatorPosition="bottom" rowIndexVar="rowIndex"
+					widgetVar="tblGeoNetWidgetVar"
+					selection="#{geoBean.listGeoNetSelection}"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="10,20,50,100"
+					rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+
+					<p:ajax event="filter" ignoreAutoUpdate="true" />
+
+					<f:facet name="header">
+						<p:outputLabel value="#{msg['geoNet.list']}" styleClass="line32"></p:outputLabel>
+					</f:facet>
+
+					<p:column selectionMode="multiple"
+						style="width:5%;text-align:center" exportable="false" />
+					<p:ajax event="rowSelectCheckbox" update="form-geohome"
+						listener="#{geoBean.selectEvent}" />
+					<p:ajax event="rowUnselectCheckbox" update="buttonRemove"
+						listener="#{geoBean.selectEvent}" />
+					<p:ajax event="toggleSelect" update="buttonRemove"
+						listener="#{geoBean.selectEvent}" />
+					<p:ajax event="rowSelect" update="buttonRemove"
+						listener="#{geoBean.selectEvent}" />
+					<p:ajax event="rowUnselect" update="buttonRemove"
+						listener="#{geoBean.selectEvent}" />
+
+					<p:column headerText="#" style="width:7%" exportable="false">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+
+					<p:column sortBy="#{item.geoNetZoneId}" style="width:10%">
+						<f:facet name="header">
+							<p:outputLabel value="#{msg['common.ID']}" />
+						</f:facet>
+
+						<h:outputText value="#{item.geoNetZoneId}" />
+					</p:column>
+
+
+					<p:column sortBy="#{item.cellId}" filterBy="#{item.cellId}"
+						filterMatchMode="contains">
+						<f:facet name="header">
+							<p:outputLabel value="#{msg['cell.cellId']}" />
+						</f:facet>
+
+						<h:outputText value="#{item.cellId}" />
+					</p:column>
+					<p:column sortBy="#{item.updateDate}" filterBy="#{item.updateDate}"
+						headerText="#{msg['geoNet.updateDate']}"
+						filterMatchMode="contains">
+
+						<h:outputText value="#{item.updateDate}">
+							<f:convertDateTime pattern="#{userSession.timeFormat}" />
+						</h:outputText>
+
+					</p:column>
+					<p:column headerText="#{msg['common.action']}" exportable="false"
+						styleClass="actionColumnSmall">
+						<!-- 				<p:commandLink actionListener="#{geoBean.editNetHome(item)}" -->
+						<!-- 					update="treeCommon categoryCommonTop contentPanel contentTitle" -->
+						<!-- 					styleClass="btn btn-sm btn-action-edit colorBlue"> -->
+						<!-- 					<i class="fa fa-pencil icon-only mr-0"></i> -->
+						<!-- 				</p:commandLink> -->
+						<p:commandLink actionListener="#{geoBean.showDialogGNZ(item)}"
+							update="dlgGeoNet" resetValues="true" process="@this"
+							disabled="#{geoBean.apply}"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-pencil icon-only mr-0"></i>
+						</p:commandLink>
+
+						<p:commandLink actionListener="#{geoBean.deleteGeoNet(item)}"
+							update="treeCommon categoryCommonTop contentPanel"
+							disabled="#{geoBean.apply}"
+							styleClass="btn btn-sm btn-action-del colorRed">
+							<i class="fa fa-times icon-only mr-0"></i>
+							<p:confirm header="#{msg['common.delete']}"
+								message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+						</p:commandLink>
+						<f:facet name="header">
+							<p:commandButton value="#{msg['common.addNew']}"
+								update="dlgGeoNet" resetValues="true" icon="fa fa-plus"
+								disabled="#{geoBean.geoHome.geoHomeZoneId == 0 || geoBean.apply}"
+								actionListener="#{geoBean.showDialogGNZ(null)}" />
+						</f:facet>
+					</p:column>
+
+					<f:facet name="footer">
+						<p:commandButton value="#{msg['common.deleteSelected']}"
+							id="buttonRemove" update="form-geohome:DTGeoNetTable"
+							disabled="#{!geoBean.activeButton()}"
+							actionListener="#{geoBean.commandRemoveGeoNet()}"
+							styleClass="pull-right">
+							<p:confirm header="#{msg['common.delete']}"
+								message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+						</p:commandButton>
+					</f:facet>
+
+				</p:dataTable>
+			</div>
+		</div>
+
+	</h:form>
+
+	<p:dialog header="#{msg['geoNet.title']}" modal="true" id="dlgGeoNet"
+		resizable="false" showEffect="fade"
+		widgetVar="dlgGeoNetWR" height="300px" width="600px">
+		<h:form id="form-geonet" class="container-fluid">
+
+			<div class="row formFieldMg">
+				<div class="col-xs-12 col-sm-6">
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['geoNet.geoNetZoneId']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="9"
+								value="#{geoBean.geoNet.geoNetZoneId}" readonly="true">
+								<pe:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['cell.cellId']}" for="txtCellId" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control" maxlength="9"
+								id="txtCellId" value="#{geoBean.geoNet.cellId}" required="true">
+								<pe:keyFilter regEx="/[0-9]/i" />
+							</p:inputText>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel for="mask" value="#{msg['geoNet.updateDate']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:calendar id="mask" effect="fold" styleClass="fullsizeCalendar"
+								value="#{geoBean.geoNet.updateDate}" disabled="true"
+								requiredMessage="#{msg['common.required']}"
+								pattern="#{userSession.timeFormat}" mask="true" />
+						</div>
+					</div>
+
+				</div>
+				<div class="col-xs-12 col-sm-6">
+
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['geo.geoHomeZoneId']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText value="#{geoBean.geoHome.geoHomeZoneId}"
+								styleClass="form-control" readonly="true"
+								requiredMessage="#{msg['common.required']}" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['geo.geoHomeZoneName']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control"
+								value="#{geoBean.geoHome.geoHomeZoneName}" readonly="true"
+								requiredMessage="#{msg['common.required']}" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<p:outputLabel value="#{msg['geo.geoHomeZoneCode']}" />
+						</div>
+						<div class="col-xs-12">
+							<p:inputText styleClass="form-control"
+								value="#{geoBean.geoHome.geoHomeZoneCode}" readonly="true"
+								requiredMessage="#{msg['common.required']}" />
+						</div>
+					</div>
+					<div class="row">
+						<div class="pull-right" style="padding-right: 12px" align="right">
+							<!-- 								<p:commandButton value="#{msg['common.apply']}" -->
+							<!-- 									action="#{geoBean.saveGeoNet()}" -->
+							<!-- 									update="treeCommon categoryCommonTop contentPanel" -->
+							<!-- 									styleClass="btn btn-default"> -->
+							<!-- 									<p:confirm header="#{msg['common.apply']}" -->
+							<!-- 										message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" /> -->
+							<!-- 								</p:commandButton> -->
+
+							<p:commandButton value="#{msg['common.apply']}" icon="fa fa-save"
+								actionListener="#{geoBean.cmdApplyGeoNet()}"
+								update=":form-geohome:DTGeoNetTable"
+								styleClass="btn btn-default">
+							</p:commandButton>
+						</div>
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</p:dialog>
+</ui:composition>
+</html>

@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:pe="http://primefaces.org/ui">
+<ui:composition>
+	<h:form id="form-event-list"
+		rendered="#{eventBean.formType eq 'form-event-list'}">
+		<div class="container-fluid">
+			<div class="row formFieldMg">
+				<div class="col-xs-12">
+					<p:dataTable id="dtEvent" var="rowitem" paginator="true" rows="10"
+						value="#{eventBean.events}" paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15,20,50,100" rowIndexVar="rowIndex"
+						rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+						<f:facet name="header">
+							<p:outputLabel value="#{msg['offer.eventListTitle']}"/>
+						</f:facet>
+
+						<p:column headerText="#" styleClass="widthSTTcolumn">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.name']}">
+							<h:outputText value="#{rowitem.eventName}"
+								styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.desc']}">
+							<h:outputText value="#{rowitem.description}"
+								styleClass="preformatted" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.action']}" styleClass="actionColumn">
+
+							<p:commandLink actionListener="#{eventBean.editEvent(rowitem)}"
+								update="treeCommon categoryCommonTop contentPanel contentTitle"
+								resetValues="true"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen"
+								title="#{msg['common.edit']}">
+								<i class="fa fa-pencil icon-only mr-0"></i>
+							</p:commandLink>
+							<p:commandLink update="treeCommon dtEvent"
+								actionListener="#{eventBean.removeEvent(rowitem)}"
+								styleClass="btn btn-sm btn-action-del colorRed"
+								title="#{msg['common.delete']}">
+								<i class="fa fa-times icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandLink>
+							<f:facet name="header">
+								<p:commandButton value="#{msg['common.addNew']}" icon="fa fa-plus"
+									title="#{msg['common.addNew']}" resetValues="true"
+									update="treeCommon categoryCommonTop contentPanel contentTitle"
+									actionListener="#{eventBean.addNewEvent()}"
+									styleClass="btn btn-default">
+								</p:commandButton>
+							</f:facet>
+						</p:column>
+					</p:dataTable>
+				</div>
+			</div>
+		</div>
+	</h:form>
+
+	<h:form id="form-event-detail"
+		rendered="#{eventBean.formType eq 'form-event-detail'}">
+		<div class="container-fluid">
+			<div class="row formFieldMg">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<p:outputLabel value="#{msg['event.eventid']}" for="txtEventId" />
+						<p:inputText value="#{eventBean.event.eventId}" required="true"
+							id="txtEventId" styleClass="form-control"
+							readonly="#{eventBean.checkId}">
+							<pe:keyFilter regEx="/[0-9]/i" />
+						</p:inputText>
+					</div>
+				</div>
+
+				<div class="col-sm-6">
+					<div class="form-group">
+						<p:outputLabel value="#{msg['event.eventtype']}"
+							for="txtEventType" />
+						<p:inputText value="#{eventBean.event.eventType}" required="true"
+							id="txtEventType" styleClass="form-control" maxlength="9">
+							<pe:keyFilter regEx="/[0-9]/i" />
+						</p:inputText>
+					</div>
+				</div>
+			</div>
+
+			<div class="row formFieldMg">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<p:outputLabel value="#{msg['event.eventname']}"
+							for="txtEventName" />
+						<p:inputText value="#{eventBean.event.eventName}"
+							styleClass="form-control" maxlengt="100" required="true"
+							id="txtEventName" />
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<p:outputLabel value="#{msg['action.category']}" />
+						<h:selectOneMenu value="#{eventBean.event.categoryId}"
+							styleClass="form-control col-xs-12">
+							<f:selectItems value="#{eventBean.categoriesOfEvent}"
+								var="category" itemValue="#{category.categoryId}"
+								itemLabel="#{category.categoryName}" />
+						</h:selectOneMenu>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="row formFieldMg">
+				<div class="col-sm-12">
+					<div class="col-sm-6 nopadding">
+						<br />
+						<div class="form-group">
+							<p:selectBooleanCheckbox
+								value="#{eventBean.event.isRequireReserveInfo}"
+								itemLabel="#{msg['event.require_reserve_info']}" />
+						</div>
+					</div>
+					<br />
+					<div class="col-sm-6">
+						<div class="form-group">
+							<p:selectBooleanCheckbox
+								value="#{eventBean.event.isRequireRatingConfig}"
+								itemLabel="#{msg['event.isRequireRatingConfig']}" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row formFieldMg">
+				<div class="col-sm-12">
+					<div class="form-group">
+						<p:outputLabel value="#{msg['common.desc']}" />
+						<p:inputText value="#{eventBean.event.description}"
+							styleClass="form-control" maxlength="255" />
+					</div>
+				</div>
+			</div>
+
+			<div class="row formFieldMg">
+				<div class="col-sm-10"></div>
+				<div class="col-sm-2" style="float: right;">
+					<!-- 					<p:commandButton value="#{msg['event.add_actiontype_map']}" -->
+					<!-- 						rendered="#{eventBean.editting}" process="@this" -->
+					<!-- 						actionListener="#{eventBean.commandAddNewActionType()}" -->
+					<!-- 						styleClass="btn btn-default btn-rv-addAT" -->
+					<!-- 						title="#{msg['event.add_actiontype_map']}"> -->
+					<!-- 						<p:ajax event="dialogReturn" update="dtActionType" -->
+					<!-- 							listener="#{eventBean.onDialogActionTypeReturn}" /> -->
+					<!-- 					</p:commandButton> -->
+					<!-- 					<p:commandButton rendered="#{eventBean.editting}" -->
+					<!-- 						title="#{msg['common.apply']}" value="#{msg['common.apply']}" -->
+					<!-- 						update="dtActionType treeCommon contentPanel" -->
+					<!-- 						actionListener="#{eventBean.saveEvent()}" -->
+					<!-- 						styleClass="btn btn-default"> -->
+					<!-- 						<p:confirm header="#{msg['common.apply']}" -->
+					<!-- 							message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" /> -->
+					<!-- 					</p:commandButton> -->
+					<p:commandButton styleClass="btnShowCate hidden"
+						actionListener="#{eventBean.redirectChangeCate()}"
+						update="treeCommon categoryCommonTop contentPanel">
+						<p:ajax event="dialogReturn"
+							listener="#{eventBean.onDialogReturnCategory}"
+							update="treeCommon categoryCommonTop contentPanel" />
+					</p:commandButton>
+				</div>
+			</div>
+
+			<div class="row formFieldMg">
+				<div class="col-xs-12">
+					<p:dataTable id="dtActionType" var="rowitem" paginator="true"
+						rows="10" value="#{eventBean.actionTypes}"
+						paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,15,20,50,100" rowIndexVar="rowIndex"
+						rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+						<f:facet name="header">
+							<p:outputLabel value="#{msg['event.table_titlte']}"
+								 />
+						</f:facet>
+
+						<p:column headerText="#" styleClass="widthSTTcolumn">
+							<h:outputText value="#{rowIndex+1}" />
+						</p:column>
+
+						<p:column headerText="#{msg['title.actiontype']}">
+							<p:commandLink process="@this"
+								actionListener="#{eventBean.chooseActionType(rowitem)}">
+								<h:outputText value="#{rowitem.actionTypeName}" />
+								<p:ajax event="dialogReturn" update="dtActionType"
+									listener="#{eventBean.onDialogActionTypeReturn}" />
+							</p:commandLink>
+						</p:column>
+
+						<p:column headerText="#{msg['common.desc']}">
+							<h:outputText value="#{rowitem.remark}" />
+						</p:column>
+
+						<p:column headerText="#{msg['common.action']}"	styleClass="actionColumnExtra">
+
+							<p:commandLink actionListener="#{eventBean.addATAt(rowitem)}"
+								update="dtActionType" process="@this" disabled="#{!eventBean.editting}"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+								<i class="fa fa-plus icon-only mr-0"></i>
+								<p:ajax event="dialogReturn" update="dtActionType"
+									listener="#{eventBean.onDialogActionTypeReturn}" />
+							</p:commandLink>
+
+							<p:commandLink disabled="#{!eventBean.editting}"
+								update="contentTitle categoryCommonTop contentPanel"
+								actionListener="#{eventBean.editActionType(rowitem)}"
+								styleClass="btn btn-sm btn-action-edit colorStrongGreen"
+								title="#{msg['common.edit']}">
+								<i class="fa fa-pencil icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.edit']}"
+									message="#{msg['common.confirmEdit']}" icon="ui-icon-alert" />
+							</p:commandLink>
+							<p:commandLink update="dtActionType" disabled="#{!eventBean.editting}"
+								actionListener="#{eventBean.removeActionType(rowitem)}"
+								styleClass="btn btn-sm btn-action-del colorRed"
+								title="#{msg['common.delete']}">
+								<i class="fa fa-times icon-only mr-0"></i>
+								<p:confirm header="#{msg['common.delete']}"
+									message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+							</p:commandLink>
+							<f:facet name="header">
+								<p:commandButton value="#{msg['event.add_actiontype_map']}"
+									disabled="#{!eventBean.editting}" process="@this" icon="fa fa-plus"
+									actionListener="#{eventBean.commandAddNewActionType()}"
+									styleClass="btn btn-default btn-rv-addAT"
+									title="#{msg['event.add_actiontype_map']}">
+									<p:ajax event="dialogReturn" update="dtActionType"
+										listener="#{eventBean.onDialogActionTypeReturn}" />
+								</p:commandButton>
+							</f:facet>
+						</p:column>
+					</p:dataTable>
+				</div>
+				<!-- 				<div class="col-xs-12 col-sm-12"> -->
+				<!-- 					<p:outputLabel ></p:outputLabel> -->
+				<!-- 				</div> -->
+<!-- 				<div class="col-xs-12 col-sm-10"> -->
+<!-- 					<p:outputLabel ></p:outputLabel> -->
+<!-- 				</div> -->
+				<div class="col-xs-12 text-right">
+					<p:commandButton disabled="#{!eventBean.editting}"
+						title="#{msg['common.apply']}" value="#{msg['common.apply']}"
+						update="dtActionType treeCommon contentPanel" icon="fa fa-save"
+						actionListener="#{eventBean.saveEvent()}">
+						<p:confirm header="#{msg['common.apply']}"
+							message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+					</p:commandButton>
+				</div>
+			</div>
+		</div>
+	</h:form>
+</ui:composition>
+</html>

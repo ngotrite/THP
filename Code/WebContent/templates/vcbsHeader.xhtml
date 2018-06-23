@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright YYYY Viettel Telecom. All rights reserved.
+VIETTEL PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<!-- HEADER -->
+<header id="header">
+	<div id="logo-group" class="pull-left logo-group">
+		<!-- PLACE YOUR LOGO HERE -->
+		<span id="logo" class="logofull" style="padding-bottom: 5px;"> <img
+			src="#{request.contextPath}/resources/img/viettel/logo-ocs.png"
+			alt="vOCS" />
+		</span>
+		<!-- END LOGO PLACEHOLDER -->
+		<span id="logo-mini" class="logoMini"> <B>vOCS</B></span>
+	</div>
+	<div class="btn-collapse-leftmenu">
+		<span class="minifyme"> <i class="fa fa-angle-double-left"></i>
+		</span>
+	</div>
+	<ul class="nav navbar-top-links navbar-left hidden-xs active">
+		<li><a class="open-close hidden-xs waves-effect waves-light">
+				<!--         	<i class="ti-menu"></i> -->
+		</a></li>
+		<li class="in">
+			<h:form class="app-search hidden-xs">
+            	<!-- <input placeholder="Search..." class="form-control" type="text"/>
+            	<a href="" class="active"><i class="fa fa-search"></i></a> -->
+            	
+	            <p:autoComplete id="dd" queryDelay="500" var="menu"
+	              	itemLabel="#{menu.name}" itemValue="#{menu.url}" inputStyleClass="form-control"
+	            	completeMethod="#{userSession.searchMenuAutoComplete}" placeholder="#{msg['title.search']}">
+	            	<p:ajax event="itemSelect" listener="#{userSession.onChoosingMenu}" />
+	            </p:autoComplete>
+            </h:form>
+        </li>
+	</ul>
+
+	<!-- pulled right: nav area -->
+	<div class="pull-right" id="header-right">
+		<!-- collapse menu button -->
+		<div id="hide-menu" class="btn-header pull-right navbar-right-pdt-5 hidden-xs">
+			<span> <a href="javascript:void(0);" title="Collapse Menu">
+					<i class="icon-menu"></i>
+			</a>
+			</span>
+		</div>
+		<!-- end collapse menu -->
+
+		<!-- logout button -->
+		<!-- <div class="btn-header transparent pull-right navbar-right-pdt-5">
+			<h:form id="formLogout">
+				<p:commandLink id="btnLogout" action="#{userSession.doLogout()}"
+					ajax="false" title="Logout">
+					<i class="icon-logout"></i>
+				</p:commandLink>
+			</h:form>
+		</div> -->
+		<!-- end logout button -->
+
+		<!-- <div id="user"
+			class="btn-header transparent pull-right navbar-right-pdt-5">
+			<h:form id="userInfo">
+				<p:commandLink id="btnuserInfo"
+					action="#{userProfileBean.getUserByLogin()}"
+					oncomplete="PF('wvUserProfile').show()" ajax="true"
+					title="User Info" update="tab:form-user-profile tab:form-password">
+					<i class="icon-user"></i>
+				</p:commandLink>
+			</h:form>
+		</div> -->
+
+		<!-- fullscreen button -->
+		<div id="fullscreen"
+			class="btn-header transparent pull-right navbar-right-pdt-5">
+			<span> <a href="javascript:void(0);"
+				onclick="launchFullscreen(document.documentElement);"
+				title="Full Screen"><i class="icon-size-fullscreen "></i></a>
+			</span>
+		</div>
+		<!-- end fullscreen button -->
+
+		<!-- multiple lang dropdown : find all flags in the image folder -->
+		<h:form class="navbar-form navbar-right pdt-4" style="padding-right:0px;">
+			<ul class="navbar-nav hidden-xs" style="padding-left:0px;">
+				<li class="liTop"><a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
+						<img src="#{request.contextPath}/resources/themes/logo/#{userSession.language}.png" />
+						<span><h:outputText value="#{userSession.displayLanguage}"></h:outputText></span>
+						<i class="fa fa-angle-down"></i>
+					</a>
+					<ul class="dropdown-menu pull-right">
+						<c:forEach var="lang" items="#{userSession.listLang}">
+							<li><p:commandLink
+								actionListener="#{userSession.onSetLanguage(lang.langCode)}" ajax="false">
+								<img alt=""
+									src="#{request.contextPath}/resources/themes/logo/#{lang.langCode}.png" />
+									<h:outputText value="#{lang.langName}"></h:outputText>
+								</p:commandLink>
+							</li>
+						</c:forEach>
+					</ul>
+				</li>
+				
+				<li class="liTop" style="padding-left: 10px; padding-top:5px;">
+					<a href="#" class="dropdown-toggle"	data-toggle="dropdown">
+						<img src="#{request.contextPath}/resources/themes/logo/user.png" />
+						<span><h:outputText value="#{userSession.userName}"></h:outputText></span>
+						<i class="fa fa-angle-down"></i>
+					</a>
+					<ul class="dropdown-menu pull-right">
+						<li>
+							<p:commandLink id="btnuserInfo"
+								action="#{userProfileBean.getUserByLogin()}"
+								oncomplete="PF('wvUserProfile').show()" ajax="true"
+								update="tab:form-user-profile tab:form-password">
+								<h:outputText value="#{msg['user.Profile']}"></h:outputText>
+							</p:commandLink>
+						</li>
+						<li>
+							<p:commandLink id="btnLogout" action="#{userSession.doLogout()}" ajax="false">
+								<h:outputText value="#{msg['user.logOut']}"></h:outputText>
+							</p:commandLink>							
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</h:form>
+		<h:form class="navbar-form navbar-right pdt-4 hidden-xs" id="changeDomain">
+			<p:selectOneMenu value="#{userSession.domainId}" style="width:200px;"
+				onchange="PF('confirm').show();" styleClass="form-control">
+				<f:selectItems value="#{userSession.lstDomain}" var="domain"
+					itemValue="#{domain.id}" itemLabel="#{domain.name}"></f:selectItems>
+			</p:selectOneMenu>
+
+			<p:confirmDialog widgetVar="confirm"
+				message="#{msg['user.cofirmDialogDomain']}"
+				style="background: #FFF;" header="#{msg['common.confirm']}">
+				<p:commandButton value="#{msg['common.yes']}" process="@form"
+					update="changeDomain" oncomplete="PF('confirm').hide()"
+					actionListener="#{userSession.updateDomainIdTmp}" 
+					 styleClass="ui-confirmdialog-no" icon="fa fa-check" />
+				<p:commandButton value="#{msg['common.no']}"
+					actionListener="#{userSession.fillBackDomainId}" process="@form"
+					update="changeDomain" oncomplete="PF('confirm').hide()" 
+					 styleClass="ui-confirmdialog-yes" icon="fa fa-times" />
+			</p:confirmDialog>
+			
+			<!-- For auto logout: interval > timeout -->
+			<p:poll listener="#{userSession.getDomainId()}" interval="180"/>
+		</h:form>
+	</div>
+	<!-- end pulled right: nav area -->
+</header>
+<!-- END HEADER -->
+<ui:include src="user_profile.xhtml"></ui:include>
+</html>

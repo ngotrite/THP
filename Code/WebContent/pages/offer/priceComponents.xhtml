@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<p:panel id="myPanel">
+	<h:form id="form-list-priceComponents" class="container-fluid"
+		rendered="#{priceComponentsBean.formType == 'category'}">
+
+		<div class="row">
+			<div class="col-xs-12  col-md-6 text-right">
+				<!-- 				<p:commandButton value="clear" update="@form" -->
+				<!-- 					styleClass="pcTableClearFilter hidden" -->
+				<!-- 					oncomplete="PF('tblPCWidgetVar').clearFilters()" /> -->
+			</div>
+			<div class="col-xs-12">
+				<p:dataTable id="ID_PriceComponents" var="item"
+					value="#{priceComponentsBean.lstPriceComponents}"
+					rowKey="#{item.priceComponentId}" widgetVar="tblPCWidgetVar"
+					emptyMessage="#{msg['common.noData']}" paginator="true" rows="10"
+					paginatorPosition="bottom"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="10,20,50,100" rowIndexVar="rowIndex"
+					rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+					<p:ajax event="filter" ignoreAutoUpdate="false" />
+
+					<f:facet name="header">
+						<p:outputLabel value="#{msg['pc_in_cat']}" />
+					</f:facet>
+
+					<p:column headerText="#" styleClass="widthSTTcolumn">
+						<h:outputText value="#{rowIndex+1}" />
+					</p:column>
+					<p:column headerText="#{msg['common.ID']}">
+						<h:outputText value="#{item.priceComponentId}" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.name']}"
+						sortBy="#{item.priceComponentName}"
+						filterBy="#{item.priceComponentName}" filterMatchMode="contains">
+						<h:outputText value="#{item.priceComponentName}"
+							styleClass="preformatted" />
+					</p:column>
+
+					<p:column headerText="#{msg['common.desc']}"
+						sortBy="#{item.remark}" filterBy="#{item.remark}"
+						filterMatchMode="contains">
+						<h:outputText value="#{item.remark}" styleClass="preformatted" />
+					</p:column>
+					<p:column headerText="#{msg['common.action']}"
+						styleClass="actionColumn">
+						<p:commandLink
+							actionListener="#{priceComponentsBean.editPriceComponents(item)}"
+							update="myPanel contentTitle categoryCommonTop contentPanel"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-pencil icon-only mr-0"></i>
+						</p:commandLink>
+						<p:commandLink
+							actionListener="#{priceComponentsBean.clonePriceComponents(item)}"
+							update="myPanel contentTitle categoryCommonTop contentPanel"
+							styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+							<i class="fa fa-clone icon-only mr-0"></i>
+							<p:ajax event="dialogReturn"
+								listener="#{priceComponentsBean.onDialogPCReturn}"
+								update="treeCommon categoryCommonTop contentPanel" />
+						</p:commandLink>
+						<p:commandLink
+							actionListener="#{priceComponentsBean.deletePriceComponents(item)}"
+							oncomplete="$('.pcTableClearFilter').click()"
+							update="ID_PriceComponents form-list-priceComponents contentPanel treeCommon"
+							styleClass="btn btn-sm btn-action-del colorRed">
+							<i class="fa fa-times icon-only mr-0"></i>
+							<p:confirm header="#{msg['common.delete']}"
+								message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+						</p:commandLink>
+
+						<f:facet name="header">
+							<p:commandButton id="btnNew" value="#{msg['common.addNew']}"
+								icon="fa fa-plus"
+								actionListener="#{priceComponentsBean.btnAddNew}"
+								update="contentTitle categoryCommonTop contentPanel"
+								styleClass="btn btn-primary" immediate="true" resetValues="true">
+							</p:commandButton>
+						</f:facet>
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+	</h:form>
+	<h:form id="form-pc-detail" class="container-fluid"
+		rendered="#{priceComponentsBean.formType eq 'form-pc-detail'}">
+		<div class="row formFieldMg">
+			<div class="col-xs-12 col-sm-6">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['cat.ID']}" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText
+							value="#{priceComponentsBean.priceComponent.priceComponentId}"
+							readonly="true" styleClass="form-control" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['pc.name']}" />
+						<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+					</div>
+					<div class="col-xs-12">
+						<p:inputText
+							value="#{priceComponentsBean.priceComponent.priceComponentName}"
+							required="true" styleClass="form-control" maxlength="100"
+							requiredMessage="#{msg['common.required']}" />
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['common.category']}" />
+					</div>
+					<div class="col-xs-12">
+						<h:selectOneMenu value="#{priceComponentsBean.categoryId}"
+							styleClass="form-control select">
+							<f:selectItems value="#{priceComponentsBean.categoriesOfPC}"
+								var="cat" itemValue="#{cat.categoryId}"
+								itemLabel="#{cat.categoryName}"></f:selectItems>
+						</h:selectOneMenu>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['priceComponent.pcType']}" for="slPCType" />
+					</div>
+					<div class="col-xs-12">
+						<table class="table-choosing">
+							<tr>
+								<td><h:selectOneMenu styleClass="form-control"
+										disabled="true" style="-webkit-appearance: none;"
+										id="slPCType"
+										value="#{priceComponentsBean.priceComponent.pcType}">
+										<f:selectItems value="#{priceComponentsBean.pcTypes}"
+											var="item" itemLabel="#{item.pcTypeName}"
+											itemValue="#{item.pcTypeId}" />
+									</h:selectOneMenu></td>
+								<td class="td-btn-fix"><p:commandLink disabled="#{!priceComponentsBean.edit}"
+										actionListener="#{priceComponentsBean.choosePcType()}"
+										id="choosePcType" immediate="true"
+										title="#{msg['common.choosePcType']}"
+										styleClass="btn btn-sm btn-action-del btn-refresh-rt">
+										<i class="fa fa-pencil"></i>
+										<p:ajax event="dialogReturn"
+											listener="#{priceComponentsBean.onDialogPcTypeReturn}" />
+									</p:commandLink> <p:commandLink disabled="#{!priceComponentsBean.edit}"
+										actionListener="#{priceComponentsBean.notChoosePcType()}"
+										id="notChoosePcType" immediate="true"
+										title="#{msg['common.delete']}"
+										styleClass="btn btn-sm btn-action-del btn-refresh-rt btn-remove-background">
+										<i class="fa fa-times icon-only mr-0"></i>
+									</p:commandLink></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:outputLabel value="#{msg['common.desc']}" />
+					</div>
+					<div class="col-xs-12">
+						<p:inputText value="#{priceComponentsBean.priceComponent.remark}"
+							styleClass="form-control" maxlength="255" />
+					</div>
+				</div>
+			</div>
+
+			<div class="col-xs-12">
+				<div class="row">
+					<div class="col-xs-12 col-md-12">
+						<p:dataTable id="ID_BlocksTable" var="item"
+							resizableColumns="true"
+							value="#{priceComponentsBean.lstSubBlocks}"
+							rowKey="#{item.blockId}" emptyMessage="#{msg['common.noData']}"
+							paginator="true" rows="10" paginatorPosition="bottom"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="10,20,50,100" rowIndexVar="rowIndex"
+							rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+							<f:facet name="header">
+								<p:outputLabel value="#{priceComponentsBean.titleBlocks}" />
+							</f:facet>
+
+							<p:column headerText="#" styleClass="widthSTTcolumn">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+
+							<p:column headerText="#{msg['block.name']}">
+								<p:commandLink
+									actionListener="#{priceComponentsBean.btnAddBlock(item)}">
+									<h:outputText value="#{item.blockName}"
+										title="#{item.blockName}" />
+									<p:ajax event="dialogReturn" update="ID_BlocksTable"
+										listener="#{priceComponentsBean.onDialogBLReturn}" />
+								</p:commandLink>
+							</p:column>
+
+							<p:column headerText="#{msg['block.desc']}"
+								styleClass="text-truncate">
+								<h:outputText value="#{item.remark}" title="#{item.remark}" />
+							</p:column>
+							<p:column styleClass="actionColumn" style="width: 216px;">
+								<p:commandLink disabled="#{!priceComponentsBean.edit}"
+									actionListener="#{priceComponentsBean.addBlockAt(item)}"
+									update="ID_BlocksTable"
+									styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+									<i class="fa fa-plus icon-only mr-0"></i>
+									<p:ajax event="dialogReturn" update="ID_BlocksTable"
+										listener="#{priceComponentsBean.onDialogBLReturn}" />
+								</p:commandLink>
+
+								<p:commandLink disabled="#{!priceComponentsBean.edit}"
+									update="ID_BlocksTable form-pc-detail contentTitle categoryCommonTop contentPanel"
+									actionListener="#{priceComponentsBean.editBlock(item)}"
+									styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+									<i class="fa fa-pencil icon-only mr-0"></i>
+									<p:confirm header="#{msg['common.summary.warning']}"
+										message="#{msg['priceComponent.editBlock']}"
+										icon="ui-icon-alert" />
+								</p:commandLink>
+								<p:commandLink update="ID_BlocksTable"
+									disabled="#{priceComponentsBean.lstSubBlocks.indexOf(item) eq 0 or !priceComponentsBean.edit}"
+									actionListener="#{priceComponentsBean.commandUpOnMap(item)}"
+									styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+									<i class="fa fa-arrow-circle-up icon-only mr-0"></i>
+								</p:commandLink>
+								<p:commandLink update="ID_BlocksTable"
+									disabled="#{priceComponentsBean.lstSubBlocks.indexOf(item) eq priceComponentsBean.lstSubBlocks.size() - 1 or !priceComponentsBean.edit}"
+									actionListener="#{priceComponentsBean.commandDownOnMap(item)}"
+									styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+									<i class="fa fa-arrow-circle-down icon-only mr-0"></i>
+								</p:commandLink>
+								<!-- 								<p:commandLink -->
+								<!-- 									actionListener="#{priceComponentsBean.cloneBlock(item)}" -->
+								<!-- 									update="ID_BlocksTable form-pc-detail contentTitle categoryCommonTop contentPanel" -->
+								<!-- 									styleClass="btn btn-sm btn-action-edit colorStrongGreen"> -->
+								<!-- 									<i class="fa fa-clone icon-only mr-0"></i> -->
+								<!-- 								</p:commandLink> -->
+								<p:commandLink disabled="#{!priceComponentsBean.edit}"
+									actionListener="#{priceComponentsBean.deleteBlock(item)}"
+									update="ID_BlocksTable form-pc-detail contentPanel treeCommon"
+									styleClass="btn btn-sm btn-action-del colorRed">
+									<i class="fa fa-times icon-only mr-0"></i>
+									<p:confirm header="#{msg['common.delete']}"
+										message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+								</p:commandLink>
+
+								<f:facet name="header">
+<!-- 									<p:outputLabel value="#{msg['common.action']}" -->
+<!-- 										rendered="#{!(priceComponentsBean.edit || priceComponentsBean.priceComponent.priceComponentId==0)}" /> -->
+									<p:commandButton value="#{msg['pc.addBlock']}" process="@this"
+										icon="fa fa-plus"
+										actionListener="#{priceComponentsBean.commandAddNewBL()}"
+										disabled="#{!priceComponentsBean.edit}"
+										styleClass="btn btn-default btn-pc-addBL">
+										<p:ajax event="dialogReturn" update="ID_BlocksTable"
+											listener="#{priceComponentsBean.onDialogBLReturn}" />
+									</p:commandButton>
+								</f:facet>
+							</p:column>
+						</p:dataTable>
+					</div>
+					<div class="col-xs-12 col-md-12 text-right">
+						<p:commandButton id="btnSave" value="#{msg['common.apply']}"
+							actionListener="#{priceComponentsBean.btnPCSave}"
+							disabled="#{!priceComponentsBean.edit}" icon="fa fa-save"
+							update="form-pc-detail contentPanel treeCommon"
+							styleClass="btn btn-default">
+							<p:confirm header="#{msg['common.apply']}"
+								message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+						</p:commandButton>
+						<p:commandButton value="actionHidden"
+							styleClass="hidden btnCallTreePC"
+							actionListener="#{priceComponentsBean.commandClonePCTree()}">
+							<p:ajax event="dialogReturn"
+								listener="#{priceComponentsBean.onDialogPCReturn}"
+								update="treeCommon categoryCommonTop contentPanel" />
+						</p:commandButton>
+						<p:commandButton styleClass="hidden btnChangeCategoryPC"
+							actionListener="#{priceComponentsBean.redirectChangeCate()}"
+							update="treeCommon categoryCommonTop contentPanel">
+							<p:ajax event="dialogReturn"
+								listener="#{priceComponentsBean.onDialogReturnCategory}"
+								update="treeCommon categoryCommonTop contentPanel" />
+						</p:commandButton>
+					</div>
+				</div>
+			</div>
+		</div>
+	</h:form>
+</p:panel>
+</html>

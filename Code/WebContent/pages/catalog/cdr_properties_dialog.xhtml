@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>CDR Properties</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf8" />
+	<link rel="shortcut icon"
+		href="#{request.contextPath}/resources/favicon.png"
+		type="image/x-icon" />
+	<link href="#{request.contextPath}/resources/css/layout_vocs.css"
+		rel="stylesheet" type="text/css" />
+	<link href="#{request.contextPath}/resources/css/tree.css"
+		rel="stylesheet" type="text/css" />
+
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<!-- font roboto -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/roboto/roboto.css" />
+	<!-- font themify -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/themify/themify-icons.css" />
+	<!-- simple line font -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/simpleLineIcon/css/simple-line-icons.css" />
+
+	<!-- end font -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/webfonts/stylesheet.css" />
+	<!-- Basic Styles -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-widget.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-jqueryui.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-datepicker.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/js/rappid/css/leftmenu.css" />
+	<!-- <link rel="stylesheet" type="text/css" media="screen" href="#{request.contextPath}/resources/themes/smartadmin/css/demo.css"/> -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/custom.css" />
+	<link rel="apple-touch-icon"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/sptouch-icon-iphone.png" />
+	<link rel="apple-touch-icon" sizes="76x76"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-ipad.png" />
+	<link rel="apple-touch-icon" sizes="120x120"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-iphone-retina.png" />
+	<link rel="apple-touch-icon" sizes="152x152"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-ipad-retina.png" />
+
+	<!-- huan -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-skins.css" />
+	<!-- <link rel="stylesheet" type="text/css" media="screen" href="#{request.contextPath}/resources/themes/smartadmin/css/demo.css"/> -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/css/custom.css" />
+
+	<!-- hieupv -->
+	<!-- Font Awesome -->
+	<link rel="stylesheet"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/font-awesome/css/font-awesome.min.css" />
+	<!-- Ocsicon -->
+	<link rel="stylesheet"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/font-ocs/osicon.css" />
+
+	<!-- Content Template CSS -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/customContent.css" />
+
+	<!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+	<!-- Startup image for web apps -->
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/ipad-landscape.png"
+		media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/ipad-portrait.png"
+		media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/iphone.png"
+		media="screen and (max-device-width: 320px)" />
+
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/js/advance.js" />
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/js/util.js" />
+
+	<!-- Custom JS -->
+	<script
+		src="#{request.contextPath}/resources/themes/smartadmin/js/custom.js"></script>
+</h:head>
+<body style="height: 350px;" class="#{userSession.sysUser.theme}">
+	<f:view locale="#{userSession.language}" contentType="text/html">
+		<p:ajaxStatus
+			onstart="checkOpenDlg('statusDialog');trimAllInputText();"
+			oncomplete="checkCloseDlg('statusDialog');" />
+		<p:ajaxStatus onstart="trimAllInputText();" oncomplete="" />
+		<p:dialog modal="true" hideEffect="" widgetVar="statusDialog"
+			draggable="false" closable="false" resizable="false"
+			style="background: transparent !important;" styleClass="loading">
+			<img src="#{request.contextPath}/resources/themes/images/loading.gif"
+				style="width: 64px;" />
+		</p:dialog>
+		<h:form id="cdr_properties_list">
+			<div class="container-fluid">
+				<div class="row formFieldMg">
+					<div class="col-xs-12" style="padding-top: 16px;">
+
+						<p:dataTable var="item"
+							value="#{cdrPropertiesDialogBean.cdrProps}"
+							selection="#{cdrPropertiesDialogBean.selectedCdrProps}"
+							rowKey="#{item.cdrPropId}" rowIndexVar="rowIndex"
+							emptyMessage="#{msg['common.noData']}" paginator="true" rows="10"
+							paginatorPosition="bottom"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="10,20,50,100">
+
+							<p:column selectionMode="multiple"
+								style="width:5%;text-align:center" />
+							<p:column headerText="#" styleClass="widthSTTcolumn">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+
+							<p:column headerText="#{msg['cdrProperties.propertiesName']}"
+								sortBy="#{item.propName}" filterBy="#{item.propName}"
+								filterMatchMode="contains">
+								<h:outputText value="#{item.propName}" />
+							</p:column>
+
+							<p:column headerText="#{msg['cdrProperties.source']}"
+								sortBy="#{item.source}" filterBy="#{item.source}"
+								filterMatchMode="contains">
+								<h:outputText value="#{item.source}" styleClass="preformatted" />
+							</p:column>
+
+							<p:column headerText="#{msg['cdrProperties.dataType']}"
+								sortBy="#{item.dataType}" filterBy="#{item.dataType}"
+								filterMatchMode="contains">
+								<h:outputText value="#{item.dataType}" />
+							</p:column>
+
+							<p:column headerText="#{msg['cdrProperties.description']}"
+								sortBy="#{item.description}" filterBy="#{item.description}"
+								filterMatchMode="contains">
+								<h:outputText value="#{item.description}" />
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+				<div class="row formFieldMg" style="padding-bottom: 10px;">
+					<div class="col-xs-12 text-right">
+						<p:commandButton
+							value="#{msg['common.select']}"
+							actionListener="#{cdrPropertiesDialogBean.onOk()}" icon="fa fa-check"/>
+						<p:commandButton value="#{msg['common.close']}" immediate="true"
+							actionListener="#{cdrPropertiesDialogBean.onCancel()}" icon="fa fa-times"/>
+						
+					</div>
+				</div>
+			</div>
+		</h:form>
+	</f:view>
+</body>
+</html>

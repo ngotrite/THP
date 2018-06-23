@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="../../templates/vcbsContentTemplate.xhtml">
+	<ui:define name="content">
+		<div class="box box-default box-solid">
+			<h:form id="form-domain" class="container-fluid">
+				<p:messages id="domainMessages" severity="error, warn"
+					showDetail="true" autoUpdate="true" closable="true" />
+				<div class="row formFieldMg">
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['domain.name']}" for="domainName"
+									styleClass="preformatted" />
+							</div>
+							<div class="col-xs-12">
+								<p:inputText id="domainName"
+									value="#{domainBean.sysDomain.name}" maxlength="100"
+									required="true" requiredMessage="#{msg['common.required']}"
+									styleClass="form-control" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['domain.desc']}" />
+							</div>
+							<div class="col-xs-12">
+								<p:inputText value="#{domainBean.sysDomain.description}"
+									maxlength="100" styleClass="form-control" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['domain.ID']}" />
+							</div>
+							<div class="col-xs-12">
+								<p:inputText value="#{domainBean.sysDomain.id}" readonly="true"
+									styleClass="form-control" />
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-xs-12">
+								<p:selectBooleanCheckbox itemLabel="#{msg['common.isActive']}"
+									value="#{domainBean.sysDomain.isActive}">
+								</p:selectBooleanCheckbox>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-12">
+						<div class="row">
+							<div class="col-xs-12 text-right">
+								<p:commandButton id="btnNew" value="#{msg['common.addNew']}"
+									actionListener="#{domainBean.btnNew}" icon="fa fa-plus"
+									disabled="#{domainBean.editing}" update="form-domain"
+									styleClass="btn btn-primary" immediate="true"
+									resetValues="true">
+								</p:commandButton>
+								<p:commandButton id="btnSave" value="#{msg['common.save']}"
+									actionListener="#{domainBean.btnSave}"
+									disabled="#{!domainBean.editing}" icon="fa fa-save"
+									update="form-domain-list:ID_DomainTable form-domain"
+									styleClass="btn btn-default">
+									<p:confirm header="#{msg['common.apply']}"
+										message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+								</p:commandButton>
+								<p:commandButton id="btnCancel" value="#{msg['common.close']}"
+									actionListener="#{domainBean.btnCancel}" icon="fa fa-refresh"
+									disabled="#{!domainBean.editing}" update="form-domain"
+									styleClass="btn btn-default" immediate="true"
+									resetValues="true">
+								</p:commandButton>
+							</div>
+						</div>
+					</div>
+				</div>
+			</h:form>
+
+
+			<h:form id="form-domain-list" class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12">
+						<p:dataTable id="ID_DomainTable" var="domain"
+							value="#{domainBean.listSysDomain}" rowIndexVar="rowIndex"
+							paginator="true" rows="10" rowsPerPageTemplate="10,20,50,100"
+							paginatorPosition="bottom" selectionMode="single"
+							rowKey="#{domain.id}"
+							rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+
+							<f:facet name="header">
+								<h:outputLabel value="#{msg['domain.list']}"></h:outputLabel>
+							</f:facet>
+
+							<p:column headerText="#" styleClass="widthSTTcolumn">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+							<p:column headerText="#{msg['domain.name']}"
+								sortBy="#{domain.name}" filterBy="#{domain.name}"
+								filterMatchMode="contains">
+								<h:outputText value="#{domain.name}" styleClass="preformatted" />
+							</p:column>
+							<p:column headerText="#{msg['common.active']}"
+								styleClass="checkboxColumn">
+								<p:selectBooleanCheckbox value="#{domain.isActive}"
+									disabled="true">
+								</p:selectBooleanCheckbox>
+							</p:column>
+							<p:column headerText="#{msg['domain.desc']}"
+								sortBy="#{domain.description}" filterBy="#{domain.description}"
+								filterMatchMode="contains">
+								<h:outputText value="#{domain.description}" />
+							</p:column>
+
+							<p:column headerText="#{msg['common.action']}"
+								styleClass="actionColumn">
+								<p:commandLink actionListener="#{domainBean.onRowEdit(domain)}"
+									update="form-domain" immediate="true"
+									styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+									<i class="fa fa-pencil icon-only mr-0"></i>
+								</p:commandLink>
+								<p:commandLink
+									update="ID_DomainTable form-domain"
+									actionListener="#{domainBean.commandClone(domain)}"
+									styleClass="btn btn-sm btn-action-edit colorStrongGreen">
+									<i class="fa fa-clone icon-only mr-0"></i>
+									<p:confirm header="#{msg['common.clone']}"
+										message="#{msg['common.confirmClone']}" icon="ui-icon-alert" />
+								</p:commandLink>
+								<p:commandLink
+									actionListener="#{domainBean.onRowDelete(domain)}"
+									update="ID_DomainTable form-domain" immediate="true"
+									styleClass="btn btn-sm btn-action-del colorRed">
+									<i class="fa fa-times icon-only mr-0"></i>
+									<p:confirm header="#{msg['common.delete']}"
+										message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+								</p:commandLink>
+							</p:column>
+						</p:dataTable>
+					</div>
+				</div>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

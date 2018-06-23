@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head />
+<ui:composition template="/pages/layout_empty.xhtml">
+	<ui:define name="subcontent">
+		<h:form id="form-avp-define" class="container-fluid nopadding">
+			<div class="row formFieldMg">
+
+				<div class="col-xs-12 col-sm-7 nopadding-right">
+					<article class="col-xs-12">
+					<div class="jarviswidget jarviswidget-color-yellow" id="wid-id-0"
+						style="margin-right: -10px;" data-widget-editbutton="false"
+						data-widget-colorbutton="false" data-widget-deletebutton="false">
+						<header> <span class="widget-icon"> <i
+							class="fa fa-table"></i>
+						</span>
+						<h2>#{msg['avpDefine.lstAVPDefine']}</h2>
+						</header>
+						<p:dataTable var="item" value="#{avpDefineBean.loadAvpDefines()}"
+							id="dtAVPDefine" rowKey="#{item.avpDefineId}"
+							widgetVar="wvAVPDefine" emptyMessage="#{msg['common.noData']}"
+							paginator="true" rows="20" paginatorPosition="bottom"
+							rowIndexVar="rowIndex" resizableColumns="true"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="10,20,50,100"
+							rowStyleClass="#{rowIndex % 2 == 1? 'rowColorBlue': null}">
+
+							<p:ajax event="filter" ignoreAutoUpdate="true" />
+
+							<p:column headerText="#" style="width:5%">
+								<h:outputText value="#{rowIndex+1}" />
+							</p:column>
+							<p:column headerText="#{msg['avpDefine.avpDefineCode']}"
+								styleClass="text-truncate" sortBy="#{item.avpDefineCode}"
+								filterBy="#{item.avpDefineCode}" filterMatchMode="contains">
+								<h:outputText value="#{item.avpDefineCode}" />
+							</p:column>
+							<p:column headerText="#{msg['avpDefine.avpDefineName']}"
+								styleClass="text-truncate" sortBy="#{item.avpDefineName}"
+								filterBy="#{item.avpDefineName}" filterMatchMode="contains">
+								<h:outputText value="#{item.avpDefineName}"
+									styleClass="preformatted" />
+							</p:column>
+							<p:column headerText="#{msg['avpDataType.title']}"
+								styleClass="text-truncate"
+								sortBy="#{avpDefineBean.getAVPTypeName(item.avpDataTypeId)}"
+								filterBy="#{avpDefineBean.getAVPTypeName(item.avpDataTypeId)}"
+								filterMatchMode="contains">
+								<h:outputText
+									value="#{avpDefineBean.getAVPTypeName(item.avpDataTypeId)}" />
+							</p:column>
+							<p:column headerText="#{msg['avpDefine.interface']}"
+								styleClass="text-truncate" sortBy="#{item._interface}"
+								filterBy="#{item._interface}" filterMatchMode="contains">
+								<h:outputText
+									value="#{avpDefineBean.getInterfaceName(item.avpDefineId)}" />
+							</p:column>
+
+							<p:column headerText="#{msg['common.action']}"
+								style="text-align:center;">
+								<p:commandLink process="@this"
+									actionListener="#{avpDefineBean.editAVPDefine(item)}"
+									resetValues="true" update="form-avp-define"
+									styleClass="btn btn-sm btn-action-edit colorStrongGreen"
+									oncomplete="backtotop();">
+									<i class="fa fa-pencil icon-only mr-0"></i>
+								</p:commandLink>
+								<p:commandLink update="form-avp-define" resetValues="true"
+									process="@this" 
+									actionListener="#{avpDefineBean.deleteAVPDefine(item)}"
+									styleClass="btn btn-sm btn-action-del colorRed">
+									<i class="fa fa-times icon-only mr-0"></i>
+									<p:confirm header="#{msg['common.delete']}"
+										message="#{msg['common.confirmDelete']}" icon="ui-icon-alert" />
+								</p:commandLink>
+
+							</p:column>
+						</p:dataTable>
+					</div>
+					</article>
+				</div>
+
+				<div class="col-xs-12 col-sm-5 nopadding-left">
+					<article class="col-xs-12">
+					<div class="jarviswidget jarviswidget-color-yellow" id="wid-id-0"
+						style="margin-right: -10px;" data-widget-editbutton="false"
+						data-widget-colorbutton="false" data-widget-deletebutton="false">
+						<header> <span class="widget-icon"> <i
+							class="fa fa-table"></i>
+						</span>
+						<h2>#{msg['policy.monitor_keys_form']}</h2>
+						</header>
+						<p:panel id="pnEdit" style="padding-top: 0px;">
+
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['common.ID']}" />
+								</div>
+								<div class="col-xs-12">
+									<p:inputText value="#{avpDefineBean.avpDefine.avpDefineId}"
+										readonly="true" styleClass="form-control">
+									</p:inputText>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['avpDefine.avpDefineCode']}"
+										for="txtAVPDefineCode" />
+								</div>
+								<div class="col-xs-12">
+									<p:inputText value="#{avpDefineBean.avpDefine.avpDefineCode}"
+										styleClass="form-control" maxlength="100" required="true"
+										id="txtAVPDefineCode">
+									</p:inputText>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['avpDefine.avpDefineName']}"
+										for="txtAVPDefineName" />
+								</div>
+								<div class="col-xs-12">
+									<p:inputText value="#{avpDefineBean.avpDefine.avpDefineName}"
+										maxlength="100" styleClass="form-control" required="true"
+										id="txtAVPDefineName">
+									</p:inputText>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['avpDataType.title']}"
+										 />
+								</div>
+
+								<div class="col-xs-12">
+									<h:selectOneMenu styleClass="form-control col-xs-12"
+										value="#{avpDefineBean.avpDefine.avpDataTypeId}">
+										<f:selectItems value="#{avpDefineBean.avpDataTypes}"
+											var="item" itemValue="#{item.avpDataTypeId}"
+											itemLabel="#{item.avpDataTypeName}" />
+									</h:selectOneMenu>
+
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12">
+									<p:outputLabel value="#{msg['avpDefine.interface']}"
+										 />
+								</div>
+
+								<div class="col-xs-12">
+									<p:selectOneMenu styleClass="form-control col-xs-12"
+										value="#{avpDefineBean.avpDefine._interface}">
+										<f:selectItem itemLabel="" />
+										<f:selectItems value="#{avpDefineBean.loadComboInterface()}" />
+									</p:selectOneMenu>
+
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-xs-12" style="text-align: right;">
+									<p:commandButton id="btnCancel" value="#{msg['common.cancel']}"
+										actionListener="#{avpDefineBean.btnCancel}" icon="fa fa-refresh"
+										disabled="#{!avpDefineBean.isEdit}" update="form-avp-define"
+										styleClass="pull-right" immediate="true" resetValues="true">
+									</p:commandButton>
+									<p:commandButton disabled="#{!avpDefineBean.isEdit}" icon="fa fa-save"
+										value="#{msg['common.apply']}" styleClass="pull-right"
+										style="margin-right: 13px;" resetValues="true"
+										actionListener="#{avpDefineBean.applyAVPDefine()}"
+										update="form-avp-define">
+										<p:confirm header="#{msg['common.apply']}"
+											message="#{msg['common.confirm_apply']}" icon="ui-icon-alert" />
+									</p:commandButton>
+									<p:commandButton disabled="#{avpDefineBean.isEdit}"
+										resetValues="true" value="#{msg['common.addNew']}"
+										styleClass="pull-right" immediate="true"
+										style="margin-right: 13px;" icon="fa fa-plus"
+										update="form-avp-define dtAVPDefine"
+										actionListener="#{avpDefineBean.addNewAVPDefine()}" />
+								</div>
+							</div>
+						</p:panel>
+					</div>
+					</article>
+				</div>
+
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>

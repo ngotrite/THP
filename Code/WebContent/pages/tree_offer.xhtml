@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<f:metadata>
+	<f:viewParam id="treeType" name="treeType"
+		value="#{treeOfferBean.treeType}" />
+	<!-- <f:event type="preRenderView" listener="#{treeOfferBean.onload}" /> same as <f:viewAction onPostback="true" /> -->
+	<f:viewAction action="#{treeOfferBean.onload}" />
+</f:metadata>
+<h:head>
+	<link href="#{request.contextPath}/resources/css/tree_ocs.css"
+		rel="stylesheet" type="text/css" />
+</h:head>
+<ui:composition template="../templates/vcbsContentTemplate.xhtml">
+	<ui:define name="content">
+		<h:inputHidden value=""></h:inputHidden>
+		<div class="col-sm-4 col-xs-12 treeContainer" style="padding: 2px;">
+			<div class="box box-default box-solid">
+				<div class="box-header with-border">
+					<!-- <h3 class="box-title box-title-tree">Tree Navigation</h3>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool minimumTree"
+							data-widget="collapse">
+							<i class="fa fa-angle-left"></i>
+						</button>
+					</div> -->
+
+					<!-- <ul class="nav nav-tabs" id="myTab" data-tabs="tabs">
+						<li class="active">
+							<a data-toggle="pill" href="#s1"><i class="fa fa-clock-o"></i> <span class="hidden-mobile hidden-tablet">Live Stats</span></a>
+						</li>
+						<li>
+							<a data-toggle="pill" href="#s2"><i class="fa fa-facebook"></i> <span class="hidden-mobile hidden-tablet">Social Network</span></a>
+						</li>
+					</ul> -->
+					<div class="box-title box-title-tree">
+						<a data-toggle="tab" class="box-link active" href="#s1"><i
+							class="fa fa-tree"></i> <span><h:outputText value="#{msg['title.treeNav']}"></h:outputText></span></a> <a
+							data-toggle="tab" class="box-link" href="#s2"><i
+							class="fa fa-search"></i> <span><h:outputText value="#{msg['title.advanceSearch']}"></h:outputText></span></a>
+					</div>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool minimumTree"
+							data-widget="collapse">
+							<i class="fa fa-angle-left"></i>
+						</button>
+					</div>
+				</div>
+				<div class="tab-content">
+					<div class="box-body treeViewData tab-pane fade in active" id="s1">
+						<div>
+							<h:form>
+							<table style="width:100%;">
+								<tr>
+									<td>
+										<p:inputText id="txtTreeSearch" maxlength="100"
+											styleClass="form-control"
+											placeholder="#{msg['title.searchNode']}" value="#{treeOfferBean.txtTreeSearch}">
+										</p:inputText>
+										<p:commandButton styleClass="hidden" actionListener="#{treeOfferBean.onSearchTree}" update="treeCommon:treeCommonOffer">
+										</p:commandButton>
+									</td>
+									<!-- <td style="width:110px; padding-left: 2px; vertical-align: bottom;">										
+											<p:selectBooleanCheckbox id="cbExpandTree" itemLabel="#{msg['common.autoExpand']}" value="#{treeOfferBean.expandTree}">
+												<p:ajax event="change" listener="#{treeOfferBean.onchangeExpandTree}" update="treeCommon:treeCommonOffer" />
+											</p:selectBooleanCheckbox>
+									</td> -->									
+								</tr>
+							</table>
+							</h:form>
+						</div>
+						<div class="widget-body content-tree heightTree">
+							<h:form id="treeCommon">
+								<p:tree id="treeCommonOffer" value="#{treeOfferBean.root}"
+									var="nodeData" cache="false" dynamic="true"
+									selectionMode="single"
+									selection="#{treeOfferBean.selectedNode}">
+									<p:ajax event="expand" listener="#{treeOfferBean.onNodeExpand}" />
+									<p:ajax event="collapse"
+										listener="#{treeOfferBean.onNodeCollapse}" />
+									<p:ajax event="select" listener="#{treeOfferBean.onNodeSelect}"
+										update="contentTitle categoryCommonTop contentPanel"
+										resetValues="true" />
+									<p:ajax event="contextMenu" update="treeCommon"
+										oncomplete="PF('tableContextMenuWV').show()"
+										listener="#{treeOfferBean.onNodeSelectContext}" />
+									<!-- <p:ajax event="contextMenu" update="treeCommon"
+									oncomplete="reShowContextMenu(currentEvent);"
+									listener="#{treeOfferBean.onNodeSelectContext}" /> -->
+
+									<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted"/>
+									</p:treeNode>
+									<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+										type="OFF_DUMP_NODE">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted" />
+									</p:treeNode>
+									<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+										type="CATEGORY">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted" title="#{nodeData.remark}" />
+									</p:treeNode>
+									<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+										type="OFF_OFFER">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted" title="#{nodeData.description}" />
+									</p:treeNode>
+									<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+										type="OFF_OFFER_GROUP">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted"/>
+									</p:treeNode>
+									<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+										type="OFF_EVENT">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted" title="#{nodeData.description}" />
+									</p:treeNode>
+									<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+										type="OFF_ACTIONTYPE">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted" />
+									</p:treeNode>
+									<p:treeNode
+										icon="#{iconClassBean.getTreeNodeIcon(nodeData)} custom-icon-16"
+										type="OFF_ACTION">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted" title="#{nodeData.remark}" />
+									</p:treeNode>
+									<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+										type="OFF_DYNAMIC_RESERVE">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted" title="#{nodeData.remark}" />
+									</p:treeNode>
+									<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+										type="OFF_SORT_PRICE_COMPONENT">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted" title="#{nodeData.remark}" />
+									</p:treeNode>
+									<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+										type="OFF_PRICE_COMPONENT">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted" title="#{nodeData.remark}" />
+									</p:treeNode>
+									<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+										type="OFF_BLOCK">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted" title="#{nodeData.remark}" />
+									</p:treeNode>
+									<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+										type="OFF_RATE_TABLE">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted" title="#{nodeData.remark}" />
+									</p:treeNode>
+									<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+										type="OFF_DECISION_TABLE">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted" title="#{nodeData.remark}" />
+									</p:treeNode>
+									<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+										type="OFF_NORMALIZER">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted" title="#{nodeData.remark}" />
+									</p:treeNode>
+									<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+										type="OFF_PACKAGE">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted" title="#{nodeData.remark}" />
+									</p:treeNode>
+									<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+										type="ACTION_DUMP_NODE">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted"/>
+									</p:treeNode>
+									<p:treeNode icon="#{iconClassBean.getTreeNodeIcon(nodeData)}"
+										type="OFF_PC_TYPE">
+										<h:outputText value="#{nodeData.nodeName}"
+											styleClass="preformatted" title="#{nodeData.remark}" />
+									</p:treeNode>
+								</p:tree>
+								<ui:include src="tree_offer_contextmenu.xhtml"></ui:include>
+							</h:form>
+						</div>
+					</div>
+					<div class="box-body treeViewData tab-pane fade" id="s2">
+						<ui:include src="tree_offer_search_form.xhtml"></ui:include>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-sm-8 col-xs-12 contentTreeContainer"
+			style="padding: 2px;">
+			<div class="box box-default box-solid">
+				<div class="box-header with-border">
+					<h3 class="box-title">
+						<h:outputLabel id="contentTitle"
+							value="#{treeOfferBean.contentTitle}"></h:outputLabel>
+					</h3>
+					<div class="box-tools pull-right">
+						<!-- <button type="button" class="btn btn-box-tool"><i class="fa fa-angle-left"></i>
+						</button> -->
+					</div>
+				</div>
+				<div class="box-body">
+					<div class="heightContentTree">
+						<p:panel id="categoryCommonTop">
+							<p:panel rendered="#{treeOfferBean.formType eq 'cat-list' }">
+								<ui:include src="tree_offer_category_list.xhtml"></ui:include>
+							</p:panel>
+							<p:panel rendered="#{treeOfferBean.formType eq 'cat-form'}">
+								<ui:include src="tree_offer_category_form.xhtml"></ui:include>
+							</p:panel>
+						</p:panel>
+						<p:panel id="contentPanel">
+							<p:panel id="page_offer"
+								rendered="#{treeOfferBean.contentPage == 'page_offer'}">
+								<ui:include src="offer/offer.xhtml"></ui:include>
+							</p:panel>
+							<p:panel id="page_action"
+								rendered="#{treeOfferBean.contentPage == 'page_action'}">
+								<ui:include src="offer/action.xhtml"></ui:include>
+							</p:panel>
+							<p:panel id="page_priceComponent"
+								rendered="#{treeOfferBean.contentPage == 'page_priceComponent'}">
+								<ui:include src="offer/priceComponents.xhtml"></ui:include>
+							</p:panel>
+							<p:panel id="page_block"
+								rendered="#{treeOfferBean.contentPage == 'page_block'}">
+								<ui:include src="offer/block.xhtml"></ui:include>
+							</p:panel>
+							<p:panel id="page_rateTable"
+								rendered="#{treeOfferBean.contentPage == 'page_rateTable'}">
+								<ui:include src="offer/ratetable.xhtml"></ui:include>
+							</p:panel>
+							<p:panel id="page_decisionTable"
+								rendered="#{treeOfferBean.contentPage == 'page_decisionTable'}">
+								<ui:include src="offer/decision_table.xhtml"></ui:include>
+							</p:panel>
+							<p:panel id="page_normalizer"
+								rendered="#{treeOfferBean.contentPage == 'page_normalizer'}">
+								<ui:include src="offer/normalizer.xhtml"></ui:include>
+							</p:panel>
+							<p:panel id="page_actiontype"
+								rendered="#{treeOfferBean.contentPage == 'page_actiontype'}">
+								<ui:include src="offer/action_type.xhtml"></ui:include>
+							</p:panel>
+							<p:panel id="page_event"
+								rendered="#{treeOfferBean.contentPage == 'page_event'}">
+								<ui:include src="offer/event.xhtml"></ui:include>
+							</p:panel>
+							<p:panel id="page_dynamicreserve"
+								rendered="#{treeOfferBean.contentPage == 'page_dynamicreserve'}">
+								<ui:include src="offer/dynamic_reserves.xhtml"></ui:include>
+							</p:panel>
+							<p:panel id="page_priceComponentSoft"
+								rendered="#{treeOfferBean.contentPage == 'page_sortPriceCompornent'}">
+								<ui:include src="offer/priceComponentSoft.xhtml"></ui:include>
+							</p:panel>
+							<p:panel id="page_offerpackage"
+								rendered="#{treeOfferBean.contentPage == 'page_offerpackage'}">
+								<ui:include src="/pages/offer/offer_package.xhtml" />
+							</p:panel>
+							<p:panel id="page_pcType"
+								rendered="#{treeOfferBean.contentPage == 'page_pcType'}">
+								<ui:include src="/pages/offer/pc_type.xhtml" />
+							</p:panel>
+						</p:panel>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<p:dialog header="#{msg['title.category']}" modal="true"
+			id="dlgCategory" resizable="false" showEffect="fade"
+			position="center" widgetVar="dlgCategory"
+			width="600px">
+			<h:form id="formDlgCategory" styleClass="container-fluid">
+				<!-- <p:messages id="msgDlgCategory" showDetail="true" autoUpdate="true"
+					closable="true" /> -->
+				<div class="row formFieldMg">
+					<div class="col-xs-12 col-sm-6">
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['cat.ID']}" ></p:outputLabel>
+							</div>
+							<div class="col-xs-12">
+								<p:inputText value="#{treeOfferBean.dlgCategory.categoryId}"
+									readonly="true" styleClass="form-control" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel for="CatName" value="#{msg['cat.name']}"
+									 />
+							</div>
+							<div class="col-xs-12">
+								<p:inputText id="CatName"
+									value="#{treeOfferBean.dlgCategory.categoryName}"
+									maxlength="50" required="true" styleClass="form-control" />
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-6">
+						<div class="row" style="display: none;">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['cat.type']}"  />
+							</div>
+							<div class="col-xs-12">
+								<h:selectOneMenu required="true"
+									value="#{treeOfferBean.dlgCategory.categoryType}"
+									styleClass="form-control select">
+									<f:selectItems value="#{treeOfferBean.listCatType}" />
+								</h:selectOneMenu>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['cat.parent']}"
+									 />
+							</div>
+							<div class="col-xs-12">
+								<h:selectOneMenu value="#{treeOfferBean.dlgCategoryParentId}"
+									styleClass="form-control select">
+									<f:selectItems value="#{treeOfferBean.listCatParentDlg}"
+										var="cat" itemValue="#{cat.categoryId}"
+										itemLabel="#{cat.categoryName}"></f:selectItems>
+								</h:selectOneMenu>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<p:outputLabel value="#{msg['cat.remark']}"
+									 />
+							</div>
+							<div class="col-xs-12">
+								<p:inputText value="#{treeOfferBean.dlgCategory.remark}"
+									maxlength="200" styleClass="form-control" />
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-xs-12 text-right">
+						<p:commandButton id="btnSaveDlg" value="#{msg['common.save']}"
+							action="#{treeOfferBean.btnCatSaveDlg()}" icon="fa fa-save"
+							update="treeCommon categoryCommonTop"
+							styleClass="btn btn-default">
+						</p:commandButton>
+						<p:commandButton id="btnCloseDlg" value="#{msg['common.close']}" icon="fa fa-close"
+							onclick="PF('dlgCategory').hide()" styleClass="btn btn-default"
+							immediate="true">
+						</p:commandButton>
+					</div>
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<!-- OFFER DIALOG - BEGIN -->
+
+
+		<p:confirmDialog message="#{msg['offer.deploy.normal_no_active']}"
+			rendered="#{treeOfferBean.treeType eq 'OFFER_OFFER'}" width="249px"
+			closeOnEscape="true" id="confirmation_normal_case_1_id" height="auto"
+			header="#{msg['offer.deploy']}" severity="alert"
+			widgetVar="confirmation_normal_case_1_id">
+			<p:commandButton value="#{msg['common.yes']}"
+				styleClass="ui-confirmdialog-yes"
+				actionListener="#{offerBean.doDeployWithoutCaseOne()}"
+				update="form_offer_detail:offerState treeCommon:treeCommonOffer"
+				oncomplete="PF('confirmation_normal_case_1_id').hide()" />
+			<p:commandButton value="#{msg['common.no']}"
+				styleClass="ui-confirmdialog-no"
+				onclick="PF('confirmation_normal_case_1_id').hide()" type="button" />
+		</p:confirmDialog>
+
+		<p:confirmDialog rendered="#{treeOfferBean.treeType eq 'OFFER_OFFER'}"
+			width="320px" id="confirmation_normal_case_2_id" height="auto"
+			closeOnEscape="true" header="#{msg['offer.deploy']}"
+			widgetVar="confirmation_normal_case_2_id">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="ui-dialog-content" style="text-align: left;">
+							<span class="ui-confirm-dialog-message">#{msg['offer.deploy.normal_actiove_one']}
+								<br /> -<label style="color: red;">#{msg['offer.a']}</label>#{msg['offer.deploy.normal_actiove_two']}
+								<br />-<label style="color: #010A70;">#{msg['offer.b']}</label>#{msg['offer.deploy.normal_actiove_three']}
+								<br />#{msg['offer.deploy.normal_actiove_four']}
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<hr />
+			<div class="col-xs-12">
+				<p:commandButton value="#{msg['offer.a']}"
+					styleClass="ui-confirmdialog-yes"
+					style="background-color: red !important;"
+					actionListener="#{offerBean.doDeployWithoutCaseOne()}"
+					update="treeCommon:treeCommonOffer categoryCommonTop contentPanel"
+					oncomplete="PF('confirmation_normal_case_2_id').hide()" />
+				<p:commandButton value="#{msg['offer.b']}"
+					styleClass="ui-confirmdialog-yes"
+					style="background-color: #010A70 !important;"
+					actionListener="#{offerBean.doDeployWithoutCaseTwo()}"
+					update="treeCommon:treeCommonOffer categoryCommonTop contentPanel"
+					oncomplete="PF('confirmation_normal_case_2_id').hide()" />
+				<p:commandButton value="#{msg['common.cancel']}"
+					styleClass="ui-confirmdialog-no"
+					onclick="PF('confirmation_normal_case_2_id').hide()" type="button" />
+			</div>
+		</p:confirmDialog>
+
+		<p:confirmDialog message="#{msg['offer.deploy.upgrate_version']}"
+			rendered="#{treeOfferBean.treeType eq 'OFFER_OFFER'}" width="249px"
+			closeOnEscape="true" id="confirmation_normal_case_3_id" height="auto"
+			header="#{msg['offer.deploy']}" severity="alert"
+			widgetVar="confirmation_normal_case_3_id">
+			<p:commandButton value="#{msg['common.yes']}"
+				styleClass="ui-confirmdialog-yes"
+				actionListener="#{offerBean.doDeployWithoutCaseThree()}"
+				update="treeCommon:treeCommonOffer contentPanel"
+				oncomplete="PF('confirmation_normal_case_3_id').hide()" />
+			<p:commandButton value="#{msg['common.no']}"
+				styleClass="ui-confirmdialog-no"
+				onclick="PF('confirmation_normal_case_3_id').hide()" type="button" />
+		</p:confirmDialog>
+
+		<p:confirmDialog message="#{msg['offer.cfdl.deleteversion']}"
+			rendered="#{treeOfferBean.treeType eq 'OFFER_OFFER'}" width="249px"
+			closeOnEscape="true" id="confirmation_normal_case_4_id" height="auto"
+			header="#{msg['common.delete']}" severity="alert"
+			widgetVar="confirmation_normal_case_4_id">
+			<p:commandButton value="#{msg['common.yes']}"
+				styleClass="ui-confirmdialog-yes"
+				actionListener="#{offerBean.removeOfferContext(treeOfferBean.nodeSelectEvent)}"
+				update="treeCommon:treeCommonOffer contentTitle categoryCommonTop contentPanel"
+				oncomplete="PF('confirmation_normal_case_4_id').hide()" />
+			<p:commandButton value="#{msg['common.no']}"
+				styleClass="ui-confirmdialog-no"
+				onclick="PF('confirmation_normal_case_4_id').hide()" type="button" />
+		</p:confirmDialog>
+		<!-- OFFER DIALOG - END -->
+	</ui:define>
+</ui:composition>
+</html>

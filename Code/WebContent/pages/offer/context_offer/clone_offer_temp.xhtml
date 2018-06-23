@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="content-type" content="text/html; charset=utf8" />
+	<link rel="shortcut icon"
+		href="#{request.contextPath}/resources/favicon.png"
+		type="image/x-icon" />
+	<link href="#{request.contextPath}/resources/css/layout_vocs.css"
+		rel="stylesheet" type="text/css" />
+	<link href="#{request.contextPath}/resources/css/tree.css"
+		rel="stylesheet" type="text/css" />
+
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+	<!-- Basic Styles -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-widget.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-jqueryui.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-datepicker.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/js/rappid/css/leftmenu.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/demo.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/custom.css" />
+	<link rel="apple-touch-icon"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/sptouch-icon-iphone.png" />
+	<link rel="apple-touch-icon" sizes="76x76"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-ipad.png" />
+	<link rel="apple-touch-icon" sizes="120x120"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-iphone-retina.png" />
+	<link rel="apple-touch-icon" sizes="152x152"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/touch-icon-ipad-retina.png" />
+
+	<!-- huan -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/smartadmin-skins.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/demo.css" />
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/css/custom.css" />
+
+	<!-- hieupv -->
+	<!-- Font Awesome -->
+	<link rel="stylesheet"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/font-awesome/css/font-awesome.min.css" />
+	<!-- Ocsicon -->
+	<link rel="stylesheet"
+		href="#{request.contextPath}/resources/themes/smartadmin/fonts/font-ocs/osicon.css" />
+
+	<!-- Content Template CSS -->
+	<link rel="stylesheet" type="text/css" media="screen"
+		href="#{request.contextPath}/resources/themes/smartadmin/css/customContent.css" />
+
+	<!-- iOS web-app metas : hides Safari UI Components and Changes Status Bar Appearance -->
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+	<!-- Startup image for web apps -->
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/ipad-landscape.png"
+		media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)" />
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/ipad-portrait.png"
+		media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)" />
+	<link rel="apple-touch-startup-image"
+		href="#{request.contextPath}/resources/themes/smartadmin/img/splash/iphone.png"
+		media="screen and (max-device-width: 320px)" />
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/js/advance.js" />
+	<script type="text/javascript"
+		src="#{request.contextPath}/resources/js/util.js" />
+	<!-- Custom JS -->
+	<script
+		src="#{request.contextPath}/resources/themes/smartadmin/js/custom.js"></script>
+	<title>#{cloneOfferTempBean.type eq 'cloneTemp' ? 'Clone' :
+		'Convert to offer template'}</title>
+</h:head>
+<body class="#{userSession.sysUser.theme}" style="height: 95%;">
+	<f:view locale="#{userSession.language}" contentType="text/html">
+		<p:ajaxStatus
+			onstart="checkOpenDlg('statusDialog');trimAllInputText();"
+			oncomplete="checkCloseDlg('statusDialog');" />
+		<p:ajaxStatus onstart="trimAllInputText();" oncomplete="" />
+		<p:dialog modal="true" hideEffect="" widgetVar="statusDialog"
+			draggable="false" closable="false" resizable="false"
+			style="background: transparent !important;" styleClass="loading">
+			<img src="#{request.contextPath}/resources/themes/images/loading.gif"
+				style="width: 64px;" />
+		</p:dialog>
+		<h:form id="form-clone_offer_temp">
+			<p:growl id="growlClone" showDetail="true" sticky="true" />
+			<div style="width: 100%; height: 20%;">
+				<p:steps id="strep_id" activeIndex="#{cloneOfferTempBean.step}"
+					styleClass="custom" readonly="false">
+					<p:menuitem value="Information" />
+					<p:menuitem value="Choose a level" />
+				</p:steps>
+			</div>
+			<p:panel rendered="#{cloneOfferTempBean.step eq 0}"
+				style="width: 100%; height: 50%;">
+				<div class="container-fluid"
+					style="overflow-y: scroll;">
+					<div class="row formFieldMg">
+						<div class="col-xs-6">
+							<div class="formGroup">
+								<p:outputLabel value="#{msg['offf.new_name']}"
+									></p:outputLabel>
+								<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+
+								<p:inputText styleClass="form-control" maxlength="200"
+									value="#{cloneOfferTempBean.offer.offerName}" required="true" />
+							</div>
+						</div>
+						<div class="col-xs-6">
+							<p:outputLabel value="#{msg['common.temp']}"
+								></p:outputLabel>
+							<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+							<p:inputText styleClass="form-control" maxlength="200"
+								readonly="true" required="true"
+								value="#{cloneOfferTempBean.temp}" />
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-6">
+							<p:outputLabel value="#{msg['off_new_external_id']}"
+								></p:outputLabel>
+							<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+							<p:inputText styleClass="form-control" maxlength="200"
+								value="#{cloneOfferTempBean.offer.offerExternalId}"
+								required="true" />
+						</div>
+						<div class="col-xs-6">
+							<div class="formGroup">
+								<p:outputLabel value="#{msg['common.category']}"
+									></p:outputLabel>
+								<p:outputLabel value=" *" style="color:red"></p:outputLabel>
+
+								<h:selectOneMenu effect="fold"
+									value="#{cloneOfferTempBean.offer.categoryId}"
+									styleClass="form-control">
+									<f:selectItems value="#{cloneOfferTempBean.categories}"
+										var="item" itemLabel="#{item.categoryName}"
+										itemValue="#{item.categoryId}" />
+								</h:selectOneMenu>
+							</div>
+						</div>
+
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="formGroup">
+								<p:outputLabel value="#{msg['offer_new_description']}"
+									></p:outputLabel>
+								<p:inputText styleClass="form-control" maxlength="200"
+									value="#{cloneOfferTempBean.offer.description}" />
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="formGroup">
+								<p:outputLabel value="#{msg['offer.version']}"
+									 />
+								<p:dataTable paginator="true" rows="5"
+									paginatorPosition="bottom" var="rowItem"
+									value="#{cloneOfferTempBean.offers}" style="max-height:20px;">
+									<p:column headerText="#" style="width:5%">
+										<h:outputText value="1" />
+									</p:column>
+
+									<p:column headerText="#{msg['offer.version']}">
+										<h:outputText value="#{rowItem.versionInfo}" />
+									</p:column>
+
+									<p:column headerText="#{msg['common.desc']}">
+										<h:outputText value="#{rowItem.description}" />
+									</p:column>
+								</p:dataTable>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:panel>
+			<p:panel rendered="#{cloneOfferTempBean.step eq 1}"
+				style="width: 100%; height: 50%;">
+				<div class="container-fluid">
+					<div class="row formFieldMg">
+						<div class="col-xs-12">
+							<div class="formGroup">
+								<p:outputLabel value="#{msg['offer.levelquestion']}"
+									 />
+								<p:outputPanel>
+									<ui:include src="/pages/offer/context_offer/clone_tree.xhtml" />
+								</p:outputPanel>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:panel>
+
+			<div class="container-fluid">
+				<div class="row formFieldMg" style="height: 10%; padding-top: 2%;">
+					<div class="col-xs-12">
+						<p:commandButton value="#{msg['common.cancel']}" immediate="true"
+							styleClass="pull-left"
+							actionListener="#{cloneOfferTempBean.oncancel()}" />
+						<p:commandButton value="#{msg['common.clone']}"
+							styleClass="pull-right"
+							style="display: #{cloneOfferTempBean.step eq 1 ? 'block' : 'none'};"
+							rendered="#{cloneOfferTempBean.step eq 1}" update="growlClone"
+							actionListener="#{cloneOfferTempBean.doClone()}" />
+						<p:commandButton styleClass="pull-right"
+							value="#{cloneOfferTempBean.step eq 0 ? msg['common.next'] : msg['common.previous']}"
+							update="form-clone_offer_temp strep_id"
+							immediate="#{cloneOfferTempBean.step eq 1}"
+							actionListener="#{cloneOfferTempBean.nextStepAndPrevious()}" />
+					</div>
+				</div>
+			</div>
+
+			<p:confirmDialog message="#{msg['offer.gen.duplicate']}"
+				width="249px" closeOnEscape="true" height="auto"
+				header="#{msg['offer.warning']}" severity="alert"
+				widgetVar="confirm_1">
+				<p:commandButton value="#{msg['common.close']}"
+					styleClass="ui-confirmdialog-no" onclick="PF('confirm_1').hide()"
+					type="button" />
+			</p:confirmDialog>
+
+			<p:confirmDialog message="#{msg['offer.msg.temp.exist']}"
+				width="249px" closeOnEscape="true" height="auto"
+				header="#{msg['offer.warning']}" severity="alert"
+				widgetVar="confirm_2">
+				<p:commandButton value="#{msg['common.close']}"
+					styleClass="ui-confirmdialog-no" onclick="PF('confirm_2').hide()"
+					type="button" />
+			</p:confirmDialog>
+
+			<p:confirmDialog message="#{msg['offer.msg.temp.incorect_cat']}"
+				width="249px" closeOnEscape="true" height="auto"
+				header="#{msg['offer.warning']}" severity="alert"
+				widgetVar="confirm_3">
+				<p:commandButton value="#{msg['common.close']}"
+					actionListener="#{cloneOfferTempBean.nextStepAndPrevious()}"
+					update="form-clone_offer_temp strep_id"
+					styleClass="ui-confirmdialog-yes"
+					oncomplete="PF('confirm_3').hide()" />
+			</p:confirmDialog>
+		</h:form>
+	</f:view>
+	<style type="text/css">
+.ui-steps .ui-steps-item {
+	width: 50%;
+}
+
+.ui-state-highlight {
+	text-shadow: none !important;
+}
+
+.ui-steps.custom {
+	margin-top: 20px;
+	margin-bottom: 50px;
+}
+
+.ui-steps.custom .ui-steps-item .ui-menuitem-link {
+	height: 10px;
+	padding: 0 1em;
+}
+
+.ui-steps.custom .ui-steps-item .ui-steps-number {
+	background-color: #0081c2;
+	color: #FFFFFF;
+	display: inline-block;
+	width: 30px;
+	border-radius: 10px;
+	margin-top: -10px;
+	margin-bottom: 10px;
+}
+</style>
+</body>
+</html>
